@@ -21,6 +21,7 @@ public class JournalNode extends BasicEntity{
 
     public JournalNode(Node n){
         super(n);
+        nodeType = JournalNode.class.getCanonicalName();
     }
 
 

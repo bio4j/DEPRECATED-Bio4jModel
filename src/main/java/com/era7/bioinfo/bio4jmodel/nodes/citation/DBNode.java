@@ -21,6 +21,7 @@ public class DBNode extends BasicEntity{
 
     public DBNode(Node n){
         super(n);
+        nodeType = "Db";
     }
 
 

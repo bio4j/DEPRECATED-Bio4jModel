@@ -24,6 +24,7 @@ public class SubmissionNode extends BasicEntity{
 
     public SubmissionNode(Node n){
         super(n);
+        nodeType = SubmissionNode.class.getCanonicalName();
     }
 
 

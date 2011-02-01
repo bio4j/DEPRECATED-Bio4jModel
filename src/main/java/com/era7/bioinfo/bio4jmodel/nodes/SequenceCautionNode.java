@@ -21,6 +21,7 @@ public class SequenceCautionNode extends BasicEntity{
 
     public SequenceCautionNode(Node n){
         super(n);
+        nodeType = SequenceCautionNode.class.getCanonicalName();
     }
 
 

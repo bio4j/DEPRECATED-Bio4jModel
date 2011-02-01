@@ -25,6 +25,7 @@ public class OrganismNode extends BasicEntity{
 
     public OrganismNode(Node n){
         super(n);
+        nodeType = OrganismNode.class.getCanonicalName();
     }
 
 

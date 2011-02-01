@@ -87,6 +87,7 @@ public class FeatureTypeNode extends BasicEntity{
 
     public FeatureTypeNode(Node n){
         super(n);
+        nodeType = FeatureTypeNode.class.getCanonicalName();
     }
 
 

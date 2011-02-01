@@ -24,6 +24,7 @@ public class ThesisNode extends BasicEntity{
 
     public ThesisNode(Node n){
         super(n);
+        nodeType = ThesisNode.class.getCanonicalName();
     }
 
 

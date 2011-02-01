@@ -21,6 +21,7 @@ public class CityNode extends BasicEntity{
 
     public CityNode(Node n){
         super(n);
+        nodeType = CityNode.class.getCanonicalName();
     }
 
 

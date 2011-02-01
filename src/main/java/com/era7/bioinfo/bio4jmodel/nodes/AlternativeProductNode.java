@@ -21,6 +21,7 @@ public class AlternativeProductNode extends BasicEntity{
 
     public AlternativeProductNode(Node n){
         super(n);
+        nodeType = AlternativeProductNode.class.getCanonicalName();
     }
 
 

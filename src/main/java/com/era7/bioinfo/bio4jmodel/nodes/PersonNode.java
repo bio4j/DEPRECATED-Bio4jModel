@@ -21,6 +21,7 @@ public class PersonNode extends BasicEntity{
 
     public PersonNode(Node n){
         super(n);
+        nodeType = PersonNode.class.getCanonicalName();
     }
 
 

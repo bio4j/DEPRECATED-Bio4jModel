@@ -28,6 +28,7 @@ public class IsoformNode extends BasicEntity{
 
     public IsoformNode(Node n){
         super(n);
+        nodeType = IsoformNode.class.getCanonicalName();
     }
 
 

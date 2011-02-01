@@ -27,6 +27,7 @@ public class BookNode extends BasicEntity{
 
     public BookNode(Node n){
         super(n);
+        nodeType = BookNode.class.getCanonicalName();
     }
 
 

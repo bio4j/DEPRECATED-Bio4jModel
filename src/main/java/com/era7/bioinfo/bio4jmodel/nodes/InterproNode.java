@@ -24,6 +24,7 @@ public class InterproNode extends BasicEntity{
 
     public InterproNode(Node n){
         super(n);
+        nodeType = InterproNode.class.getCanonicalName();
     }
 
 

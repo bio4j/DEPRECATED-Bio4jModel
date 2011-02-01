@@ -22,6 +22,7 @@ public class InstituteNode extends BasicEntity{
 
     public InstituteNode(Node n){
         super(n);
+        nodeType = InstituteNode.class.getCanonicalName();
     }
 
 

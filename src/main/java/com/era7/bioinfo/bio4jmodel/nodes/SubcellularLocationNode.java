@@ -21,6 +21,7 @@ public class SubcellularLocationNode extends BasicEntity{
 
     public SubcellularLocationNode(Node n){
         super(n);
+        nodeType = SubcellularLocationNode.class.getCanonicalName();
     }
 
     public String getName(){    return String.valueOf(node.getProperty(NAME_PROPERTY));}

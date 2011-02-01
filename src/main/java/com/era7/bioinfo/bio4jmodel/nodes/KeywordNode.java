@@ -25,6 +25,7 @@ public class KeywordNode extends BasicEntity{
 
     public KeywordNode(Node n){
         super(n);
+        nodeType = KeywordNode.class.getCanonicalName();
     }
 
 

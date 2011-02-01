@@ -21,6 +21,7 @@ public class UnpublishedObservationNode extends BasicEntity{
 
     public UnpublishedObservationNode(Node n){
         super(n);
+        nodeType = UnpublishedObservationNode.class.getCanonicalName();
     }
 
 

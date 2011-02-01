@@ -22,6 +22,7 @@ public class ConsortiumNode extends BasicEntity{
 
     public ConsortiumNode(Node n){
         super(n);
+        nodeType = ConsortiumNode.class.getCanonicalName();
     }
 
 

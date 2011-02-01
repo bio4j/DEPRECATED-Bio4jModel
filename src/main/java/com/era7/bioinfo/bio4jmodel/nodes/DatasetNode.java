@@ -21,6 +21,7 @@ public class DatasetNode extends BasicEntity{
 
     public DatasetNode(Node n){
         super(n);
+        nodeType = DatasetNode.class.getCanonicalName();
     }
 
 

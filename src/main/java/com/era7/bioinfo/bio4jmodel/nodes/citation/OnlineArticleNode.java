@@ -26,6 +26,7 @@ public class OnlineArticleNode extends BasicEntity{
 
     public OnlineArticleNode(Node n){
         super(n);
+        nodeType = OnlineArticleNode.class.getCanonicalName();
     }
 
 

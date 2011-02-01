@@ -37,6 +37,7 @@ public class ArticleNode extends BasicEntity{
 
     public ArticleNode(Node n){
         super(n);
+        nodeType = ArticleNode.class.getCanonicalName();
     }
 
 

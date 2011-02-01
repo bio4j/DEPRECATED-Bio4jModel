@@ -33,6 +33,7 @@ public class ProteinNode extends BasicEntity {
 
     public ProteinNode(Node n) {
         super(n);
+        nodeType = ProteinNode.class.getCanonicalName();
     }
 
     public String getName() {

@@ -22,6 +22,7 @@ public class CountryNode extends BasicEntity{
 
     public CountryNode(Node n){
         super(n);
+        nodeType = CountryNode.class.getCanonicalName();
     }
 
 

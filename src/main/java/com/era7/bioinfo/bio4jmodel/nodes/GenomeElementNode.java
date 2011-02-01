@@ -22,6 +22,7 @@ public class GenomeElementNode extends BasicEntity{
 
     public GenomeElementNode(Node n){
         super(n);
+        nodeType = GenomeElementNode.class.getCanonicalName();
     }
 
 

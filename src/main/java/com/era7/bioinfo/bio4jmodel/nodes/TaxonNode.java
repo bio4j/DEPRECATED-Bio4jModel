@@ -21,6 +21,7 @@ public class TaxonNode extends BasicEntity{
 
     public TaxonNode(Node n){
         super(n);
+        nodeType = TaxonNode.class.getCanonicalName();
     }
 
 

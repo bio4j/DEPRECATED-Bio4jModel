@@ -21,6 +21,7 @@ public class PublisherNode extends BasicEntity{
 
     public PublisherNode(Node n){
         super(n);
+        nodeType = PublisherNode.class.getCanonicalName();
     }
 
 

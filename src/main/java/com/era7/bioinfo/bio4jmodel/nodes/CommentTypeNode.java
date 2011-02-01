@@ -47,6 +47,7 @@ public class CommentTypeNode extends BasicEntity{
 
     public CommentTypeNode(Node n){
         super(n);
+        nodeType = CommentTypeNode.class.getCanonicalName();
     }
 
 

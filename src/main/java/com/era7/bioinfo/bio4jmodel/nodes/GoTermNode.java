@@ -36,6 +36,7 @@ public class GoTermNode extends BasicEntity{
 
     public GoTermNode(Node n){
         super(n);
+        nodeType = GoTermNode.class.getCanonicalName();
     }
 
 

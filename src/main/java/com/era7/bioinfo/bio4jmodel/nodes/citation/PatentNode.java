@@ -25,6 +25,7 @@ public class PatentNode extends BasicEntity{
 
     public PatentNode(Node n){
         super(n);
+        nodeType = PatentNode.class.getCanonicalName();
     }
 
 
