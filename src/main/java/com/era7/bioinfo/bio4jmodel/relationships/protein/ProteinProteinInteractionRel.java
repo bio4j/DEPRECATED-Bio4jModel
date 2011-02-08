@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.era7.bioinfo.uniprotneo4jmodel.model.neo4j.relationships.protein;
+package com.era7.bioinfo.bio4jmodel.relationships.protein;
 
 import com.era7.bioinfo.bioinfoneo4j.BasicRelationship;
 import org.neo4j.graphdb.Relationship;
