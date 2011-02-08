@@ -13,9 +13,9 @@ import org.neo4j.graphdb.Relationship;
  */
 public class MassSpectrometryCommentRel extends BasicCommentRel{
 
-    public static final String RELATIONSHIP_NAME = "COMMENT_RNA_EDITING";
+    public static final String RELATIONSHIP_NAME = "COMMENT_MASS_SPECTROMETRY";
 
-    public static final String UNIPROT_ATTRIBUTE_TYPE_VALUE = "RNA editing";
+    public static final String UNIPROT_ATTRIBUTE_TYPE_VALUE = "mass spectrometry";
 
     public static final String BEGIN_PROPERTY = "begin";
     public static final String END_PROPERTY = "end";
