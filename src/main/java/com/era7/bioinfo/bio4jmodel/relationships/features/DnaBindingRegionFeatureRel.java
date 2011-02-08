@@ -13,7 +13,7 @@ import org.neo4j.graphdb.Relationship;
  */
 public class DnaBindingRegionFeatureRel extends BasicFeatureRel{
 
-    public static final String RELATIONSHIP_NAME = "FEATURE_HELIX";
+    public static final String RELATIONSHIP_NAME = "FEATURE_DNA_BINDING_REGION";
     public static final String UNIPROT_ATTRIBUTE_TYPE_VALUE = "DNA-binding region";
 
     public DnaBindingRegionFeatureRel(Relationship rel){

@@ -13,7 +13,7 @@ import org.neo4j.graphdb.Relationship;
  */
 public class GlycosylationSiteFeatureRel extends BasicFeatureRel{
 
-    public static final String RELATIONSHIP_NAME = "GLYCOSYLATION_SITE";
+    public static final String RELATIONSHIP_NAME = "FEATURE_GLYCOSYLATION_SITE";
     public static final String UNIPROT_ATTRIBUTE_TYPE_VALUE = "glycosylation site";
 
 
