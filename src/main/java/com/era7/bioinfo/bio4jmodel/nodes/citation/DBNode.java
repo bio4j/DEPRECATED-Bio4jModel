@@ -9,8 +9,8 @@ import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
 import org.neo4j.graphdb.Node;
 
 /**
- *
- * @author ppareja
+ * Databases where submission protein citations are submitted to
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class DBNode extends BasicEntity{
 

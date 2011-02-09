@@ -9,7 +9,7 @@ import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
 import org.neo4j.graphdb.Node;
 
 /**
- * It simply models a country
+ * It simply models a country of the world
  * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class CountryNode extends BasicEntity{

@@ -9,8 +9,8 @@ import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
 import org.neo4j.graphdb.Node;
 
 /**
- *
- * @author ppareja
+ * Publishers regarding to book protein citations
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class PublisherNode extends BasicEntity{
 

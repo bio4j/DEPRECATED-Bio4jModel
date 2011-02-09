@@ -9,8 +9,8 @@ import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
 import org.neo4j.graphdb.Node;
 
 /**
- *
- * @author ppareja
+ * Just nodes representing different cities of the world
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class CityNode extends BasicEntity{
 

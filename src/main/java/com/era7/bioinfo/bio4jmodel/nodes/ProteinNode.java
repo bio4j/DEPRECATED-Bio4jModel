@@ -13,8 +13,8 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Uniprot proteins
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class ProteinNode extends BasicEntity {
 
