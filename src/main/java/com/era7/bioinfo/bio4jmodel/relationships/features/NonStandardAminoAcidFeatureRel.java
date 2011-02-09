@@ -8,8 +8,8 @@ package com.era7.bioinfo.bio4jmodel.relationships.features;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Occurence of non-standard amino acids (selenocysteine and pyrrolysine) in the protein sequence
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class NonStandardAminoAcidFeatureRel extends BasicFeatureRel{
 

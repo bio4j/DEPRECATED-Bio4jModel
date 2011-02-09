@@ -8,8 +8,8 @@ package com.era7.bioinfo.bio4jmodel.relationships.features;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Modified residues excluding lipids, glycans and protein cross-links
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class ModifiedResidueFeatureRel extends BasicFeatureRel{
 

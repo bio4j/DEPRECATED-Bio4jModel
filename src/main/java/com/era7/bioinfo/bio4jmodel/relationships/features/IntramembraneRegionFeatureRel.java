@@ -8,8 +8,8 @@ package com.era7.bioinfo.bio4jmodel.relationships.features;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Extent of a region located in a membrane without crossing it
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class IntramembraneRegionFeatureRel extends BasicFeatureRel{
 

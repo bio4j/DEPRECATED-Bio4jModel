@@ -8,8 +8,8 @@ package com.era7.bioinfo.bio4jmodel.relationships.features;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Nucleotide phosphate binding region
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class NucleotidePhosphateBindingRegionFeatureRel extends BasicFeatureRel{
 

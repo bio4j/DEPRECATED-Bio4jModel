@@ -8,8 +8,8 @@ package com.era7.bioinfo.bio4jmodel.relationships.features;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Position(s) of calcium binding region(s) within the protein
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class CalciumBindingRegionFeatureRel extends BasicFeatureRel{
 

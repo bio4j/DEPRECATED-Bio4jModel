@@ -8,8 +8,8 @@ package com.era7.bioinfo.bio4jmodel.relationships.features;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Extent of a transit peptide for organelle targeting
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class TransitPeptideFeatureRel extends BasicFeatureRel{
 

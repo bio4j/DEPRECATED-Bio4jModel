@@ -8,8 +8,8 @@ package com.era7.bioinfo.bio4jmodel.relationships.features;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Sequence targeting proteins to the secretory pathway or periplasmic space
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class SignalPeptideFeatureRel extends BasicFeatureRel{
 

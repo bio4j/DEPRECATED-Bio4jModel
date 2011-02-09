@@ -8,8 +8,8 @@ package com.era7.bioinfo.bio4jmodel.relationships.features;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Indicates that two residues in a sequence are not consecutive
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class NonConsecutiveResiduesFeatureRel extends BasicFeatureRel{
 

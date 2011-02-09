@@ -8,8 +8,8 @@ package com.era7.bioinfo.bio4jmodel.relationships.features;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Part of a protein that is cleaved during maturation or activation
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class PropeptideFeatureRel extends BasicFeatureRel{
 

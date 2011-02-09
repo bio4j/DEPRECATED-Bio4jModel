@@ -8,8 +8,8 @@ package com.era7.bioinfo.bio4jmodel.relationships.features;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Beta strand regions within the experimentally determined protein structure
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class StrandFeatureRel extends BasicFeatureRel{
 

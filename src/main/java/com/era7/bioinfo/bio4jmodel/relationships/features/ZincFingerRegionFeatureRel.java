@@ -8,8 +8,8 @@ package com.era7.bioinfo.bio4jmodel.relationships.features;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Position(s) and type(s) of zinc fingers within the protein
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class ZincFingerRegionFeatureRel extends BasicFeatureRel{
 
