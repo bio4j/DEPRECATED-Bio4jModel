@@ -9,8 +9,8 @@ import com.era7.bioinfo.bioinfoneo4j.BasicRelationship;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Unpublished observation authors
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class UnpublishedObservationAuthorRel extends BasicRelationship{
 

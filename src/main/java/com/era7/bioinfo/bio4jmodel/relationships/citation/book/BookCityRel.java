@@ -9,8 +9,8 @@ import com.era7.bioinfo.bioinfoneo4j.BasicRelationship;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * City where a book is published in
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class BookCityRel extends BasicRelationship{
 
