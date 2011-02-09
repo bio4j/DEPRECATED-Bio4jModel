@@ -8,8 +8,8 @@ package com.era7.bioinfo.bio4jmodel.relationships.comment;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Disease(s) associated with protein defect(s)
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class DiseaseCommentRel extends BasicCommentRel{
 

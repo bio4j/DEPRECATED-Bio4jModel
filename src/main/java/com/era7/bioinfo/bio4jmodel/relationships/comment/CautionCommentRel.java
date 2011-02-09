@@ -8,8 +8,8 @@ package com.era7.bioinfo.bio4jmodel.relationships.comment;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Warning about possible errors and/or grounds for confusion
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class CautionCommentRel extends BasicCommentRel{
 

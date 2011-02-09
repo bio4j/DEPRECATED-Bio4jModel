@@ -8,8 +8,8 @@ package com.era7.bioinfo.bio4jmodel.relationships.comment;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Amino acid variation(s) due to RNA editing
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class RnaEditingCommentRel extends BasicCommentRel{
 
@@ -26,7 +26,6 @@ public class RnaEditingCommentRel extends BasicCommentRel{
     public String getPosition(){
         return String.valueOf(this.relationship.getProperty(POSITION_PROPERTY));
     }
-
     public void setPosition(String value){
         this.relationship.setProperty(POSITION_PROPERTY, value);
     }

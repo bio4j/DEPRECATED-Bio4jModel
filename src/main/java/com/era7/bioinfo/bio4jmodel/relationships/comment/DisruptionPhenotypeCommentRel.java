@@ -8,8 +8,8 @@ package com.era7.bioinfo.bio4jmodel.relationships.comment;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Description of the effects caused by the disruption of a protein-encoding gene
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class DisruptionPhenotypeCommentRel extends BasicCommentRel{
 

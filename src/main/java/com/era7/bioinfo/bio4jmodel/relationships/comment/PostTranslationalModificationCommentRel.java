@@ -8,15 +8,15 @@ package com.era7.bioinfo.bio4jmodel.relationships.comment;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Post-translational modifications
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
-public class PostTransactionalModificationCommentRel extends BasicCommentRel{
+public class PostTranslationalModificationCommentRel extends BasicCommentRel{
 
-    public static final String RELATIONSHIP_NAME = "COMMENT_POST_TRANSACTIONAL_MODIFICATION";
+    public static final String RELATIONSHIP_NAME = "COMMENT_POST_TRANSLATIONAL_MODIFICATION";
     public static final String UNIPROT_ATTRIBUTE_TYPE_VALUE = "PTM";
 
-    public PostTransactionalModificationCommentRel(Relationship rel){
+    public PostTranslationalModificationCommentRel(Relationship rel){
         super(rel);
     }
 
