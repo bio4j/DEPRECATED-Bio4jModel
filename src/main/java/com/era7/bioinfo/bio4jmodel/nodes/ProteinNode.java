@@ -35,6 +35,7 @@ public class ProteinNode extends BasicEntity {
     
     public static final String NAME_PROPERTY = "name";
     public static final String FULL_NAME_PROPERTY = "full_name";
+    public static final String SHORT_NAME_PROPERTY = "short_name";
     public static final String ACCESSION_PROPERTY = "accession";
     public static final String SEQUENCE_PROPERTY = "sequence";
     public static final String MASS_PROPERTY = "mass";
@@ -62,6 +63,10 @@ public class ProteinNode extends BasicEntity {
 
     public String getFullName(){
         return String.valueOf(node.getProperty(FULL_NAME_PROPERTY));
+    }
+
+    public String getShortName(){
+        return String.valueOf(node.getProperty(SHORT_NAME_PROPERTY));
     }
 
     public String getAccession() {
@@ -145,6 +150,10 @@ public class ProteinNode extends BasicEntity {
 
     public void setFullName(String value){
         node.setProperty(FULL_NAME_PROPERTY, value);
+    }
+
+    public void setShortName(String value){
+        node.setProperty(SHORT_NAME_PROPERTY, value);
     }
 
     public void setAccession(String value) {
@@ -234,6 +243,7 @@ public class ProteinNode extends BasicEntity {
         String result = "\naccession = " + this.getAccession() +
                 "\nname = " + this.getName() +
                 "\nfull name = " + this.getFullName() +
+                "\nshort name = " + this.getShortName() + 
                 "\nmodified date = " + this.getModifiedDate() +
                 "\nmass = " + this.getMass() +
                 "\nlength = " + this.getLength() +
