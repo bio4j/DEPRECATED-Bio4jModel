@@ -19,7 +19,6 @@ package com.era7.bioinfo.bio4jmodel.nodes;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinDatasetRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinOrganismRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
-import java.util.List;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -31,6 +30,7 @@ import org.neo4j.graphdb.Relationship;
 public class ProteinNode extends BasicEntity {
 
     public static final String PROTEIN_ACCESSION_INDEX = "protein_accession_index";
+    public static final String PROTEIN_FULL_NAME_FULL_TEXT_INDEX = "protein_full_name_full_text_index";
     
     public static final String NAME_PROPERTY = "name";
     public static final String FULL_NAME_PROPERTY = "full_name";
@@ -44,7 +44,8 @@ public class ProteinNode extends BasicEntity {
     public static final String PIR_ID_PROPERTY = "pir_id";
     public static final String KEGG_ID_PROPERTY = "kegg_id";
     public static final String EMBL_REFERENCES_PROPERTY = "embl_references";
-    public static final String ARRAY_EXPRESS_ID = "array_express_id";
+    public static final String ARRAY_EXPRESS_ID_PROPERTY = "array_express_id";
+    public static final String UNIGENE_ID_PROPERTY = "unigene_id";
 
     //public static final String GENE_NAMES_SEPARATOR = "\t";
 
@@ -86,7 +87,11 @@ public class ProteinNode extends BasicEntity {
     }
 
     public String getArrayExpressId(){
-        return String.valueOf(node.getProperty(ARRAY_EXPRESS_ID));
+        return String.valueOf(node.getProperty(ARRAY_EXPRESS_ID_PROPERTY));
+    }
+
+    public String getUniGeneId(){
+        return String.valueOf(node.getProperty(UNIGENE_ID_PROPERTY));
     }
 
     public String getModifiedDate(){
@@ -165,7 +170,11 @@ public class ProteinNode extends BasicEntity {
     }
 
     public void setArrayExpressId(String value){
-        node.setProperty(ARRAY_EXPRESS_ID, value);
+        node.setProperty(ARRAY_EXPRESS_ID_PROPERTY, value);
+    }
+
+    public void setUniGeneId(String value){
+        node.setProperty(UNIGENE_ID_PROPERTY, value);
     }
 
     public void setMass(float value) {
@@ -223,7 +232,8 @@ public class ProteinNode extends BasicEntity {
                 "\nPIR id = " + this.getPIRId() +
                 "\nKegg id = " + this.getKeggId() +
                 "\nArrayExpress id = " + this.getArrayExpressId() +
-                "\nEnsembl id = " + this.getEnsemblId() + 
+                "\nEnsembl id = " + this.getEnsemblId() +
+                "\nUniGene id = " + this.getUniGeneId() + 
                 "\nsequence = " + this.getSequence();
 
         return result;
