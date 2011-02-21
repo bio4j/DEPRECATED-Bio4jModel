@@ -40,8 +40,13 @@ public class ProteinNode extends BasicEntity {
     public static final String LENGTH_PROPERTY = "length";
     public static final String MODIFIED_DATE_PROPERTY = "modified_date";
     public static final String GENE_NAMES_PROPERTY = "gene_names";
+    public static final String ENSEMBL_ID_PROPERTY = "ensembl_id";
+    public static final String PIR_ID_PROPERTY = "pir_id";
+    public static final String KEGG_ID_PROPERTY = "kegg_id";
+    public static final String EMBL_REFERENCES_PROPERTY = "embl_references";
+    public static final String ARRAY_EXPRESS_ID = "array_express_id";
 
-    public static final String GENE_NAMES_SEPARATOR = "\t";
+    //public static final String GENE_NAMES_SEPARATOR = "\t";
 
     public ProteinNode(Node n) {
         super(n);
@@ -64,6 +69,26 @@ public class ProteinNode extends BasicEntity {
         return String.valueOf(node.getProperty(SEQUENCE_PROPERTY));
     }
 
+    public String getEnsemblId(){
+        return String.valueOf(node.getProperty(ENSEMBL_ID_PROPERTY));
+    }
+
+    public String[] getEMBLreferences(){
+        return (String[]) node.getProperty(EMBL_REFERENCES_PROPERTY);
+    }
+
+    public String getPIRId(){
+        return String.valueOf(node.getProperty(PIR_ID_PROPERTY));
+    }
+
+    public String getKeggId(){
+        return String.valueOf(node.getProperty(KEGG_ID_PROPERTY));
+    }
+
+    public String getArrayExpressId(){
+        return String.valueOf(node.getProperty(ARRAY_EXPRESS_ID));
+    }
+
     public String getModifiedDate(){
         return String.valueOf(node.getProperty(MODIFIED_DATE_PROPERTY));
     }
@@ -76,13 +101,13 @@ public class ProteinNode extends BasicEntity {
         return Integer.parseInt(String.valueOf(node.getProperty(LENGTH_PROPERTY)));
     }
 
-    public String getGeneNames(){
-        return String.valueOf(node.getProperty(GENE_NAMES_PROPERTY));
+    public String[] getGeneNames(){
+        return (String[])node.getProperty(GENE_NAMES_PROPERTY);
     }
 
-    public String[] getGeneNamesArray(){
-        return String.valueOf(node.getProperty(GENE_NAMES_PROPERTY)).split(GENE_NAMES_SEPARATOR);
-    }
+//    public String[] getGeneNamesArray(){
+//        return String.valueOf(node.getProperty(GENE_NAMES_PROPERTY)).split(GENE_NAMES_SEPARATOR);
+//    }
 
     public OrganismNode getOrganism() {
         OrganismNode org = null;
@@ -123,6 +148,26 @@ public class ProteinNode extends BasicEntity {
         node.setProperty(MODIFIED_DATE_PROPERTY, value);
     }
 
+    public void setEnsemblId(String value){
+        node.setProperty(ENSEMBL_ID_PROPERTY, value);
+    }
+
+    public void setKeggId(String value){
+        node.setProperty(KEGG_ID_PROPERTY, value);
+    }
+
+    public void setPIRId(String value){
+        node.setProperty(PIR_ID_PROPERTY, value);
+    }
+
+    public void setEMBLreferences(String[] value){
+        node.setProperty(EMBL_REFERENCES_PROPERTY, value);
+    }
+
+    public void setArrayExpressId(String value){
+        node.setProperty(ARRAY_EXPRESS_ID, value);
+    }
+
     public void setMass(float value) {
         node.setProperty(MASS_PROPERTY, value);
     }
@@ -131,24 +176,24 @@ public class ProteinNode extends BasicEntity {
         node.setProperty(LENGTH_PROPERTY, value);
     }
 
-    public void setGeneNames(String value){
+    public void setGeneNames(String[] value){
         node.setProperty(GENE_NAMES_PROPERTY, value);
     }
 
-    public void setGeneNames(List<String> list){
-        String geneNames = "";
-        for (String st : list) {
-            geneNames += st + GENE_NAMES_SEPARATOR;
-        }
-        if(list != null){
-            if(list.size() > 0){
-                //le quito el tabulador que sobra al final
-                geneNames = geneNames.substring(0, geneNames.length()-1);
-            }
-        }
-        node.setProperty(GENE_NAMES_PROPERTY, geneNames);
-        
-    }
+//    public void setGeneNames(List<String> list){
+//        String geneNames = "";
+//        for (String st : list) {
+//            geneNames += st + GENE_NAMES_SEPARATOR;
+//        }
+//        if(list != null){
+//            if(list.size() > 0){
+//                //le quito el tabulador que sobra al final
+//                geneNames = geneNames.substring(0, geneNames.length()-1);
+//            }
+//        }
+//        node.setProperty(GENE_NAMES_PROPERTY, geneNames);
+//
+//    }
 
     @Override
     public int hashCode() {
@@ -173,7 +218,12 @@ public class ProteinNode extends BasicEntity {
                 "\nmodified date = " + this.getModifiedDate() +
                 "\nmass = " + this.getMass() +
                 "\nlength = " + this.getLength() +
-                "\ngene names = " + this.getGeneNames() + 
+                "\ngene names = " + this.getGeneNames() +
+                "\nEMBL references = " + this.getEMBLreferences() +
+                "\nPIR id = " + this.getPIRId() +
+                "\nKegg id = " + this.getKeggId() +
+                "\nArrayExpress id = " + this.getArrayExpressId() +
+                "\nEnsembl id = " + this.getEnsemblId() + 
                 "\nsequence = " + this.getSequence();
 
         return result;
