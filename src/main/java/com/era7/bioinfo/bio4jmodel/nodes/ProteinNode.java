@@ -31,6 +31,7 @@ public class ProteinNode extends BasicEntity {
 
     public static final String PROTEIN_ACCESSION_INDEX = "protein_accession_index";
     public static final String PROTEIN_FULL_NAME_FULL_TEXT_INDEX = "protein_full_name_full_text_index";
+    public static final String PROTEIN_GENE_NAMES_FULL_TEXT_INDEX = "protein_gene_names_full_text_index";
     
     public static final String NAME_PROPERTY = "name";
     public static final String FULL_NAME_PROPERTY = "full_name";
@@ -46,6 +47,7 @@ public class ProteinNode extends BasicEntity {
     public static final String EMBL_REFERENCES_PROPERTY = "embl_references";
     public static final String ARRAY_EXPRESS_ID_PROPERTY = "array_express_id";
     public static final String UNIGENE_ID_PROPERTY = "unigene_id";
+    public static final String ALTERNATIVE_ACCESSIONS_PROPERTY = "alternative_accessions";
 
     //public static final String GENE_NAMES_SEPARATOR = "\t";
 
@@ -76,6 +78,10 @@ public class ProteinNode extends BasicEntity {
 
     public String[] getEMBLreferences(){
         return (String[]) node.getProperty(EMBL_REFERENCES_PROPERTY);
+    }
+
+    public String[] getAlternativeAcessions(){
+        return (String[]) node.getProperty(ALTERNATIVE_ACCESSIONS_PROPERTY);
     }
 
     public String getPIRId(){
@@ -167,6 +173,10 @@ public class ProteinNode extends BasicEntity {
 
     public void setEMBLreferences(String[] value){
         node.setProperty(EMBL_REFERENCES_PROPERTY, value);
+    }
+
+    public void setAlternativeAccessions(String[] value){
+        node.setProperty(ALTERNATIVE_ACCESSIONS_PROPERTY, value);
     }
 
     public void setArrayExpressId(String value){
