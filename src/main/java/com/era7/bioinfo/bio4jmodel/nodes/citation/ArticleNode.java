@@ -28,7 +28,7 @@ import org.neo4j.graphdb.Node;
  */
 public class ArticleNode extends BasicEntity{
 
-    public static final String ARTICLE_TITLE_INDEX = "article_title_index";
+    public static final String ARTICLE_TITLE_FULL_TEXT_INDEX = "article_title_full_text_index";
 
     public static final String ARTICLE_PUBMED_ID_INDEX = "article_pubmed_id_index";
     public static final String ARTICLE_MEDLINE_ID_INDEX = "article_medline_id_index";

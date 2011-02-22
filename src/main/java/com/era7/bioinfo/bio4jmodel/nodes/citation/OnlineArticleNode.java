@@ -27,7 +27,7 @@ import org.neo4j.graphdb.Node;
  */
 public class OnlineArticleNode extends BasicEntity{
 
-    public static final String ONLINE_ARTICLE_TITLE_INDEX = "online_article_title_index";
+    public static final String ONLINE_ARTICLE_TITLE_FULL_TEXT_INDEX = "online_article_title_full_text_index";
 
 
     /** Online article title **/

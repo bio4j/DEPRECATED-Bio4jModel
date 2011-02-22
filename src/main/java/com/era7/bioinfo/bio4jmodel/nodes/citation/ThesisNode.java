@@ -26,7 +26,7 @@ import org.neo4j.graphdb.Node;
  */
 public class ThesisNode extends BasicEntity{
 
-    public static final String THESIS_TITLE_INDEX = "thesis_title_index";
+    public static final String THESIS_TITLE_FULL_TEXT_INDEX = "thesis_title_full_text_index";
 
     public static final String TITLE_PROPERTY = "title";
     public static final String DATE_PROPERTY = "date";

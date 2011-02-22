@@ -26,7 +26,7 @@ import org.neo4j.graphdb.Node;
  */
 public class BookNode extends BasicEntity{
 
-    public static final String BOOK_NAME_INDEX = "book_name_index";
+    public static final String BOOK_NAME_FULL_TEXT_INDEX = "book_name_full_text_index";
 
     /** Book name **/
     public static final String NAME_PROPERTY = "name";
