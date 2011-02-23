@@ -20,7 +20,6 @@ import com.era7.bioinfo.bio4jmodel.nodes.GoTermNode;
 import com.era7.bioinfo.bio4jmodel.nodes.ProteinNode;
 import com.era7.bioinfo.bio4jmodel.relationships.GoParentRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinGoRel;
-import com.era7.bioinfo.bioinfoneo4j.Neo4jManager;
 import com.era7.lib.bioinfoxml.ProteinXML;
 import com.era7.lib.bioinfoxml.go.GOSlimXML;
 import com.era7.lib.bioinfoxml.go.GoAnnotationXML;
@@ -39,7 +38,8 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.index.IndexService;
+import org.neo4j.graphdb.index.Index;
+import org.neo4j.graphdb.index.IndexHits;
 
 /**
  * 
@@ -48,7 +48,7 @@ import org.neo4j.index.IndexService;
 public class GoUtil {
 
     public static GoAnnotationXML getGoAnnotation(ArrayList<ProteinXML> proteins,
-            Neo4jManager manager) {
+            Bio4jManager manager) {
 
         GoAnnotationXML annotationXML = new GoAnnotationXML();
 
@@ -60,40 +60,45 @@ public class GoUtil {
 
         try {
 
-            IndexService indexService = manager.getIndexService();
+            //IndexService indexService = manager.getIndexService();
+            Index<Node> proteinAccessionIndex = manager.getProteinAccessionIndex();
 
             ProteinGoRel proteinGoRel = new ProteinGoRel(null);
             Iterator<Relationship> relIterator = null;
 
             for (ProteinXML proteinXML : proteins) {
-                
-                ProteinNode proteinNode = new ProteinNode(indexService.getSingleNode(ProteinNode.PROTEIN_ACCESSION_INDEX, proteinXML.getId()));
-                relIterator = proteinNode.getNode().getRelationships(proteinGoRel, Direction.OUTGOING).iterator();
-                while (relIterator.hasNext()) {
 
-                    proteinGoRel = new ProteinGoRel(relIterator.next());
-                    GoTermNode goTermNode = new GoTermNode(proteinGoRel.getEndNode());
-                    String goId = goTermNode.getId();
+                IndexHits<Node> protHits = proteinAccessionIndex.get(ProteinNode.PROTEIN_ACCESSION_INDEX, proteinXML.getId());
+                if (protHits.hasNext()) {
+                    ProteinNode proteinNode = new ProteinNode(protHits.getSingle());
+                    relIterator = proteinNode.getNode().getRelationships(proteinGoRel, Direction.OUTGOING).iterator();
+                    while (relIterator.hasNext()) {
 
-                    GoTermXML goXml = new GoTermXML();
-                    goXml.setId(goId);
-                    goXml.setAspect(goTermNode.getNamespace());
-                    goXml.setGoName(goTermNode.getName());
-                    goXml.setEvidence(proteinGoRel.getEvidence());
-                    proteinXML.addGoTerm(goXml, true);
+                        proteinGoRel = new ProteinGoRel(relIterator.next());
+                        GoTermNode goTermNode = new GoTermNode(proteinGoRel.getRelationship().getEndNode());
+                        String goId = goTermNode.getId();
 
-                    Integer goCount = goCountsMap.get(goId);
-                    if (goCount == null) {
-                        goCountsMap.put(goId, 1);
-                        goAnnotatorsMap.put(goId, new GoTermXML((Element) goXml.asJDomElement().clone()));
-                    } else {
-                        goCountsMap.put(goId, (goCount + 1));
+                        GoTermXML goXml = new GoTermXML();
+                        goXml.setId(goId);
+                        goXml.setAspect(goTermNode.getNamespace());
+                        goXml.setGoName(goTermNode.getName());
+                        goXml.setEvidence(proteinGoRel.getEvidence());
+                        proteinXML.addGoTerm(goXml, true);
+
+                        Integer goCount = goCountsMap.get(goId);
+                        if (goCount == null) {
+                            goCountsMap.put(goId, 1);
+                            goAnnotatorsMap.put(goId, new GoTermXML((Element) goXml.asJDomElement().clone()));
+                        } else {
+                            goCountsMap.put(goId, (goCount + 1));
+                        }
                     }
+
+                    proteinXML.detach();
+
+                    annotationXML.addProteinAnnotation(proteinXML);
                 }
 
-                proteinXML.detach();
-
-                annotationXML.addProteinAnnotation(proteinXML);
             }
 
             Set<String> keySet = goAnnotatorsMap.keySet();
@@ -107,6 +112,8 @@ public class GoUtil {
             txn.success();
 
         } catch (Exception e) {
+            Logger logger = Logger.getLogger("GoUtil");
+            logger.log(Level.SEVERE, e.getMessage());
             txn.failure();
             annotationXML = null;
         } finally {
@@ -119,16 +126,18 @@ public class GoUtil {
 
     public static GOSlimXML getGoSlim(ArrayList<ProteinXML> proteins,
             SlimSetXML slimSetXML,
-            Neo4jManager manager) {
+            Bio4jManager manager) {
 
         GOSlimXML goSlimXML = new GOSlimXML();
 
         GoAnnotationXML goAnnotationXML = GoUtil.getGoAnnotation(proteins, manager);
 
+        Index<Node> goTermIdIndex = manager.getGoTermIdIndex();
+
         if (goAnnotationXML != null) {
             List<GoTermXML> goAnnotators = goAnnotationXML.getAnnotatorGoTerms();
 
-            IndexService indexService = manager.getIndexService();
+            //IndexService indexService = manager.getIndexService();
 
             // in this hash map there is one entry for each annotator go term
             // the hash-set contains every slim-set go term including the annotator
@@ -136,7 +145,7 @@ public class GoUtil {
 
             //Here is every id included in the slim set
             HashSet<String> slimSetIds = new HashSet<String>();
-            
+
             //Now I extract the ids of the SlimSet
             List<Element> slimElements = slimSetXML.asJDomElement().getChildren(GoTermXML.TAG_NAME);
             for (Element slimElement : slimElements) {
@@ -163,16 +172,16 @@ public class GoUtil {
                     //this array includes the term own id and every ancestor id
                     ArrayList<String> ancestorsIds = new ArrayList<String>();
 
-                    GoTermNode goTermNode = new GoTermNode(indexService.getSingleNode(GoTermNode.GO_TERM_ID_INDEX, goAnnotator.getId()));
+                    GoTermNode goTermNode = new GoTermNode(goTermIdIndex.get(GoTermNode.GO_TERM_ID_INDEX, goAnnotator.getId()).getSingle());
                     //now I look up for the term ancestors
                     GoTermNode parent = goTermNode;
                     while (parent != null) {
                         ancestorsIds.add(parent.getId());
 
                         Node nodeParent = parent.getNode().getSingleRelationship(goParentRel, Direction.OUTGOING).getEndNode();
-                        if(nodeParent != null){
+                        if (nodeParent != null) {
                             parent = new GoTermNode(nodeParent);
-                        }else{
+                        } else {
                             parent = null;
                         }
                     }
@@ -180,7 +189,7 @@ public class GoUtil {
                     for (String ancestorId : ancestorsIds) {
                         //If the ancestor is included in the slim set, it means that this term
                         //from the slim set includes the goAnnotator 
-                        if(slimSetIds.contains(ancestorId)){
+                        if (slimSetIds.contains(ancestorId)) {
                             HashSet<String> hashSet = goAnnotatorsIncludingSlimSetTermsMap.get(goAnnotator.getId());
                             hashSet.add(ancestorId); //ancestorId is actually one of the slim-set terms ids.
                         }
@@ -189,7 +198,7 @@ public class GoUtil {
 
 
                 //So now I should have every goAnnotator with its corresponing slimSet terms
-                
+
 
 
                 txn.success();

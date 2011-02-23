@@ -26,7 +26,7 @@ import org.neo4j.graphdb.Node;
  */
 public class PersonNode extends BasicEntity{
 
-    public static final String PERSON_NAME_INDEX = "person_name_index";
+    public static final String PERSON_NAME_FULL_TEXT_INDEX = "person_name_full_text_index";
 
     public static final String NAME_PROPERTY = "name";
 
