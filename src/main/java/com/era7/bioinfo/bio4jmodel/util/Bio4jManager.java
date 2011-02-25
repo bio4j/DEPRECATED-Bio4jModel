@@ -94,7 +94,7 @@ public class Bio4jManager extends Neo4jManager{
         instituteNameIndex = graphDbService.index().forNodes(InstituteNode.INSTITUTE_NAME_INDEX, indexProps);
         countryNameIndex = graphDbService.index().forNodes(CountryNode.COUNTRY_NAME_INDEX, indexProps);
         cityNameIndex = graphDbService.index().forNodes(CityNode.CITY_NAME_INDEX, indexProps);
-        thesisFullTextIndex = graphDbService.index().forNodes(ThesisNode.THESIS_TITLE_FULL_TEXT_INDEX, indexProps);
+        thesisFullTextIndex = graphDbService.index().forNodes(ThesisNode.THESIS_TITLE_FULL_TEXT_INDEX, indexFullTextProps);
         patentNumberIndex = graphDbService.index().forNodes(PatentNode.PATENT_NUMBER_INDEX, indexProps);
         bookNameFullTextIndex = graphDbService.index().forNodes(BookNode.BOOK_NAME_FULL_TEXT_INDEX, indexFullTextProps);
         publisherNameIndex = graphDbService.index().forNodes(PublisherNode.PUBLISHER_NAME_INDEX, indexProps);

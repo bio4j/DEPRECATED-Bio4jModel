@@ -21,7 +21,9 @@ import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
 import org.neo4j.graphdb.Node;
 
 /**
- * This class just models a Research Institute.
+ * This class models the 'provisional' target node for relationships between
+ * proteins and themselves. Whenever neo4j API supports self-relationships for
+ * nodes, this node will be no longer necessary.
  * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class ProteinSelfInteractionsNode extends BasicEntity{
