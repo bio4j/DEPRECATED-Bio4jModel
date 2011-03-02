@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.era7.bioinfo.bio4jmodel.relationships;
+package com.era7.bioinfo.bio4jmodel.relationships.go;
 
 import com.era7.bioinfo.bioinfoneo4j.BasicRelationship;
 import org.neo4j.graphdb.Relationship;
@@ -27,6 +27,8 @@ import org.neo4j.graphdb.Relationship;
 public class GoParentRel extends BasicRelationship{
 
     public static final String NAME = "GO_PARENT";
+
+    public static final String GO_PARENT_REL_INDEX = "go_parent_rel_index";
 
     public GoParentRel(Relationship rel){
         super(rel);

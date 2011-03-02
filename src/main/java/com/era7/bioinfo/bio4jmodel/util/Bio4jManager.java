@@ -7,11 +7,13 @@ package com.era7.bioinfo.bio4jmodel.util;
 
 import com.era7.bioinfo.bio4jmodel.nodes.*;
 import com.era7.bioinfo.bio4jmodel.nodes.citation.*;
+import com.era7.bioinfo.bio4jmodel.relationships.go.GoParentRel;
 import com.era7.bioinfo.bioinfoneo4j.Neo4jManager;
 import java.util.HashMap;
 import java.util.Map;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.Index;
 
 /**
@@ -30,6 +32,7 @@ public class Bio4jManager extends Neo4jManager{
 
     private GraphDatabaseService graphDbService = null;
 
+    //-----------------node indexes-----------------------
     private Index<Node> goTermIdIndex = null;
     private Index<Node> proteinAccessionIndex = null;
     private Index<Node> proteinFullNameFullTextIndex = null;
@@ -60,6 +63,9 @@ public class Bio4jManager extends Neo4jManager{
     private Index<Node> articlePubmedIdIndex = null;
     private Index<Node> journalNameIndex = null;
 
+    //------------relationship indexes---------------
+    private Index<Relationship> goParentRelIndex = null;
+
     /**
      * Constructor
      * @param dbFolder
@@ -76,6 +82,7 @@ public class Bio4jManager extends Neo4jManager{
         indexFullTextProps.put(PROVIDER_ST, LUCENE_ST);
         indexFullTextProps.put(TYPE_ST, FULL_TEXT_ST);
 
+        //----------node indexes-----------
         goTermIdIndex = graphDbService.index().forNodes(GoTermNode.GO_TERM_ID_INDEX, indexProps);
         proteinAccessionIndex = graphDbService.index().forNodes(ProteinNode.PROTEIN_ACCESSION_INDEX, indexProps);
         proteinFullNameFullTextIndex = graphDbService.index().forNodes(ProteinNode.PROTEIN_FULL_NAME_FULL_TEXT_INDEX, indexFullTextProps);
@@ -105,6 +112,9 @@ public class Bio4jManager extends Neo4jManager{
         articleDoiIdIndex = graphDbService.index().forNodes(ArticleNode.ARTICLE_DOI_ID_INDEX, indexProps);
         articlePubmedIdIndex = graphDbService.index().forNodes(ArticleNode.ARTICLE_PUBMED_ID_INDEX, indexProps);
         journalNameIndex = graphDbService.index().forNodes(JournalNode.JOURNAL_NAME_INDEX, indexProps);
+
+        //----------relationship indexes-----
+        goParentRelIndex = graphDbService.index().forRelationships(GoParentRel.GO_PARENT_REL_INDEX, indexProps);
         
 
     }
@@ -209,6 +219,9 @@ public class Bio4jManager extends Neo4jManager{
         return journalNameIndex;
     }
 
+    public Index<Relationship> getGoParentRelIndex(){
+        return goParentRelIndex;
+    }
 
 
 }

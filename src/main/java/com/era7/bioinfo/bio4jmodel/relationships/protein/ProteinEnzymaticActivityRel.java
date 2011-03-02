@@ -21,14 +21,14 @@ import com.era7.bioinfo.bioinfoneo4j.BasicRelationship;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Protein's dataset (Swiss-prot or trembl)
+ * Protein enzymatic activity (EC number connections)
  * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
-public class ProteinDatasetRel extends BasicRelationship{
+public class ProteinEnzymaticActivityRel extends BasicRelationship{
 
-    public static final String NAME = "PROTEIN_DATASET";
+    public static final String NAME = "PROTEIN_ENZYMATIC_ACTIVITY";
 
-    public ProteinDatasetRel(Relationship rel){
+    public ProteinEnzymaticActivityRel(Relationship rel){
         super(rel);
     }
 

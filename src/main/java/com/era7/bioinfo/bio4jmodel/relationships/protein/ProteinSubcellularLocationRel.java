@@ -57,7 +57,9 @@ public class ProteinSubcellularLocationRel extends BasicRelationship{
     @Override
     public String toString(){
         return "status = " + getStatus() +
-                "\nevidence = " + getEvidence();
+                "\nevidence = " + getEvidence() +
+                "\ntopology = " + getTopology() +
+                "\ntopology status = " + getTopologyStatus();
     }
 
 }
