@@ -25,27 +25,46 @@ import com.era7.lib.bioinfoxml.go.GOSlimXML;
 import com.era7.lib.bioinfoxml.go.GoAnnotationXML;
 import com.era7.lib.bioinfoxml.go.GoTermXML;
 import com.era7.lib.bioinfoxml.go.SlimSetXML;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import org.jdom.Element;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.graphdb.index.RelationshipIndex;
 
 /**
  * 
  * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class GoUtil {
+
+    private static final Logger logger = Logger.getLogger("GoUtil");
+
+    static {
+        try {
+            FileHandler fh = new FileHandler("GoUtil.log", true);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+            logger.addHandler(fh);
+            logger.setLevel(Level.ALL);
+        } catch (IOException ex) {
+            Logger.getLogger(GoUtil.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(GoUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public static GoAnnotationXML getGoAnnotation(ArrayList<ProteinXML> proteins,
             Bio4jManager manager) {
@@ -56,7 +75,7 @@ public class GoUtil {
         HashMap<String, GoTermXML> goAnnotatorsMap = new HashMap<String, GoTermXML>();
         HashMap<String, Integer> goCountsMap = new HashMap<String, Integer>();
 
-        Transaction txn = manager.beginTransaction();
+//        Transaction txn = manager.beginTransaction();
 
         try {
 
@@ -109,15 +128,15 @@ public class GoUtil {
             }
 
 
-            txn.success();
+//            txn.success();
 
         } catch (Exception e) {
             Logger logger = Logger.getLogger("GoUtil");
             logger.log(Level.SEVERE, e.getMessage());
-            txn.failure();
+//            txn.failure();
             annotationXML = null;
         } finally {
-            txn.finish();
+//            txn.finish();
         }
 
 
@@ -144,15 +163,38 @@ public class GoUtil {
             HashMap<String, HashSet<String>> goAnnotatorsIncludingSlimSetTermsMap = new HashMap<String, HashSet<String>>();
 
             //Here is every id included in the slim set
-            HashSet<String> slimSetIds = new HashSet<String>();
+            //HashSet<String> slimSetIds = new HashSet<String>();
+
+            //Here are the xml elements of the Go terms from the slim set termid --> term xml
+            HashMap<String, GoTermXML> slimSetGos = new HashMap<String, GoTermXML>();
+
+            //Here are the number of proteins annotated for each go term of the slim set termid --> number of proteins annotated
+            HashMap<String, Integer> slimSetTermsAnnotationCounts = new HashMap<String, Integer>();
 
             //Now I extract the ids of the SlimSet
             List<Element> slimElements = slimSetXML.asJDomElement().getChildren(GoTermXML.TAG_NAME);
             for (Element slimElement : slimElements) {
                 GoTermXML tempGo = new GoTermXML(slimElement);
-                slimSetIds.add(tempGo.getId());
+
+                //--completing data of slimset go terms-----
+                GoTermNode tempGoNode = new GoTermNode(manager.getGoTermIdIndex().get(GoTermNode.GO_TERM_ID_INDEX, tempGo.getId()).getSingle());
+                tempGo.setAspect(tempGoNode.getNamespace());
+                tempGo.setGoName(tempGoNode.getName());
+                //------------------------
+                
+                slimSetGos.put(tempGo.getId(), tempGo);
+
+                //initializing annotation counts map
+                slimSetTermsAnnotationCounts.put(tempGo.getId(), 0);
             }
             //--------------------------------------------
+
+
+//            logger.log(Level.INFO, "slimsetIds:");
+//            for (String slimId : slimSetIds) {
+//                logger.log(Level.INFO, ("slimId:" + slimId));
+//            }
+
 
             //Now it is time for goAnnotatorsIncludingSlimSetTermsMap initialization
             for (GoTermXML goAnnotator : goAnnotators) {
@@ -160,7 +202,7 @@ public class GoUtil {
             }
             //------------------------------------------------------
 
-            Transaction txn = manager.beginTransaction();
+
 
             try {
 
@@ -168,47 +210,117 @@ public class GoUtil {
 
                 //Now I search the way up of every go Annotator and check if in the way I find
                 //any of the terms included in the slim set.
+
+                //logger.log(Level.INFO, "lalalala");
+
+                int callCounter = 0;
+
                 for (GoTermXML goAnnotator : goAnnotators) {
                     //this array includes the term own id and every ancestor id
-                    ArrayList<String> ancestorsIds = new ArrayList<String>();
+                    HashSet<String> ancestorsIds = new HashSet<String>();
 
                     GoTermNode goTermNode = new GoTermNode(goTermIdIndex.get(GoTermNode.GO_TERM_ID_INDEX, goAnnotator.getId()).getSingle());
-                    //now I look up for the term ancestors
-                    GoTermNode parent = goTermNode;
-                    while (parent != null) {
-                        ancestorsIds.add(parent.getId());
 
-                        Node nodeParent = parent.getNode().getSingleRelationship(goParentRel, Direction.OUTGOING).getEndNode();
-                        if (nodeParent != null) {
-                            parent = new GoTermNode(nodeParent);
-                        } else {
-                            parent = null;
-                        }
-                    }
+                    //logger.log(Level.INFO, goTermNode.toString());
+
+                    fillUpAncestorIds(goTermNode, ancestorsIds, goParentRel, manager.getGoParentRelIndex(), callCounter);
 
                     for (String ancestorId : ancestorsIds) {
                         //If the ancestor is included in the slim set, it means that this term
                         //from the slim set includes the goAnnotator 
-                        if (slimSetIds.contains(ancestorId)) {
+                        if (slimSetGos.keySet().contains(ancestorId)) {
                             HashSet<String> hashSet = goAnnotatorsIncludingSlimSetTermsMap.get(goAnnotator.getId());
                             hashSet.add(ancestorId); //ancestorId is actually one of the slim-set terms ids.
                         }
                     }
-                }
 
+                    callCounter++;
+                }
 
                 //So now I should have every goAnnotator with its corresponing slimSet terms
 
+                List<Element> proteinList = goAnnotationXML.getProteinAnnotations().getChildren(ProteinXML.TAG_NAME);
 
+                Element proteinsElem = new Element(GOSlimXML.PROTEINS_TAG_NAME);
 
-                txn.success();
+                int sampleAnnotatedGeneNumber = 0;
+
+                for (Element currentElem : proteinList) {
+
+                    boolean annotated = false;
+
+                    //getting the protein
+                    ProteinXML currentProteinXML = new ProteinXML(currentElem);
+                    //--------now we access to its go annotations-------------
+                    List<GoTermXML> proteinTerms = new ArrayList<GoTermXML>();
+                    List<GoTermXML> bpTerms = currentProteinXML.getBiologicalProcessGoTerms();
+                    List<GoTermXML> ccTerms = currentProteinXML.getCellularComponentGoTerms();
+                    List<GoTermXML> mfTerms = currentProteinXML.getMolecularFunctionGoTerms();
+                    if (bpTerms != null) {
+                        proteinTerms.addAll(bpTerms);
+                    }
+                    if (ccTerms != null) {
+                        proteinTerms.addAll(ccTerms);
+                    }
+                    if (mfTerms != null) {
+                        proteinTerms.addAll(mfTerms);
+                    }
+                    //------------------------------------------------------
+                    //creating the result xml protein
+                    ProteinXML proteinResult = new ProteinXML();
+                    proteinResult.setId(currentProteinXML.getId());
+                    HashSet<String> proteinSlimTems = new HashSet<String>();
+                    for (GoTermXML goTermXML : proteinTerms) {
+                        HashSet<String> hashSet = goAnnotatorsIncludingSlimSetTermsMap.get(goTermXML.getId());
+                        if (hashSet != null) {
+                            proteinSlimTems.addAll(hashSet);
+                            annotated = true;
+                        }
+                    }
+
+                    //now we get the info from the slimset go terms
+                    for (String string : proteinSlimTems) {
+                        //logger.log(Level.INFO, ("string: " + string));
+                        GoTermXML tempGoTerm = new GoTermXML((Element) slimSetGos.get(string).asJDomElement().clone());
+                        //logger.log(Level.INFO, ("tempGoTerm: " + tempGoTerm));
+                        proteinResult.addGoTerm(tempGoTerm, true);
+
+                        //updating annotation counts
+                        slimSetTermsAnnotationCounts.put(string, slimSetTermsAnnotationCounts.get(string) + 1);
+                    }
+
+                    proteinsElem.addContent(proteinResult.asJDomElement());
+
+                    if (annotated) {
+                        sampleAnnotatedGeneNumber++;
+                    }
+
+                }
+
+                //updating slimset annotation counts
+                List<Element> slimSetElems = slimSetXML.asJDomElement().getChildren(GoTermXML.TAG_NAME);
+                for (Element slimSetElem : slimSetElems) {
+                    GoTermXML slimSetGo = new GoTermXML(slimSetElem);
+                    slimSetGo.setAnnotationsCount(slimSetTermsAnnotationCounts.get(slimSetGo.getId()));
+                }
+                
+                goSlimXML.asJDomElement().addContent(proteinsElem);
+                slimSetXML.detach();
+                goSlimXML.setSlimSet(slimSetXML);
+                goSlimXML.setSampleGeneNumber(proteinList.size());
+                goSlimXML.setSampleAnnotatedGeneNumber(sampleAnnotatedGeneNumber);
+                //goSlimXML.set
+
+//                txn.success();
             } catch (Exception e) {
-                Logger logger = Logger.getLogger("GoUtil");
                 logger.log(Level.SEVERE, e.getMessage());
-                txn.failure();
+                StackTraceElement[] trace = e.getStackTrace();
+                for (StackTraceElement stackTraceElement : trace) {
+                    logger.log(Level.SEVERE, stackTraceElement.toString());
+                }
                 goSlimXML = null;
             } finally {
-                txn.finish();
+//                txn.finish();
             }
 
 
@@ -218,5 +330,31 @@ public class GoUtil {
 
 
         return goSlimXML;
+    }
+
+    private static void fillUpAncestorIds(GoTermNode node,
+            HashSet<String> ancestorsIds,
+            GoParentRel goParentRel,
+            RelationshipIndex goParentRelIndex,
+            int call) {
+
+        ancestorsIds.add(node.getId());
+
+        //logger.log(Level.INFO, ("fillUpAncestorIds (v2) --> " + node.getId() + " call: " + call));
+
+
+        Iterator<Relationship> relIterator = goParentRelIndex.get(GoParentRel.GO_PARENT_REL_INDEX, String.valueOf(node.getNode().getId())).iterator();
+        if (relIterator.hasNext()) {
+            node = new GoTermNode(relIterator.next().getEndNode());
+
+            fillUpAncestorIds(node, ancestorsIds, goParentRel, goParentRelIndex, call);
+            while (relIterator.hasNext()) {
+                node = new GoTermNode(relIterator.next().getEndNode());
+                //logger.log(Level.INFO, ("double parent --> " + node.getId() + " call: " + call));
+                fillUpAncestorIds(node, ancestorsIds, goParentRel, goParentRelIndex, call + 400000);
+            }
+        }
+
+
     }
 }

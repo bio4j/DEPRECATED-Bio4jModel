@@ -57,7 +57,7 @@
     </dependency>
         <dependency>
             <groupId>com.era7.lib</groupId>
-            <artifactId>BioinfoXML</artifactId>
+            <artifactId>Era7BioinfoXML</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>

@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.Index;
+import org.neo4j.graphdb.index.RelationshipIndex;
 
 /**
  *
@@ -64,7 +64,7 @@ public class Bio4jManager extends Neo4jManager{
     private Index<Node> journalNameIndex = null;
 
     //------------relationship indexes---------------
-    private Index<Relationship> goParentRelIndex = null;
+    private RelationshipIndex goParentRelIndex = null;
 
     /**
      * Constructor
@@ -219,7 +219,7 @@ public class Bio4jManager extends Neo4jManager{
         return journalNameIndex;
     }
 
-    public Index<Relationship> getGoParentRelIndex(){
+    public RelationshipIndex getGoParentRelIndex(){
         return goParentRelIndex;
     }
 
