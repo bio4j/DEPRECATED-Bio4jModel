@@ -29,6 +29,8 @@ public class OnlineArticleNode extends BasicEntity{
 
     public static final String ONLINE_ARTICLE_TITLE_FULL_TEXT_INDEX = "online_article_title_full_text_index";
 
+    public static final String NODE_TYPE = OnlineArticleNode.class.getCanonicalName();
+
 
     /** Online article title **/
     public static final String TITLE_PROPERTY = "title";
@@ -38,7 +40,6 @@ public class OnlineArticleNode extends BasicEntity{
 
     public OnlineArticleNode(Node n){
         super(n);
-        nodeType = OnlineArticleNode.class.getCanonicalName();
     }
 
 

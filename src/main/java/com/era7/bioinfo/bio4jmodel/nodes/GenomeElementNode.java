@@ -27,6 +27,7 @@ import org.neo4j.graphdb.Node;
 public class GenomeElementNode extends BasicEntity{
 
     public static final String GENOME_ELEMENT_ID_INDEX = "genome_element_id_index";
+    public static final String NODE_TYPE = GenomeElementNode.class.getCanonicalName();
 
     public static final String ID_PROPERTY = "id";
     public static final String SEQUENCE_PROPERTY = "sequence";
@@ -34,7 +35,6 @@ public class GenomeElementNode extends BasicEntity{
 
     public GenomeElementNode(Node n){
         super(n);
-        nodeType = GenomeElementNode.class.getCanonicalName();
     }
 
 

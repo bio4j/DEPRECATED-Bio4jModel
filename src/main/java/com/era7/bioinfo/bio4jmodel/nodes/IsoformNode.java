@@ -27,6 +27,7 @@ import org.neo4j.graphdb.Node;
 public class IsoformNode extends BasicEntity{
 
     public static final String ISOFORM_ID_INDEX = "isoform_id_index";
+    public static final String NODE_TYPE = IsoformNode.class.getCanonicalName();
 
     /** Isoform id **/
     public static final String ID_PROPERTY = "id";
@@ -40,7 +41,6 @@ public class IsoformNode extends BasicEntity{
 
     public IsoformNode(Node n){
         super(n);
-        nodeType = IsoformNode.class.getCanonicalName();
     }
 
 

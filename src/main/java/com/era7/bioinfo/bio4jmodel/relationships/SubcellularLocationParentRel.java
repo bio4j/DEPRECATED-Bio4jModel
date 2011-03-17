@@ -26,6 +26,8 @@ import org.neo4j.graphdb.Relationship;
  */
 public class SubcellularLocationParentRel extends BasicRelationship{
 
+    public static final String SUBCELLULAR_LOCATION_PARENT_REL_INDEX = "subcellular_location_parent_rel_index";
+
     public static final String NAME = "SUBCELLULAR_LOCATION_PARENT";
 
     public SubcellularLocationParentRel(Relationship rel){

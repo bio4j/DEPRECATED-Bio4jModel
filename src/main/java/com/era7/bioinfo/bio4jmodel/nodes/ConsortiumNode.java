@@ -26,6 +26,7 @@ import org.neo4j.graphdb.Node;
 public class ConsortiumNode extends BasicEntity{
 
     public static final String CONSORTIUM_NAME_INDEX = "consortium_name_index";
+    public static final String NODE_TYPE = ConsortiumNode.class.getCanonicalName();
 
     /** Consortium name **/
     public static final String NAME_PROPERTY = "name";
@@ -33,7 +34,6 @@ public class ConsortiumNode extends BasicEntity{
 
     public ConsortiumNode(Node n){
         super(n);
-        nodeType = ConsortiumNode.class.getCanonicalName();
     }
 
 

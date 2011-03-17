@@ -28,12 +28,13 @@ public class OnlineJournalNode extends BasicEntity{
 
     public static final String ONLINE_JOURNAL_NAME_INDEX = "online_journal_name_index";
 
+    public static final String NODE_TYPE = OnlineJournalNode.class.getCanonicalName();
+
     public static final String NAME_PROPERTY = "name";
 
 
     public OnlineJournalNode(Node n){
         super(n);
-        nodeType = OnlineJournalNode.class.getCanonicalName();
     }
 
 

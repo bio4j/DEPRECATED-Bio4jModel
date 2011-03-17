@@ -30,6 +30,8 @@ public class ArticleNode extends BasicEntity{
 
     public static final String ARTICLE_TITLE_FULL_TEXT_INDEX = "article_title_full_text_index";
 
+    public static final String NODE_TYPE = ArticleNode.class.getCanonicalName();
+
     public static final String ARTICLE_PUBMED_ID_INDEX = "article_pubmed_id_index";
     public static final String ARTICLE_MEDLINE_ID_INDEX = "article_medline_id_index";
     public static final String ARTICLE_DOI_ID_INDEX = "article_doi_id_index";
@@ -48,7 +50,6 @@ public class ArticleNode extends BasicEntity{
 
     public ArticleNode(Node n){
         super(n);
-        nodeType = ArticleNode.class.getCanonicalName();
     }
 
 

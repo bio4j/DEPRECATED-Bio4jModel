@@ -7,6 +7,7 @@ package com.era7.bioinfo.bio4jmodel.util;
 
 import com.era7.bioinfo.bio4jmodel.nodes.*;
 import com.era7.bioinfo.bio4jmodel.nodes.citation.*;
+import com.era7.bioinfo.bio4jmodel.relationships.SubcellularLocationParentRel;
 import com.era7.bioinfo.bio4jmodel.relationships.go.GoParentRel;
 import com.era7.bioinfo.bioinfoneo4j.Neo4jManager;
 import java.util.HashMap;
@@ -65,6 +66,7 @@ public class Bio4jManager extends Neo4jManager{
 
     //------------relationship indexes---------------
     private RelationshipIndex goParentRelIndex = null;
+    private RelationshipIndex subcellularLocationParentRelIndex = null;
 
     /**
      * Constructor
@@ -115,6 +117,7 @@ public class Bio4jManager extends Neo4jManager{
 
         //----------relationship indexes-----
         goParentRelIndex = graphDbService.index().forRelationships(GoParentRel.GO_PARENT_REL_INDEX, indexProps);
+        subcellularLocationParentRelIndex = graphDbService.index().forRelationships(SubcellularLocationParentRel.SUBCELLULAR_LOCATION_PARENT_REL_INDEX);
         
 
     }
@@ -221,6 +224,9 @@ public class Bio4jManager extends Neo4jManager{
 
     public RelationshipIndex getGoParentRelIndex(){
         return goParentRelIndex;
+    }
+    public RelationshipIndex getSubcellularParentRelIndex(){
+        return subcellularLocationParentRelIndex;
     }
 
 

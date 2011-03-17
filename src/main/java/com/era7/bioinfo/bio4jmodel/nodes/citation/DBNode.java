@@ -27,12 +27,13 @@ public class DBNode extends BasicEntity{
 
     public static final String DB_NAME_INDEX = "db_name_index";
 
+    public static final String NODE_TYPE = DBNode.class.getCanonicalName();
+
     public static final String NAME_PROPERTY = "name";
 
 
     public DBNode(Node n){
         super(n);
-        nodeType = "Db";
     }
 
 

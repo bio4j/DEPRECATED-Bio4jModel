@@ -28,12 +28,13 @@ public class SequenceCautionNode extends BasicEntity{
 
     public static final String SEQUENCE_CAUTION_NAME_INDEX = "sequence_caution_name_index";
 
+    public static final String NODE_TYPE = SequenceCautionNode.class.getCanonicalName();
+
     public static final String NAME_PROPERTY = "name";
 
 
     public SequenceCautionNode(Node n){
         super(n);
-        nodeType = SequenceCautionNode.class.getCanonicalName();
     }
 
 

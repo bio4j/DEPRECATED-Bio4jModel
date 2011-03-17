@@ -28,6 +28,8 @@ public class EnzymeNode extends BasicEntity{
 
     public static final String ENZYME_ID_INDEX = "enzyme_id_index";
 
+    public static final String NODE_TYPE = EnzymeNode.class.getCanonicalName();
+
     /** Enzyme id (EZ number)**/
     public static final String ID_PROPERTY = "id";
     public static final String OFFICIAL_NAME_PROPERTY = "official_name";
@@ -40,7 +42,6 @@ public class EnzymeNode extends BasicEntity{
 
     public EnzymeNode(Node n){
         super(n);
-        nodeType = EnzymeNode.class.getCanonicalName();
     }
 
 

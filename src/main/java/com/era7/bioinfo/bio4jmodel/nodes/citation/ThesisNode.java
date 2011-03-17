@@ -28,6 +28,8 @@ public class ThesisNode extends BasicEntity{
 
     public static final String THESIS_TITLE_FULL_TEXT_INDEX = "thesis_title_full_text_index";
 
+    public static final String NODE_TYPE = ThesisNode.class.getCanonicalName();
+
     public static final String TITLE_PROPERTY = "title";
     public static final String DATE_PROPERTY = "date";
 
@@ -36,7 +38,6 @@ public class ThesisNode extends BasicEntity{
 
     public ThesisNode(Node n){
         super(n);
-        nodeType = ThesisNode.class.getCanonicalName();
     }
 
 

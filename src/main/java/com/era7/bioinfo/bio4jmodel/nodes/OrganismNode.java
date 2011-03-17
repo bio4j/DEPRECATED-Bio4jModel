@@ -29,6 +29,8 @@ public class OrganismNode extends BasicEntity{
     public static final String ORGANISM_SCIENTIFIC_NAME_INDEX = "organism_scientific_name_index";
     public static final String ORGANISM_NCBI_TAXONOMY_ID_INDEX = "organism_ncbi_taxonomy_id_index";
 
+    public static final String NODE_TYPE = OrganismNode.class.getCanonicalName();
+
     public static final String SCIENTIFIC_NAME_PROPERTY = "scientific_name";
     public static final String COMMON_NAME_PROPERTY = "common_name";
     public static final String SYNONYM_NAME_PROPERTY = "synonym_name";
@@ -37,7 +39,6 @@ public class OrganismNode extends BasicEntity{
 
     public OrganismNode(Node n){
         super(n);
-        nodeType = OrganismNode.class.getCanonicalName();
     }
 
 

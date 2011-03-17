@@ -27,6 +27,7 @@ import org.neo4j.graphdb.Node;
 public class GoTermNode extends BasicEntity{
 
     public static final String GO_TERM_ID_INDEX = "go_term_id_index";
+    public static final String NODE_TYPE = GoTermNode.class.getCanonicalName();
 
     /** GO Term id **/
     public static final String ID_PROPERTY = "id";
@@ -49,7 +50,6 @@ public class GoTermNode extends BasicEntity{
 
     public GoTermNode(Node n){
         super(n);
-        nodeType = GoTermNode.class.getCanonicalName();
     }
 
 

@@ -27,6 +27,7 @@ import org.neo4j.graphdb.Node;
 public class InterproNode extends BasicEntity{
 
     public static final String INTERPRO_ID_INDEX = "interpro_id_index";
+    public static final String NODE_TYPE = InterproNode.class.getCanonicalName();
 
     /** Interpro term id **/
     public static final String ID_PROPERTY = "id";
@@ -36,7 +37,6 @@ public class InterproNode extends BasicEntity{
 
     public InterproNode(Node n){
         super(n);
-        nodeType = InterproNode.class.getCanonicalName();
     }
 
 

@@ -28,10 +28,10 @@ import org.neo4j.graphdb.Node;
  */
 public class ProteinSelfInteractionsNode extends BasicEntity{
 
+    public static final String NODE_TYPE = ProteinSelfInteractionsNode.class.getCanonicalName();
     
     public ProteinSelfInteractionsNode(Node n){
         super(n);
-        nodeType = ProteinSelfInteractionsNode.class.getCanonicalName();
     }
 
     @Override

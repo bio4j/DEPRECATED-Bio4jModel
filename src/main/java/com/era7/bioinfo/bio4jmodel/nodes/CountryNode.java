@@ -27,6 +27,7 @@ import org.neo4j.graphdb.Node;
 public class CountryNode extends BasicEntity{
 
     public static final String COUNTRY_NAME_INDEX = "country_name_index";
+    public static final String NODE_TYPE = CountryNode.class.getCanonicalName();
 
     /** Country name **/
     public static final String NAME_PROPERTY = "name";
@@ -34,7 +35,6 @@ public class CountryNode extends BasicEntity{
 
     public CountryNode(Node n){
         super(n);
-        nodeType = CountryNode.class.getCanonicalName();
     }
 
 

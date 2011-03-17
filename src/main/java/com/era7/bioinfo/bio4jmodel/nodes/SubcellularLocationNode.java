@@ -28,12 +28,13 @@ public class SubcellularLocationNode extends BasicEntity{
 
     public static final String SUBCELLULAR_LOCATION_NAME_INDEX = "subcellular_location_name_index";
 
+    public static final String NODE_TYPE = SubcellularLocationNode.class.getCanonicalName();
+
     public static final String NAME_PROPERTY = "name";
 
 
     public SubcellularLocationNode(Node n){
         super(n);
-        nodeType = SubcellularLocationNode.class.getCanonicalName();
     }
 
     public String getName(){    return String.valueOf(node.getProperty(NAME_PROPERTY));}

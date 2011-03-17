@@ -28,12 +28,13 @@ public class PublisherNode extends BasicEntity{
 
     public static final String PUBLISHER_NAME_INDEX = "publisher_name_index";
 
+    public static final String NODE_TYPE = PublisherNode.class.getCanonicalName();
+
     public static final String NAME_PROPERTY = "name";
 
 
     public PublisherNode(Node n){
         super(n);
-        nodeType = PublisherNode.class.getCanonicalName();
     }
 
 

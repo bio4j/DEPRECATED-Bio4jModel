@@ -28,12 +28,13 @@ public class UnpublishedObservationNode extends BasicEntity{
 
     public static final String DATE_PROPERTY = "date";
 
+    public static final String NODE_TYPE = UnpublishedObservationNode.class.getCanonicalName();
+
     public static final String UNIPROT_ATTRIBUTE_TYPE_VALUE = "unpublished observations";
 
 
     public UnpublishedObservationNode(Node n){
         super(n);
-        nodeType = UnpublishedObservationNode.class.getCanonicalName();
     }
 
 

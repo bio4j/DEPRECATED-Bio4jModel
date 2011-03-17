@@ -27,6 +27,8 @@ public class SubmissionNode extends BasicEntity{
 
     public static final String SUBMISSION_TITLE_INDEX = "submission_title_index";
 
+    public static final String NODE_TYPE = SubmissionNode.class.getCanonicalName();
+
     public static final String TITLE_PROPERTY = "title";
     public static final String DATE_PROPERTY = "date";
 
@@ -35,7 +37,6 @@ public class SubmissionNode extends BasicEntity{
 
     public SubmissionNode(Node n){
         super(n);
-        nodeType = SubmissionNode.class.getCanonicalName();
     }
 
 

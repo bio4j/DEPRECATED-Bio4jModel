@@ -28,6 +28,8 @@ public class BookNode extends BasicEntity{
 
     public static final String BOOK_NAME_FULL_TEXT_INDEX = "book_name_full_text_index";
 
+    public static final String NODE_TYPE = BookNode.class.getCanonicalName();
+
     /** Book name **/
     public static final String NAME_PROPERTY = "name";
     /** Year **/
@@ -38,7 +40,6 @@ public class BookNode extends BasicEntity{
 
     public BookNode(Node n){
         super(n);
-        nodeType = BookNode.class.getCanonicalName();
     }
 
 

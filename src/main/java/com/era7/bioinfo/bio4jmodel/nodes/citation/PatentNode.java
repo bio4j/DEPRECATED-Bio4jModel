@@ -28,6 +28,8 @@ public class PatentNode extends BasicEntity{
 
     public static final String PATENT_NUMBER_INDEX = "patent_number_index";
 
+    public static final String NODE_TYPE = PatentNode.class.getCanonicalName();
+
     public static final String NUMBER_PROPERTY = "number";
     public static final String DATE_PROPERTY = "date";
     public static final String TITLE_PROPERTY = "title";
@@ -37,7 +39,6 @@ public class PatentNode extends BasicEntity{
 
     public PatentNode(Node n){
         super(n);
-        nodeType = PatentNode.class.getCanonicalName();
     }
 
 

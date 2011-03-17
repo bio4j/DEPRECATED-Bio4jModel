@@ -32,6 +32,8 @@ public class ProteinNode extends BasicEntity {
     public static final String PROTEIN_ACCESSION_INDEX = "protein_accession_index";
     public static final String PROTEIN_FULL_NAME_FULL_TEXT_INDEX = "protein_full_name_full_text_index";
     public static final String PROTEIN_GENE_NAMES_FULL_TEXT_INDEX = "protein_gene_names_full_text_index";
+
+    public static final String NODE_TYPE = ProteinNode.class.getCanonicalName();
     
     public static final String NAME_PROPERTY = "name";
     public static final String FULL_NAME_PROPERTY = "full_name";
@@ -54,7 +56,6 @@ public class ProteinNode extends BasicEntity {
 
     public ProteinNode(Node n) {
         super(n);
-        nodeType = ProteinNode.class.getCanonicalName();
     }
 
     public String getName() {

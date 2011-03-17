@@ -26,6 +26,7 @@ import org.neo4j.graphdb.Node;
  */
 public class InstituteNode extends BasicEntity{
 
+    public static final String NODE_TYPE = InstituteNode.class.getCanonicalName();
     public static final String INSTITUTE_NAME_INDEX = "institute_name_index";
 
     /** Institute name **/
@@ -34,7 +35,6 @@ public class InstituteNode extends BasicEntity{
 
     public InstituteNode(Node n){
         super(n);
-        nodeType = InstituteNode.class.getCanonicalName();
     }
 
 

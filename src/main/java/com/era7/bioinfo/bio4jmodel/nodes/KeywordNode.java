@@ -29,6 +29,8 @@ public class KeywordNode extends BasicEntity{
     public static final String KEYWORD_ID_INDEX = "keyword_id_index";
     public static final String KEYWORD_NAME_INDEX = "keyword_name_index";
 
+    public static final String NODE_TYPE = KeywordNode.class.getCanonicalName();
+
     /** Keyword id **/
     public static final String ID_PROPERTY = "id";
     /** Keyword name **/
@@ -37,7 +39,6 @@ public class KeywordNode extends BasicEntity{
 
     public KeywordNode(Node n){
         super(n);
-        nodeType = KeywordNode.class.getCanonicalName();
     }
 
 
