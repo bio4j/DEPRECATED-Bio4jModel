@@ -254,7 +254,7 @@ public class GoUtil {
                     HashMap<String,String> currentProteinSlimTermInductors = new HashMap<String, String>();
                     //proteinSlimTermsAndInductorTermsMap.put(currentProteinXML.getId(), currentProteinSlimTermInductors);
 
-                    System.out.println("currentProteinXML.getId() = " + currentProteinXML.getId());
+                    //System.out.println("currentProteinXML.getId() = " + currentProteinXML.getId());
 
                     //--------now we access to its go annotations-------------
                     List<GoTermXML> proteinTerms = new ArrayList<GoTermXML>();
@@ -295,10 +295,9 @@ public class GoUtil {
 
                         //------Adding protein annotation term leading to slim set term -----------
                         String termInductorId = currentProteinSlimTermInductors.get(tempGoTerm.getId());
-                        //look for inductor info
-                        System.out.println("proteinTerms.size() = " + proteinTerms.size());
+                        //look for inductor info                        
                         for (GoTermXML goTermXML : proteinTerms) {
-                            System.out.println("goTermXML = " + goTermXML);
+                            //System.out.println("goTermXML = " + goTermXML);
                             if(goTermXML.getId().equals(termInductorId)){
                                 tempGoTerm.setProteinAnnotationLeadingToSlimTerm(new GoTermXML((Element)goTermXML.asJDomElement().clone()));
                                 break;
