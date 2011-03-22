@@ -161,9 +161,7 @@ public class GoUtil {
             // in this hash map there is one entry for each annotator go term
             // the hash-set contains every slim-set go term including the annotator
             HashMap<String, HashSet<String>> goAnnotatorsIncludingSlimSetTermsMap = new HashMap<String, HashSet<String>>();
-
-            //Here is every id included in the slim set
-            //HashSet<String> slimSetIds = new HashSet<String>();
+         
 
             //Here are the xml elements of the Go terms from the slim set termid --> term xml
             HashMap<String, GoTermXML> slimSetGos = new HashMap<String, GoTermXML>();
@@ -251,6 +249,13 @@ public class GoUtil {
 
                     //getting the protein
                     ProteinXML currentProteinXML = new ProteinXML(currentElem);
+
+                    //initializing inductors map                    
+                    HashMap<String,String> currentProteinSlimTermInductors = new HashMap<String, String>();
+                    //proteinSlimTermsAndInductorTermsMap.put(currentProteinXML.getId(), currentProteinSlimTermInductors);
+
+                    System.out.println("currentProteinXML.getId() = " + currentProteinXML.getId());
+
                     //--------now we access to its go annotations-------------
                     List<GoTermXML> proteinTerms = new ArrayList<GoTermXML>();
                     List<GoTermXML> bpTerms = currentProteinXML.getBiologicalProcessGoTerms();
@@ -273,8 +278,13 @@ public class GoUtil {
                     for (GoTermXML goTermXML : proteinTerms) {
                         HashSet<String> hashSet = goAnnotatorsIncludingSlimSetTermsMap.get(goTermXML.getId());
                         if (hashSet != null) {
-                            proteinSlimTems.addAll(hashSet);
-                            annotated = true;
+                            if(hashSet.size() > 0){
+                                proteinSlimTems.addAll(hashSet);
+                                for (String tempSlimTermId : hashSet) {
+                                    currentProteinSlimTermInductors.put(tempSlimTermId, goTermXML.getId());
+                                }                                
+                                annotated = true;
+                            }
                         }
                     }
 
@@ -282,9 +292,23 @@ public class GoUtil {
                     for (String string : proteinSlimTems) {
                         //logger.log(Level.INFO, ("string: " + string));
                         GoTermXML tempGoTerm = new GoTermXML((Element) slimSetGos.get(string).asJDomElement().clone());
+
+                        //------Adding protein annotation term leading to slim set term -----------
+                        String termInductorId = currentProteinSlimTermInductors.get(tempGoTerm.getId());
+                        //look for inductor info
+                        System.out.println("proteinTerms.size() = " + proteinTerms.size());
+                        for (GoTermXML goTermXML : proteinTerms) {
+                            System.out.println("goTermXML = " + goTermXML);
+                            if(goTermXML.getId().equals(termInductorId)){
+                                tempGoTerm.setProteinAnnotationLeadingToSlimTerm(new GoTermXML((Element)goTermXML.asJDomElement().clone()));
+                                break;
+                            }                            
+                        }
+                        //--------------------------------------------------------------------------
+
                         //logger.log(Level.INFO, ("tempGoTerm: " + tempGoTerm));
                         proteinResult.addGoTerm(tempGoTerm, true);
-
+                        
                         //updating annotation counts
                         slimSetTermsAnnotationCounts.put(string, slimSetTermsAnnotationCounts.get(string) + 1);
                     }
@@ -311,7 +335,6 @@ public class GoUtil {
                 goSlimXML.setSampleAnnotatedGeneNumber(sampleAnnotatedGeneNumber);
                 //goSlimXML.set
 
-//                txn.success();
             } catch (Exception e) {
                 logger.log(Level.SEVERE, e.getMessage());
                 StackTraceElement[] trace = e.getStackTrace();
@@ -319,9 +342,7 @@ public class GoUtil {
                     logger.log(Level.SEVERE, stackTraceElement.toString());
                 }
                 goSlimXML = null;
-            } finally {
-//                txn.finish();
-            }
+            } 
 
 
         } else {
