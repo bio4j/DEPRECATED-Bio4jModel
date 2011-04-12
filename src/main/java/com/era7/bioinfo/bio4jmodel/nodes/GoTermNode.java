@@ -41,6 +41,11 @@ public class GoTermNode extends BasicEntity{
         - Molecular function<br>
         - Cellular component<br>**/
     public static final String NAMESPACE_PROPERTY = "namespace";
+    /**
+     * Boolean value indicating whether the term is obsolete or not
+     */
+    public static final String OBSOLETE_PROPERTY = "obsolete";
+    public static final String COMMENT_PROPERTY = "comment";
     public static final String ALTERNATIVE_IDS_PROPERTY = "alternative_ids";
 
     public static final String BIOLOGICAL_PROCESS_NAMESPACE = "biological_process";
@@ -57,6 +62,8 @@ public class GoTermNode extends BasicEntity{
     public String getName(){    return String.valueOf(node.getProperty(NAME_PROPERTY));}
     public String getDefinition(){  return String.valueOf(node.getProperty(DEFINITION_PROPERTY));}
     public String getNamespace(){   return String.valueOf(node.getProperty(NAMESPACE_PROPERTY));}
+    public Boolean getObsolete(){    return Boolean.parseBoolean(String.valueOf(node.getProperty(OBSOLETE_PROPERTY)));}
+    public String getComment(){ return String.valueOf(node.getProperty(COMMENT_PROPERTY));}
     public String[] getAlternativeIds(){    return (String[]) node.getProperty(ALTERNATIVE_IDS_PROPERTY);}
 
 
@@ -64,6 +71,8 @@ public class GoTermNode extends BasicEntity{
     public void setName(String value){  node.setProperty(NAME_PROPERTY, value);}
     public void setDefinition(String value){    node.setProperty(DEFINITION_PROPERTY, value);}
     public void setNamespace(String value){ node.setProperty(NAMESPACE_PROPERTY, value);}
+    public void setObsolete(Boolean value){ node.setProperty(OBSOLETE_PROPERTY, String.valueOf(value));}
+    public void setComment(String value){   node.setProperty(COMMENT_PROPERTY, value);}
     public void setAlternativeIds(String[] value){  node.setProperty(ALTERNATIVE_IDS_PROPERTY, value);}
 
 

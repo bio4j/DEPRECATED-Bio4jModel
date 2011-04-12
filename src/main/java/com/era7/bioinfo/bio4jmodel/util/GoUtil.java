@@ -143,13 +143,24 @@ public class GoUtil {
         return annotationXML;
     }
 
+    /**
+     * 
+     * @param proteins
+     * @param slimSetXML
+     * @param manager
+     * @param goAnnotationXML
+     * @return
+     */
     public static GOSlimXML getGoSlim(ArrayList<ProteinXML> proteins,
             SlimSetXML slimSetXML,
-            Bio4jManager manager) {
+            Bio4jManager manager,
+            GoAnnotationXML goAnnotationXML) {
 
         GOSlimXML goSlimXML = new GOSlimXML();
 
-        GoAnnotationXML goAnnotationXML = GoUtil.getGoAnnotation(proteins, manager);
+        if(goAnnotationXML == null){
+            goAnnotationXML = GoUtil.getGoAnnotation(proteins, manager);
+        }
 
         Index<Node> goTermIdIndex = manager.getGoTermIdIndex();
 
