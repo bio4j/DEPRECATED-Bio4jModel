@@ -8,7 +8,7 @@ package com.era7.bioinfo.bio4jmodel.util;
 import com.era7.bioinfo.bio4jmodel.nodes.*;
 import com.era7.bioinfo.bio4jmodel.nodes.citation.*;
 import com.era7.bioinfo.bio4jmodel.relationships.SubcellularLocationParentRel;
-import com.era7.bioinfo.bio4jmodel.relationships.go.GoParentRel;
+import com.era7.bioinfo.bio4jmodel.relationships.go.IsAGoRel;
 import com.era7.bioinfo.bioinfoneo4j.Neo4jManager;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,7 +65,7 @@ public class Bio4jManager extends Neo4jManager{
     private Index<Node> journalNameIndex = null;
 
     //------------relationship indexes---------------
-    private RelationshipIndex goParentRelIndex = null;
+    private RelationshipIndex isAGorelIndex = null;
     private RelationshipIndex subcellularLocationParentRelIndex = null;
 
     /**
@@ -116,7 +116,7 @@ public class Bio4jManager extends Neo4jManager{
         journalNameIndex = graphDbService.index().forNodes(JournalNode.JOURNAL_NAME_INDEX, indexProps);
 
         //----------relationship indexes-----
-        goParentRelIndex = graphDbService.index().forRelationships(GoParentRel.GO_PARENT_REL_INDEX, indexProps);
+        isAGorelIndex = graphDbService.index().forRelationships(IsAGoRel.IS_A_REL_INDEX, indexProps);
         subcellularLocationParentRelIndex = graphDbService.index().forRelationships(SubcellularLocationParentRel.SUBCELLULAR_LOCATION_PARENT_REL_INDEX);
         
 
@@ -222,8 +222,8 @@ public class Bio4jManager extends Neo4jManager{
         return journalNameIndex;
     }
 
-    public RelationshipIndex getGoParentRelIndex(){
-        return goParentRelIndex;
+    public RelationshipIndex getIsAGoRelIndex(){
+        return isAGorelIndex;
     }
     public RelationshipIndex getSubcellularParentRelIndex(){
         return subcellularLocationParentRelIndex;

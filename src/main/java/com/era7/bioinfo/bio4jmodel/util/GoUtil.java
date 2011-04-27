@@ -18,7 +18,7 @@ package com.era7.bioinfo.bio4jmodel.util;
 
 import com.era7.bioinfo.bio4jmodel.nodes.GoTermNode;
 import com.era7.bioinfo.bio4jmodel.nodes.ProteinNode;
-import com.era7.bioinfo.bio4jmodel.relationships.go.GoParentRel;
+import com.era7.bioinfo.bio4jmodel.relationships.go.IsAGoRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinGoRel;
 import com.era7.lib.bioinfoxml.ProteinXML;
 import com.era7.lib.bioinfoxml.go.GOSlimXML;
@@ -131,7 +131,6 @@ public class GoUtil {
 //            txn.success();
 
         } catch (Exception e) {
-            Logger logger = Logger.getLogger("GoUtil");
             logger.log(Level.SEVERE, e.getMessage());
 //            txn.failure();
             annotationXML = null;
@@ -149,7 +148,7 @@ public class GoUtil {
      * @param slimSetXML
      * @param manager
      * @param goAnnotationXML
-     * @return
+     * @return GO Slim in xml format
      */
     public static GOSlimXML getGoSlim(ArrayList<ProteinXML> proteins,
             SlimSetXML slimSetXML,
@@ -215,7 +214,7 @@ public class GoUtil {
 
             try {
 
-                GoParentRel goParentRel = new GoParentRel(null);
+                IsAGoRel goParentRel = new IsAGoRel(null);
 
                 //Now I search the way up of every go Annotator and check if in the way I find
                 //any of the terms included in the slim set.
@@ -232,7 +231,7 @@ public class GoUtil {
 
                     //logger.log(Level.INFO, goTermNode.toString());
 
-                    fillUpAncestorIds(goTermNode, ancestorsIds, goParentRel, manager.getGoParentRelIndex(), callCounter);
+                    fillUpAncestorIds(goTermNode, ancestorsIds, goParentRel, manager.getIsAGoRelIndex(), callCounter);
 
                     for (String ancestorId : ancestorsIds) {
                         //If the ancestor is included in the slim set, it means that this term
@@ -365,7 +364,7 @@ public class GoUtil {
 
     private static void fillUpAncestorIds(GoTermNode node,
             HashSet<String> ancestorsIds,
-            GoParentRel goParentRel,
+            IsAGoRel goParentRel,
             RelationshipIndex goParentRelIndex,
             int call) {
 
@@ -374,7 +373,7 @@ public class GoUtil {
         //logger.log(Level.INFO, ("fillUpAncestorIds (v2) --> " + node.getId() + " call: " + call));
 
 
-        Iterator<Relationship> relIterator = goParentRelIndex.get(GoParentRel.GO_PARENT_REL_INDEX, String.valueOf(node.getNode().getId())).iterator();
+        Iterator<Relationship> relIterator = goParentRelIndex.get(IsAGoRel.IS_A_REL_INDEX, String.valueOf(node.getNode().getId())).iterator();
         if (relIterator.hasNext()) {
             node = new GoTermNode(relIterator.next().getEndNode());
 

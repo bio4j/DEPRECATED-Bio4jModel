@@ -21,17 +21,20 @@ import com.era7.bioinfo.bioinfoneo4j.BasicRelationship;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * 
- * This relationship can be used for retrieving the three top level 
- * gene ontology terms (biological process, molecular function, and cellular component).
- * 
+ *
+ * GO term 'is_a' relationship
+ *
  * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
-public class MainGoRel extends BasicRelationship{
+public class IsAGoRel extends BasicRelationship{
 
-    public static final String NAME = "MAIN_GO";
+    public static final String NAME = "IS_A_GO";
 
-    public MainGoRel(Relationship rel){
+    public static final String OBOXML_RELATIONSHIP_NAME = "is_a";
+
+    public static final String IS_A_REL_INDEX = "is_a_rel_index";
+
+    public IsAGoRel(Relationship rel){
         super(rel);
     }
 

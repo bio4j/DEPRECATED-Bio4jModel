@@ -21,8 +21,11 @@ import com.era7.bioinfo.bioinfoneo4j.BasicRelationship;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * 
+ * Relationship for retrieving the cellular component sub-ontology
+ * top level node.
+ * 
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class CellularComponentRel extends BasicRelationship{
 
