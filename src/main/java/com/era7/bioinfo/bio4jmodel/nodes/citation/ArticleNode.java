@@ -16,8 +16,18 @@
  */
 package com.era7.bioinfo.bio4jmodel.nodes.citation;
 
+import com.era7.bioinfo.bio4jmodel.nodes.ConsortiumNode;
+import com.era7.bioinfo.bio4jmodel.nodes.PersonNode;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.article.ArticleAuthorConsortiumRel;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.article.ArticleAuthorPersonRel;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.article.ArticleJournalRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * The reference information for a journal citation includes the journal abbreviation, the volume number,
@@ -64,6 +74,43 @@ public class ArticleNode extends BasicEntity{
     public void setMedlineId(String value){  node.setProperty(MEDLINE_ID_PROPERTY, value);}
     public void setDoiId(String value){  node.setProperty(DOI_ID_PROPERTY, value);}
 
+    
+    /**
+     * gets the article journal
+     * @return 
+     */
+    public JournalNode getJournal(){
+        Iterator<Relationship> iterator = this.node.getRelationships(new ArticleJournalRel(null), Direction.OUTGOING).iterator();
+        if(iterator.hasNext()){
+            return new JournalNode(iterator.next().getEndNode());
+        }else{
+            return null;
+        }
+    }
+    /**
+     * gets consortium authors (if any) of the article
+     * @return 
+     */
+    public List<ConsortiumNode> getConsortiumAuthors(){
+        List<ConsortiumNode> list = new ArrayList<ConsortiumNode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new ArticleAuthorConsortiumRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new ConsortiumNode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
+    /**
+     * gets person authors (if any) of the article
+     * @return 
+     */
+    public List<PersonNode> getPersonAuthors(){
+        List<PersonNode> list = new ArrayList<PersonNode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new ArticleAuthorPersonRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new PersonNode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
 
     @Override
     public int hashCode(){

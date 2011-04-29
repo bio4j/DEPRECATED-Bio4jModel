@@ -16,8 +16,18 @@
  */
 package com.era7.bioinfo.bio4jmodel.nodes.citation;
 
+import com.era7.bioinfo.bio4jmodel.nodes.CityNode;
+import com.era7.bioinfo.bio4jmodel.nodes.PersonNode;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.book.BookAuthorRel;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.book.BookCityRel;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.book.BookPublisherRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * The reference information for articles found in books or other types of publication includes
@@ -49,6 +59,46 @@ public class BookNode extends BasicEntity{
 
     public void setName(String value){  node.setProperty(NAME_PROPERTY, value);}
     public void setDate(String value){  node.setProperty(DATE_PROPERTY, value);}
+    
+    
+    /**
+     * Gets the Book publisher
+     * @return 
+     */
+    public PublisherNode getPublisher(){
+        Iterator<Relationship> iterator = node.getRelationships(new BookPublisherRel(null), Direction.OUTGOING).iterator();
+        if(iterator.hasNext()){
+            return new PublisherNode(iterator.next().getEndNode());
+        }else{
+            return null;
+        }        
+    }
+    
+    /**
+     * Gets the city where the book was published
+     * @return 
+     */
+    public CityNode getCity(){
+        Iterator<Relationship> iterator = node.getRelationships(new BookCityRel(null), Direction.OUTGOING).iterator();
+        if(iterator.hasNext()){
+            return new CityNode(iterator.next().getEndNode());
+        }else{
+            return null;
+        }        
+    }
+    
+    /**
+     * gets the authors of the book
+     * @return 
+     */
+    public List<PersonNode> getAuthors(){
+        List<PersonNode> list = new ArrayList<PersonNode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new BookAuthorRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new PersonNode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
 
 
     @Override

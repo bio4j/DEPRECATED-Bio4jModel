@@ -17,8 +17,18 @@
 
 package com.era7.bioinfo.bio4jmodel.nodes.citation;
 
+import com.era7.bioinfo.bio4jmodel.nodes.ConsortiumNode;
+import com.era7.bioinfo.bio4jmodel.nodes.PersonNode;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.onarticle.OnlineArticleAuthorConsortiumRel;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.onarticle.OnlineArticleAuthorPersonRel;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.onarticle.OnlineArticleJournalRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * The reference information for a online article citation includes the online journal,
@@ -45,8 +55,46 @@ public class OnlineArticleNode extends BasicEntity{
 
     public String getTitle(){    return String.valueOf(node.getProperty(TITLE_PROPERTY));}
 
-
     public void setTitle(String value){  node.setProperty(TITLE_PROPERTY, value);}
+    
+    
+    /**
+     * Gets the online journal where the online article was submitted
+     * @return 
+     */
+    public OnlineJournalNode getOnlineJournal(){
+        Iterator<Relationship> iterator = this.node.getRelationships(new OnlineArticleJournalRel(null), Direction.OUTGOING).iterator();
+        if(iterator.hasNext()){
+            return new OnlineJournalNode(iterator.next().getEndNode());
+        }else{
+            return null;
+        }
+    }
+    
+    /**
+     * gets consortium authors (if any) of the online article
+     * @return 
+     */
+    public List<ConsortiumNode> getConsortiumAuthors(){
+        List<ConsortiumNode> list = new ArrayList<ConsortiumNode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new OnlineArticleAuthorConsortiumRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new ConsortiumNode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
+    /**
+     * gets person authors (if any) of the article
+     * @return 
+     */
+    public List<PersonNode> getPersonAuthors(){
+        List<PersonNode> list = new ArrayList<PersonNode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new OnlineArticleAuthorPersonRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new PersonNode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
 
 
     @Override

@@ -50,7 +50,7 @@ public class NodeRetriever {
     
     /**
      * 
-     * @param goId 
+     * @param proteinAccession 
      * @return ProteinNode with the accession provided
      */
     public ProteinNode getProteinNodeByAccession(String proteinAccession){
@@ -172,7 +172,7 @@ public class NodeRetriever {
     }
     /**
      * 
-     * @param scientificName 
+     * @param ncbiTaxonomyId 
      * @return OrganismNode with the scientific name provided
      */
     public OrganismNode getOrganismByNCBITaxonomyId(String ncbiTaxonomyId){

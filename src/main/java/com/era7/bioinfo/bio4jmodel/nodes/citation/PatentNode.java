@@ -17,8 +17,15 @@
 
 package com.era7.bioinfo.bio4jmodel.nodes.citation;
 
+import com.era7.bioinfo.bio4jmodel.nodes.PersonNode;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.patent.PatentAuthorRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * Patent protein citations
@@ -52,6 +59,20 @@ public class PatentNode extends BasicEntity{
     public void setTitle(String value){  node.setProperty(TITLE_PROPERTY, value);}
 
 
+    /**
+     * gets authors (if any) of the patent
+     * @return 
+     */
+    public List<PersonNode> getAuthors(){
+        List<PersonNode> list = new ArrayList<PersonNode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new PatentAuthorRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new PersonNode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
+    
+    
     @Override
     public int hashCode(){
         return super.hashCode();
