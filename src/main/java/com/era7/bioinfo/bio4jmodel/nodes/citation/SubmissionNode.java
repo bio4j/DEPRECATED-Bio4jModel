@@ -16,8 +16,18 @@
  */
 package com.era7.bioinfo.bio4jmodel.nodes.citation;
 
+import com.era7.bioinfo.bio4jmodel.nodes.ConsortiumNode;
+import com.era7.bioinfo.bio4jmodel.nodes.PersonNode;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.submission.SubmissionAuthorConsortiumRel;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.submission.SubmissionAuthorPersonRel;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.submission.SubmissionDbRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * Submission protein citations
@@ -46,6 +56,45 @@ public class SubmissionNode extends BasicEntity{
 
     public void setTitle(String value){  node.setProperty(TITLE_PROPERTY, value);}
     public void setDate(String value){  node.setProperty(DATE_PROPERTY, value);}
+    
+    
+    /**
+     * Gets the submission DB
+     * @return 
+     */
+    public DBNode getDB(){
+        Iterator<Relationship> iterator = this.node.getRelationships(new SubmissionDbRel(null), Direction.OUTGOING).iterator();
+        if(iterator.hasNext()){
+            return new DBNode(iterator.next().getEndNode());
+        }else{
+            return null;
+        }
+    }
+    
+    /**
+     * gets consortium authors (if any) of the submission
+     * @return 
+     */
+    public List<ConsortiumNode> getConsortiumAuthors(){
+        List<ConsortiumNode> list = new ArrayList<ConsortiumNode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new SubmissionAuthorConsortiumRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new ConsortiumNode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
+    /**
+     * gets person authors (if any) of the submission
+     * @return 
+     */
+    public List<PersonNode> getPersonAuthors(){
+        List<PersonNode> list = new ArrayList<PersonNode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new SubmissionAuthorPersonRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new PersonNode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
 
 
     @Override

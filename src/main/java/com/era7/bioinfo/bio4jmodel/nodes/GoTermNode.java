@@ -17,8 +17,18 @@
 
 package com.era7.bioinfo.bio4jmodel.nodes;
 
+import com.era7.bioinfo.bio4jmodel.relationships.go.HasPartOfGoRel;
+import com.era7.bioinfo.bio4jmodel.relationships.go.IsAGoRel;
+import com.era7.bioinfo.bio4jmodel.relationships.go.NegativelyRegulatesGoRel;
+import com.era7.bioinfo.bio4jmodel.relationships.go.PartOfGoRel;
+import com.era7.bioinfo.bio4jmodel.relationships.go.PositivelyRegulatesGoRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * Gene ontology term
@@ -74,8 +84,69 @@ public class GoTermNode extends BasicEntity{
     public void setObsolete(Boolean value){ node.setProperty(OBSOLETE_PROPERTY, String.valueOf(value));}
     public void setComment(String value){   node.setProperty(COMMENT_PROPERTY, value);}
     public void setAlternativeIds(String[] value){  node.setProperty(ALTERNATIVE_IDS_PROPERTY, value);}
-
-
+  
+    /**
+     * 
+     * @return 
+     */
+    public List<GoTermNode> getIsAGoNodes(){
+        List<GoTermNode> list = new ArrayList<GoTermNode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new IsAGoRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new GoTermNode(iterator.next().getEndNode()));
+        }
+        return list;
+    }    
+    /**
+     * 
+     * @return 
+     */
+    public List<GoTermNode> getNegativelyRegulatesNodes(){
+        List<GoTermNode> list = new ArrayList<GoTermNode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new NegativelyRegulatesGoRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new GoTermNode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
+    /**
+     * 
+     * @return 
+     */
+    public List<GoTermNode> getPositivelyRegulatesNodes(){
+        List<GoTermNode> list = new ArrayList<GoTermNode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new PositivelyRegulatesGoRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new GoTermNode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
+    /**
+     * 
+     * @return 
+     */
+    public List<GoTermNode> getPartOfNodes(){
+        List<GoTermNode> list = new ArrayList<GoTermNode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new PartOfGoRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new GoTermNode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
+    /**
+     * 
+     * @return 
+     */
+    public List<GoTermNode> getHasPartOfNodes(){
+        List<GoTermNode> list = new ArrayList<GoTermNode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new HasPartOfGoRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new GoTermNode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
+    
+    
     @Override
     public int hashCode(){
         return super.hashCode();

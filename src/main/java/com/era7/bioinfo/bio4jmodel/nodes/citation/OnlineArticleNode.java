@@ -84,7 +84,7 @@ public class OnlineArticleNode extends BasicEntity{
         return list;
     }
     /**
-     * gets person authors (if any) of the article
+     * gets person authors (if any) of the online article
      * @return 
      */
     public List<PersonNode> getPersonAuthors(){

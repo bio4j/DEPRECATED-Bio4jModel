@@ -17,8 +17,13 @@
 
 package com.era7.bioinfo.bio4jmodel.nodes.citation;
 
+import com.era7.bioinfo.bio4jmodel.nodes.PersonNode;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.uo.UnpublishedObservationAuthorRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
+import java.util.Iterator;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * Protein unpublished observation citations
@@ -41,6 +46,20 @@ public class UnpublishedObservationNode extends BasicEntity{
     public String getDate(){    return String.valueOf(node.getProperty(DATE_PROPERTY));}
 
     public void setDate(String value){  node.setProperty(DATE_PROPERTY, value);}
+    
+    
+    /**
+     * Gets the author of the unpublished observation
+     * @return 
+     */
+    public PersonNode getAuthor(){
+        Iterator<Relationship> iterator = this.node.getRelationships(new UnpublishedObservationAuthorRel(null), Direction.OUTGOING).iterator();
+        if(iterator.hasNext()){
+            return new PersonNode(iterator.next().getEndNode());
+        }else{
+            return null;
+        }
+    }
 
 
     @Override
