@@ -17,8 +17,14 @@
 package com.era7.bioinfo.bio4jmodel.nodes;
 
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinDatasetRel;
+import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinIsoformInteractionRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinOrganismRel;
+import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinProteinInteractionRel;
+import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinSelfInteractionRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -208,21 +214,54 @@ public class ProteinNode extends BasicEntity {
     public void setGeneNames(String[] value){
         node.setProperty(GENE_NAMES_PROPERTY, value);
     }
-
-//    public void setGeneNames(List<String> list){
-//        String geneNames = "";
-//        for (String st : list) {
-//            geneNames += st + GENE_NAMES_SEPARATOR;
-//        }
-//        if(list != null){
-//            if(list.size() > 0){
-//                //le quito el tabulador que sobra al final
-//                geneNames = geneNames.substring(0, geneNames.length()-1);
-//            }
-//        }
-//        node.setProperty(GENE_NAMES_PROPERTY, geneNames);
-//
-//    }
+    
+    
+    /**
+     * Protein-protein interactions
+     * @return 
+     */
+    public List<ProteinProteinInteractionRel> getProteinInteractions(){
+        List<ProteinProteinInteractionRel> list = new ArrayList<ProteinProteinInteractionRel>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new ProteinProteinInteractionRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new ProteinProteinInteractionRel(iterator.next()));
+        }
+        
+        return list;
+    }
+    /**
+     * Protein self-interactions
+     * @return 
+     */
+    public List<ProteinSelfInteractionRel> getSelfInteractions(){
+        List<ProteinSelfInteractionRel> list = new ArrayList<ProteinSelfInteractionRel>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new ProteinSelfInteractionRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new ProteinSelfInteractionRel(iterator.next()));
+        }
+        
+        return list;
+    }
+    
+    /**
+     * Protein-Isoform interactions
+     * @return 
+     */
+    public List<ProteinIsoformInteractionRel> getIsoformInteractions(){
+        List<ProteinIsoformInteractionRel> list = new ArrayList<ProteinIsoformInteractionRel>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new ProteinIsoformInteractionRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new ProteinIsoformInteractionRel(iterator.next()));
+        }
+        
+        return list;
+    }
+    
+    
+    
 
     @Override
     public int hashCode() {
