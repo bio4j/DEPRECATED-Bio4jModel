@@ -16,6 +16,20 @@
  */
 package com.era7.bioinfo.bio4jmodel.nodes;
 
+import com.era7.bioinfo.bio4jmodel.nodes.citation.ArticleNode;
+import com.era7.bioinfo.bio4jmodel.nodes.citation.BookNode;
+import com.era7.bioinfo.bio4jmodel.nodes.citation.OnlineArticleNode;
+import com.era7.bioinfo.bio4jmodel.nodes.citation.PatentNode;
+import com.era7.bioinfo.bio4jmodel.nodes.citation.SubmissionNode;
+import com.era7.bioinfo.bio4jmodel.nodes.citation.ThesisNode;
+import com.era7.bioinfo.bio4jmodel.nodes.citation.UnpublishedObservationNode;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.article.ArticleProteinCitationRel;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.book.BookProteinCitationRel;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.onarticle.OnlineArticleProteinCitationRel;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.patent.PatentProteinCitationRel;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.submission.SubmissionProteinCitationRel;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.thesis.ThesisProteinCitationRel;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.uo.UnpublishedObservationProteinCitationRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinDatasetRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinIsoformInteractionRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinOrganismRel;
@@ -259,6 +273,105 @@ public class ProteinNode extends BasicEntity {
         
         return list;
     }
+    
+    //---------------------------------------------------------------------------------------------
+    //-------------------------------------CITATIONS-----------------------------------------------
+    //---------------------------------------------------------------------------------------------
+    
+    /**
+     * Protein article citations
+     * @return 
+     */
+    public List<ArticleNode> getArticleCitations(){
+        List<ArticleNode> list = new ArrayList<ArticleNode>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new ArticleProteinCitationRel(null), Direction.INCOMING).iterator();
+        while(iterator.hasNext()){
+            list.add(new ArticleNode(iterator.next().getStartNode()));
+        }
+        return list;
+    }
+    /**
+     * Protein submission citations
+     * @return 
+     */
+    public List<SubmissionNode> getSubmissionCitations(){
+        List<SubmissionNode> list = new ArrayList<SubmissionNode>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new SubmissionProteinCitationRel(null), Direction.INCOMING).iterator();
+        while(iterator.hasNext()){
+            list.add(new SubmissionNode(iterator.next().getStartNode()));
+        }
+        return list;
+    }
+    /**
+     * Protein Online article citations
+     * @return 
+     */
+    public List<OnlineArticleNode> getOnlineArticleCitations(){
+        List<OnlineArticleNode> list = new ArrayList<OnlineArticleNode>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new OnlineArticleProteinCitationRel(null), Direction.INCOMING).iterator();
+        while(iterator.hasNext()){
+            list.add(new OnlineArticleNode(iterator.next().getStartNode()));
+        }
+        return list;
+    } 
+    /**
+     * Protein Book citations
+     * @return 
+     */
+    public List<BookNode> getBookCitations(){
+        List<BookNode> list = new ArrayList<BookNode>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new BookProteinCitationRel(null), Direction.INCOMING).iterator();
+        while(iterator.hasNext()){
+            list.add(new BookNode(iterator.next().getStartNode()));
+        }
+        return list;
+    }
+    /**
+     * Protein patent citations
+     * @return 
+     */
+    public List<PatentNode> getPatentCitations(){
+        List<PatentNode> list = new ArrayList<PatentNode>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new PatentProteinCitationRel(null), Direction.INCOMING).iterator();
+        while(iterator.hasNext()){
+            list.add(new PatentNode(iterator.next().getStartNode()));
+        }
+        return list;
+    }
+    /**
+     * Protein thesis citations
+     * @return 
+     */
+    public List<ThesisNode> getThesisCitations(){
+        List<ThesisNode> list = new ArrayList<ThesisNode>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new ThesisProteinCitationRel(null), Direction.INCOMING).iterator();
+        while(iterator.hasNext()){
+            list.add(new ThesisNode(iterator.next().getStartNode()));
+        }
+        return list;
+    }
+    /**
+     * Protein unpublished observations citations
+     * @return 
+     */
+    public List<UnpublishedObservationNode> getUnpublishedObservationsCitations(){
+        List<UnpublishedObservationNode> list = new ArrayList<UnpublishedObservationNode>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new UnpublishedObservationProteinCitationRel(null), Direction.INCOMING).iterator();
+        while(iterator.hasNext()){
+            list.add(new UnpublishedObservationNode(iterator.next().getStartNode()));
+        }
+        return list;
+    }
+    //---------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------
     
     
     
