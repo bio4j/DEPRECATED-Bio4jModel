@@ -68,6 +68,7 @@ public class ProteinNode extends BasicEntity {
     public static final String PIR_ID_PROPERTY = "pir_id";
     public static final String KEGG_ID_PROPERTY = "kegg_id";
     public static final String EMBL_REFERENCES_PROPERTY = "embl_references";
+    public static final String REFSEQ_REFERENCES_PROPERTY = "refseq_references";
     public static final String ARRAY_EXPRESS_ID_PROPERTY = "array_express_id";
     public static final String UNIGENE_ID_PROPERTY = "unigene_id";
     public static final String ALTERNATIVE_ACCESSIONS_PROPERTY = "alternative_accessions";
@@ -104,6 +105,10 @@ public class ProteinNode extends BasicEntity {
 
     public String[] getEMBLreferences(){
         return (String[]) node.getProperty(EMBL_REFERENCES_PROPERTY);
+    }
+    
+    public String[] getRefseqReferences(){
+        return (String[]) node.getProperty(REFSEQ_REFERENCES_PROPERTY);
     }
 
     public String[] getAlternativeAcessions(){
@@ -205,6 +210,10 @@ public class ProteinNode extends BasicEntity {
         node.setProperty(EMBL_REFERENCES_PROPERTY, value);
     }
 
+    public void setRefseqReferences(String[] value){
+        node.setProperty(REFSEQ_REFERENCES_PROPERTY, value);
+    }
+    
     public void setAlternativeAccessions(String[] value){
         node.setProperty(ALTERNATIVE_ACCESSIONS_PROPERTY, value);
     }
