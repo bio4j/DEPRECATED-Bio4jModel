@@ -26,7 +26,6 @@ import org.neo4j.graphdb.Node;
  */
 public abstract class RNANode extends BasicEntity{
 
-    public static final String GENE_PROPERTY = "gene";
     public static final String NOTE_PROPERTY = "note";
     public static final String POSITIONS_PROPERTY = "positions";
 
@@ -36,12 +35,10 @@ public abstract class RNANode extends BasicEntity{
     }
 
 
-    public String getGene(){  return String.valueOf(node.getProperty(GENE_PROPERTY));}
     public String getPositions(){   return String.valueOf(node.getProperty(POSITIONS_PROPERTY));}
     public String getNote(){   return String.valueOf(node.getProperty(NOTE_PROPERTY));}
 
 
-    public void setGene(String value){    node.setProperty(GENE_PROPERTY, value);}
     public void setPositions(String value){ node.setProperty(POSITIONS_PROPERTY, value);}
     public void setNote(String value){ node.setProperty(NOTE_PROPERTY, value);}
 

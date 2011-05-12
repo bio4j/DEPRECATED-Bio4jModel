@@ -7,6 +7,7 @@ package com.era7.bioinfo.bio4jmodel.util;
 
 import com.era7.bioinfo.bio4jmodel.nodes.*;
 import com.era7.bioinfo.bio4jmodel.nodes.citation.*;
+import com.era7.bioinfo.bio4jmodel.nodes.refseq.GenomeElementNode;
 import com.era7.bioinfo.bio4jmodel.relationships.SubcellularLocationParentRel;
 import com.era7.bioinfo.bio4jmodel.relationships.go.IsAGoRel;
 import com.era7.bioinfo.bioinfoneo4j.Neo4jManager;
@@ -63,6 +64,10 @@ public class Bio4jManager extends Neo4jManager{
     private Index<Node> articleDoiIdIndex = null;
     private Index<Node> articlePubmedIdIndex = null;
     private Index<Node> journalNameIndex = null;
+    private Index<Node> genomeElementVersionIndex = null;
+    
+    //----special indexes----
+    //private Index<Node> 
 
     //------------relationship indexes---------------
     private RelationshipIndex isAGorelIndex = null;
@@ -114,6 +119,7 @@ public class Bio4jManager extends Neo4jManager{
         articleDoiIdIndex = graphDbService.index().forNodes(ArticleNode.ARTICLE_DOI_ID_INDEX, indexProps);
         articlePubmedIdIndex = graphDbService.index().forNodes(ArticleNode.ARTICLE_PUBMED_ID_INDEX, indexProps);
         journalNameIndex = graphDbService.index().forNodes(JournalNode.JOURNAL_NAME_INDEX, indexProps);
+        genomeElementVersionIndex = graphDbService.index().forNodes(GenomeElementNode.GENOME_ELEMENT_VERSION_INDEX,indexProps);
 
         //----------relationship indexes-----
         isAGorelIndex = graphDbService.index().forRelationships(IsAGoRel.IS_A_REL_INDEX, indexProps);
@@ -221,6 +227,9 @@ public class Bio4jManager extends Neo4jManager{
     public Index<Node> getJournalNameIndex(){
         return journalNameIndex;
     }
+    public Index<Node> getGenomeElementVersionIndex(){
+        return genomeElementVersionIndex;
+    }
 
     public RelationshipIndex getIsAGoRelIndex(){
         return isAGorelIndex;
@@ -228,6 +237,7 @@ public class Bio4jManager extends Neo4jManager{
     public RelationshipIndex getSubcellularParentRelIndex(){
         return subcellularLocationParentRelIndex;
     }
-
+    
+    
 
 }

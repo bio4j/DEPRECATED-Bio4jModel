@@ -26,7 +26,7 @@ import org.neo4j.graphdb.Node;
  */
 public class GenomeElementNode extends BasicEntity{
 
-    public static final String GENOME_ELEMENT_VERSION_INDEX = "genome_element_id_index";
+    public static final String GENOME_ELEMENT_VERSION_INDEX = "genome_element_version_index";
     public static final String NODE_TYPE = GenomeElementNode.class.getCanonicalName();
 
     public static final String VERSION_PROPERTY = "version";
