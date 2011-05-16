@@ -17,8 +17,15 @@
 
 package com.era7.bioinfo.bio4jmodel.nodes.refseq;
 
+import com.era7.bioinfo.bio4jmodel.nodes.refseq.rna.*;
+import com.era7.bioinfo.bio4jmodel.relationships.refseq.*;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * Organisms genome elements
@@ -48,6 +55,105 @@ public class GenomeElementNode extends BasicEntity{
     public void setComment(String value){  node.setProperty(COMMENT_PROPERTY, value);}
     public void setDefinition(String value){  node.setProperty(DEFINITION_PROPERTY, value);}
 
+    
+    
+    /**
+     * 
+     * @return 
+     */
+    public List<CDSNode> getCDS(){
+        List<CDSNode> list = new ArrayList<CDSNode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new GenomeElementCDSRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new CDSNode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
+    /**
+     * 
+     * @return 
+     */
+    public List<GeneNode> getGenes(){
+        List<GeneNode> list = new ArrayList<GeneNode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new GenomeElementGeneRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new GeneNode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
+    /**
+     * 
+     * @return 
+     */
+    public List<MRNANode> getMRnas(){
+        List<MRNANode> list = new ArrayList<MRNANode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new GenomeElementMRnaRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new MRNANode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
+    /**
+     * 
+     * @return 
+     */
+    public List<MiscRNANode> getMiscRnas(){
+        List<MiscRNANode> list = new ArrayList<MiscRNANode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new GenomeElementMiscRnaRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new MiscRNANode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
+    /**
+     * 
+     * @return 
+     */
+    public List<NcRNANode> getNcRnas(){
+        List<NcRNANode> list = new ArrayList<NcRNANode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new GenomeElementNcRnaRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new NcRNANode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
+    /**
+     * 
+     * @return 
+     */
+    public List<RRNANode> getRRnas(){
+        List<RRNANode> list = new ArrayList<RRNANode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new GenomeElementRRnaRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new RRNANode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
+    /**
+     * 
+     * @return 
+     */
+    public List<TRNANode> getTRnas(){
+        List<TRNANode> list = new ArrayList<TRNANode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new GenomeElementTRnaRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new TRNANode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
+    /**
+     * 
+     * @return 
+     */
+    public List<TmRNANode> getTmRnas(){
+        List<TmRNANode> list = new ArrayList<TmRNANode>();
+        Iterator<Relationship> iterator = this.node.getRelationships(new GenomeElementTmRnaRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new TmRNANode(iterator.next().getEndNode()));
+        }
+        return list;
+    }
+    
 
     @Override
     public int hashCode(){
@@ -62,6 +168,13 @@ public class GenomeElementNode extends BasicEntity{
         }else{
             return false;
         }
+    }
+    
+    @Override
+    public String toString(){
+        return "version: " + getVersion() + "\n" +
+                "comment: " + getComment() + "\n" + 
+                "definition: " + getDefinition() + "\n";
     }
 
 }

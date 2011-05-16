@@ -6,6 +6,7 @@ package com.era7.bioinfo.bio4jmodel.util;
 
 import com.era7.bioinfo.bio4jmodel.nodes.*;
 import com.era7.bioinfo.bio4jmodel.nodes.citation.*;
+import com.era7.bioinfo.bio4jmodel.nodes.refseq.GenomeElementNode;
 import java.util.ArrayList;
 import java.util.List;
 import org.neo4j.graphdb.Node;
@@ -22,6 +23,21 @@ public class NodeRetriever {
     
     public NodeRetriever(Bio4jManager bio4jManager){
         manager = bio4jManager;
+    }
+    
+    //-------------------------------------------------------------------
+    //--------------------------REFSEQ-----------------------------------
+    
+    
+    public GenomeElementNode getGenomeElementByVersion(String version){
+        
+        IndexHits<Node> hits = manager.getGenomeElementVersionIndex().get(GenomeElementNode.GENOME_ELEMENT_VERSION_INDEX, version);
+        
+        if(hits.hasNext()){
+            return new GenomeElementNode(hits.getSingle());
+        }else{
+            return null;
+        }
     }
     
     
