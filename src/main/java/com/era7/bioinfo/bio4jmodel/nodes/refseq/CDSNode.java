@@ -59,4 +59,10 @@ public class CDSNode extends BasicEntity{
         }
     }
 
+    @Override
+    public String toString(){
+        return "positions = " + getPositions() + "\n" +
+                "note = " + getNote();
+    }
+    
 }

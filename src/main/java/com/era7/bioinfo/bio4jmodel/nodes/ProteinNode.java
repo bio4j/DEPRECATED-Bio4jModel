@@ -23,6 +23,7 @@ import com.era7.bioinfo.bio4jmodel.nodes.citation.PatentNode;
 import com.era7.bioinfo.bio4jmodel.nodes.citation.SubmissionNode;
 import com.era7.bioinfo.bio4jmodel.nodes.citation.ThesisNode;
 import com.era7.bioinfo.bio4jmodel.nodes.citation.UnpublishedObservationNode;
+import com.era7.bioinfo.bio4jmodel.nodes.refseq.GenomeElementNode;
 import com.era7.bioinfo.bio4jmodel.relationships.citation.article.ArticleProteinCitationRel;
 import com.era7.bioinfo.bio4jmodel.relationships.citation.book.BookProteinCitationRel;
 import com.era7.bioinfo.bio4jmodel.relationships.citation.onarticle.OnlineArticleProteinCitationRel;
@@ -31,6 +32,7 @@ import com.era7.bioinfo.bio4jmodel.relationships.citation.submission.SubmissionP
 import com.era7.bioinfo.bio4jmodel.relationships.citation.thesis.ThesisProteinCitationRel;
 import com.era7.bioinfo.bio4jmodel.relationships.citation.uo.UnpublishedObservationProteinCitationRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinDatasetRel;
+import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinGenomeElementRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinIsoformInteractionRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinOrganismRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinProteinInteractionRel;
@@ -168,6 +170,15 @@ public class ProteinNode extends BasicEntity {
             dataset = new DatasetNode(rel.getEndNode());
         }
         return dataset;
+    }
+    
+    public List<GenomeElementNode> getGenomeElements(){
+        List<GenomeElementNode> list = new ArrayList<GenomeElementNode>();
+        Iterator<Relationship> iterator = node.getRelationships(new ProteinGenomeElementRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new GenomeElementNode(iterator.next().getEndNode()));
+        }
+        return list;
     }
 
     public void setName(String value) {
@@ -402,6 +413,25 @@ public class ProteinNode extends BasicEntity {
 
     @Override
     public String toString() {
+        
+        String geneNamesSt = "";        
+        for (String geneName : getGeneNames()) {
+            geneNamesSt += geneName + ", ";
+        }
+        if(geneNamesSt.length() > 0){
+            geneNamesSt = geneNamesSt.substring(0,geneNamesSt.length() - 2);
+        }
+        
+        String emblReferencesSt = "";        
+        for (String emblReference : getEMBLreferences()) {
+            emblReferencesSt += emblReference + ", ";
+        }
+        if(emblReferencesSt.length() > 0){
+            emblReferencesSt = emblReferencesSt.substring(0,emblReferencesSt.length() - 2);
+        }
+        
+        
+        
         String result = "\naccession = " + this.getAccession() +
                 "\nname = " + this.getName() +
                 "\nfull name = " + this.getFullName() +
@@ -409,8 +439,8 @@ public class ProteinNode extends BasicEntity {
                 "\nmodified date = " + this.getModifiedDate() +
                 "\nmass = " + this.getMass() +
                 "\nlength = " + this.getLength() +
-                "\ngene names = " + this.getGeneNames() +
-                "\nEMBL references = " + this.getEMBLreferences() +
+                "\ngene names = " + geneNamesSt +
+                "\nEMBL references = " + emblReferencesSt +
                 "\nPIR id = " + this.getPIRId() +
                 "\nKegg id = " + this.getKeggId() +
                 "\nArrayExpress id = " + this.getArrayExpressId() +

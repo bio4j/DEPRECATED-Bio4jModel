@@ -17,8 +17,14 @@
 
 package com.era7.bioinfo.bio4jmodel.nodes;
 
+import com.era7.bioinfo.bio4jmodel.relationships.TaxonParentRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * Uniprot taxonomy taxon
@@ -43,6 +49,59 @@ public class TaxonNode extends BasicEntity{
 
     public void setName(String value){  node.setProperty(NAME_PROPERTY, value);}
 
+    /**
+     * 
+     * @return 
+     */
+    public TaxonNode getParent(){
+        TaxonNode parent = null;
+        
+        Iterator<Relationship> iterator = this.getNode().getRelationships(new TaxonParentRel(null), Direction.OUTGOING).iterator();
+        if(iterator.hasNext()){
+            parent = new TaxonNode(iterator.next().getEndNode());
+        }
+        
+        return parent;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public List<TaxonNode> getChildren(){
+        List<TaxonNode> list = new ArrayList<TaxonNode>();
+        
+        Iterator<Relationship> iterator = this.getNode().getRelationships(new TaxonParentRel(null), Direction.INCOMING).iterator();
+        
+        while(iterator.hasNext()){
+            Node tempNode = iterator.next().getStartNode();
+            if(tempNode.getProperty(BasicEntity.NODE_TYPE_PROPERTY).equals(TaxonNode.NODE_TYPE)){
+                list.add(new TaxonNode(tempNode));
+            }           
+        }
+        
+        return list;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public List<OrganismNode> getOrganisms(){
+        List<OrganismNode> list = new ArrayList<OrganismNode>();
+        
+        Iterator<Relationship> iterator = this.getNode().getRelationships(new TaxonParentRel(null), Direction.INCOMING).iterator();
+        
+        while(iterator.hasNext()){
+            Node tempNode = iterator.next().getStartNode();
+            if(tempNode.getProperty(BasicEntity.NODE_TYPE_PROPERTY).equals(OrganismNode.NODE_TYPE)){
+                list.add(new OrganismNode(tempNode));
+            }           
+        }
+        
+        return list;
+    }
+    
 
     @Override
     public int hashCode(){
