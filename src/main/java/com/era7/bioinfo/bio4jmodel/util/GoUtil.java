@@ -157,13 +157,16 @@ public class GoUtil {
 
         GOSlimXML goSlimXML = new GOSlimXML();
 
-        if(goAnnotationXML == null){
+        if (goAnnotationXML == null) {
             goAnnotationXML = GoUtil.getGoAnnotation(proteins, manager);
         }
+
+        int goTermsLostNotIncludedInSlimSet = 0;
 
         Index<Node> goTermIdIndex = manager.getGoTermIdIndex();
 
         if (goAnnotationXML != null) {
+
             List<GoTermXML> goAnnotators = goAnnotationXML.getAnnotatorGoTerms();
 
             //IndexService indexService = manager.getIndexService();
@@ -171,7 +174,7 @@ public class GoUtil {
             // in this hash map there is one entry for each annotator go term
             // the hash-set contains every slim-set go term including the annotator
             HashMap<String, HashSet<String>> goAnnotatorsIncludingSlimSetTermsMap = new HashMap<String, HashSet<String>>();
-         
+
 
             //Here are the xml elements of the Go terms from the slim set termid --> term xml
             HashMap<String, GoTermXML> slimSetGos = new HashMap<String, GoTermXML>();
@@ -189,7 +192,7 @@ public class GoUtil {
                 tempGo.setAspect(tempGoNode.getNamespace());
                 tempGo.setGoName(tempGoNode.getName());
                 //------------------------
-                
+
                 slimSetGos.put(tempGo.getId(), tempGo);
 
                 //initializing annotation counts map
@@ -261,7 +264,7 @@ public class GoUtil {
                     ProteinXML currentProteinXML = new ProteinXML(currentElem);
 
                     //initializing inductors map                    
-                    HashMap<String,String> currentProteinSlimTermInductors = new HashMap<String, String>();
+                    HashMap<String, String> currentProteinSlimTermInductors = new HashMap<String, String>();
                     //proteinSlimTermsAndInductorTermsMap.put(currentProteinXML.getId(), currentProteinSlimTermInductors);
 
                     //System.out.println("currentProteinXML.getId() = " + currentProteinXML.getId());
@@ -287,13 +290,20 @@ public class GoUtil {
                     HashSet<String> proteinSlimTems = new HashSet<String>();
                     for (GoTermXML goTermXML : proteinTerms) {
                         HashSet<String> hashSet = goAnnotatorsIncludingSlimSetTermsMap.get(goTermXML.getId());
+
+                        System.out.println("");
+
                         if (hashSet != null) {
-                            if(hashSet.size() > 0){
+                            if (hashSet.size() > 0) {
                                 proteinSlimTems.addAll(hashSet);
                                 for (String tempSlimTermId : hashSet) {
                                     currentProteinSlimTermInductors.put(tempSlimTermId, goTermXML.getId());
-                                }                                
+                                }
                                 annotated = true;
+                            } else {
+                                //-----The go term annotation lost is stored-------
+                                goSlimXML.addGoTermLostNotIncludedInSlimSet(new GoTermXML((Element) goTermXML.asJDomElement().clone()));
+                                System.out.println("holaaa!" + goTermXML.getId());
                             }
                         }
                     }
@@ -308,16 +318,16 @@ public class GoUtil {
                         //look for inductor info                        
                         for (GoTermXML goTermXML : proteinTerms) {
                             //System.out.println("goTermXML = " + goTermXML);
-                            if(goTermXML.getId().equals(termInductorId)){
-                                tempGoTerm.setProteinAnnotationLeadingToSlimTerm(new GoTermXML((Element)goTermXML.asJDomElement().clone()));
+                            if (goTermXML.getId().equals(termInductorId)) {
+                                tempGoTerm.setProteinAnnotationLeadingToSlimTerm(new GoTermXML((Element) goTermXML.asJDomElement().clone()));
                                 break;
-                            }                            
+                            }
                         }
                         //--------------------------------------------------------------------------
 
                         //logger.log(Level.INFO, ("tempGoTerm: " + tempGoTerm));
                         proteinResult.addGoTerm(tempGoTerm, true);
-                        
+
                         //updating annotation counts
                         slimSetTermsAnnotationCounts.put(string, slimSetTermsAnnotationCounts.get(string) + 1);
                     }
@@ -336,7 +346,7 @@ public class GoUtil {
                     GoTermXML slimSetGo = new GoTermXML(slimSetElem);
                     slimSetGo.setAnnotationsCount(slimSetTermsAnnotationCounts.get(slimSetGo.getId()));
                 }
-                
+
                 goSlimXML.asJDomElement().addContent(proteinsElem);
                 slimSetXML.detach();
                 goSlimXML.setSlimSet(slimSetXML);
@@ -351,7 +361,7 @@ public class GoUtil {
                     logger.log(Level.SEVERE, stackTraceElement.toString());
                 }
                 goSlimXML = null;
-            } 
+            }
 
 
         } else {

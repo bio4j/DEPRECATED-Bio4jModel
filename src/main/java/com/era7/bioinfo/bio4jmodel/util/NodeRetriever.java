@@ -87,7 +87,7 @@ public class NodeRetriever {
      */
     public List<ProteinNode> getProteinsByFullName(String proteinFullName){
         
-        IndexHits<Node> hits = manager.getProteinFullNameFullTextIndex().get(ProteinNode.PROTEIN_FULL_NAME_FULL_TEXT_INDEX, proteinFullName);
+        IndexHits<Node> hits = manager.getProteinFullNameFullTextIndex().query(ProteinNode.PROTEIN_FULL_NAME_FULL_TEXT_INDEX, proteinFullName);
         
         List<ProteinNode> list = new ArrayList<ProteinNode>();
         
@@ -104,7 +104,7 @@ public class NodeRetriever {
      */
     public List<ProteinNode> getProteinsByGeneNames(String proteinGeneName){
         
-        IndexHits<Node> hits = manager.getProteinGeneNamesFullTextIndex().get(ProteinNode.PROTEIN_GENE_NAMES_FULL_TEXT_INDEX, proteinGeneName);
+        IndexHits<Node> hits = manager.getProteinGeneNamesFullTextIndex().query(ProteinNode.PROTEIN_GENE_NAMES_FULL_TEXT_INDEX, proteinGeneName);
         
         List<ProteinNode> list = new ArrayList<ProteinNode>();
         

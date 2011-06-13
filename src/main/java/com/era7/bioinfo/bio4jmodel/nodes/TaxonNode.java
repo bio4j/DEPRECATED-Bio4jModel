@@ -56,9 +56,9 @@ public class TaxonNode extends BasicEntity{
     public TaxonNode getParent(){
         TaxonNode parent = null;
         
-        Iterator<Relationship> iterator = this.getNode().getRelationships(new TaxonParentRel(null), Direction.OUTGOING).iterator();
+        Iterator<Relationship> iterator = this.getNode().getRelationships(new TaxonParentRel(null), Direction.INCOMING).iterator();
         if(iterator.hasNext()){
-            parent = new TaxonNode(iterator.next().getEndNode());
+            parent = new TaxonNode(iterator.next().getStartNode());
         }
         
         return parent;
@@ -71,10 +71,10 @@ public class TaxonNode extends BasicEntity{
     public List<TaxonNode> getChildren(){
         List<TaxonNode> list = new ArrayList<TaxonNode>();
         
-        Iterator<Relationship> iterator = this.getNode().getRelationships(new TaxonParentRel(null), Direction.INCOMING).iterator();
+        Iterator<Relationship> iterator = this.getNode().getRelationships(new TaxonParentRel(null), Direction.OUTGOING).iterator();
         
         while(iterator.hasNext()){
-            Node tempNode = iterator.next().getStartNode();
+            Node tempNode = iterator.next().getEndNode();
             if(tempNode.getProperty(BasicEntity.NODE_TYPE_PROPERTY).equals(TaxonNode.NODE_TYPE)){
                 list.add(new TaxonNode(tempNode));
             }           
@@ -90,10 +90,10 @@ public class TaxonNode extends BasicEntity{
     public List<OrganismNode> getOrganisms(){
         List<OrganismNode> list = new ArrayList<OrganismNode>();
         
-        Iterator<Relationship> iterator = this.getNode().getRelationships(new TaxonParentRel(null), Direction.INCOMING).iterator();
+        Iterator<Relationship> iterator = this.getNode().getRelationships(new TaxonParentRel(null), Direction.OUTGOING).iterator();
         
         while(iterator.hasNext()){
-            Node tempNode = iterator.next().getStartNode();
+            Node tempNode = iterator.next().getEndNode();            
             if(tempNode.getProperty(BasicEntity.NODE_TYPE_PROPERTY).equals(OrganismNode.NODE_TYPE)){
                 list.add(new OrganismNode(tempNode));
             }           
