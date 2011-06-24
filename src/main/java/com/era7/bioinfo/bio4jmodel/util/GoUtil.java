@@ -20,7 +20,7 @@ import com.era7.bioinfo.bio4jmodel.nodes.GoTermNode;
 import com.era7.bioinfo.bio4jmodel.nodes.ProteinNode;
 import com.era7.bioinfo.bio4jmodel.relationships.go.IsAGoRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinGoRel;
-import com.era7.lib.bioinfoxml.ProteinXML;
+import com.era7.lib.bioinfoxml.uniprot.ProteinXML;
 import com.era7.lib.bioinfoxml.go.GOSlimXML;
 import com.era7.lib.bioinfoxml.go.GoAnnotationXML;
 import com.era7.lib.bioinfoxml.go.GoTermXML;

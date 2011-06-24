@@ -31,12 +31,20 @@ import com.era7.bioinfo.bio4jmodel.relationships.citation.patent.PatentProteinCi
 import com.era7.bioinfo.bio4jmodel.relationships.citation.submission.SubmissionProteinCitationRel;
 import com.era7.bioinfo.bio4jmodel.relationships.citation.thesis.ThesisProteinCitationRel;
 import com.era7.bioinfo.bio4jmodel.relationships.citation.uo.UnpublishedObservationProteinCitationRel;
+import com.era7.bioinfo.bio4jmodel.relationships.comment.DomainCommentRel;
+import com.era7.bioinfo.bio4jmodel.relationships.comment.FunctionCommentRel;
+import com.era7.bioinfo.bio4jmodel.relationships.comment.PathwayCommentRel;
+import com.era7.bioinfo.bio4jmodel.relationships.comment.SimilarityCommentRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinDatasetRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinGenomeElementRel;
+import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinGoRel;
+import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinInterproRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinIsoformInteractionRel;
+import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinKeywordRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinOrganismRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinProteinInteractionRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinSelfInteractionRel;
+import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinSubcellularLocationRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -181,74 +189,91 @@ public class ProteinNode extends BasicEntity {
         return list;
     }
 
-    public void setName(String value) {
-        node.setProperty(NAME_PROPERTY, value);
-    }
-
-    public void setFullName(String value){
-        node.setProperty(FULL_NAME_PROPERTY, value);
-    }
-
-    public void setShortName(String value){
-        node.setProperty(SHORT_NAME_PROPERTY, value);
-    }
-
-    public void setAccession(String value) {
-        node.setProperty(ACCESSION_PROPERTY, value);
-    }
-
-    public void setSequence(String value) {
-        node.setProperty(SEQUENCE_PROPERTY, value);
-    }
-
-    public void setModifiedDate(String value){
-        node.setProperty(MODIFIED_DATE_PROPERTY, value);
-    }
-
-    public void setEnsemblId(String value){
-        node.setProperty(ENSEMBL_ID_PROPERTY, value);
-    }
-
-    public void setKeggId(String value){
-        node.setProperty(KEGG_ID_PROPERTY, value);
-    }
-
-    public void setPIRId(String value){
-        node.setProperty(PIR_ID_PROPERTY, value);
-    }
-
-    public void setEMBLreferences(String[] value){
-        node.setProperty(EMBL_REFERENCES_PROPERTY, value);
-    }
-
-    public void setRefseqReferences(String[] value){
-        node.setProperty(REFSEQ_REFERENCES_PROPERTY, value);
+    
+    public List<SubcellularLocationNode> getSubcellularLocations(){
+        List<SubcellularLocationNode> list = new ArrayList<SubcellularLocationNode>();        
+        Iterator<Relationship> iterator = node.getRelationships(new ProteinSubcellularLocationRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new SubcellularLocationNode(iterator.next().getEndNode()));
+        }
+        return list;
     }
     
-    public void setAlternativeAccessions(String[] value){
-        node.setProperty(ALTERNATIVE_ACCESSIONS_PROPERTY, value);
-    }
-
-    public void setArrayExpressId(String value){
-        node.setProperty(ARRAY_EXPRESS_ID_PROPERTY, value);
-    }
-
-    public void setUniGeneId(String value){
-        node.setProperty(UNIGENE_ID_PROPERTY, value);
-    }
-
-    public void setMass(float value) {
-        node.setProperty(MASS_PROPERTY, value);
-    }
-
-    public void setLength(int value) {
-        node.setProperty(LENGTH_PROPERTY, value);
-    }
-
-    public void setGeneNames(String[] value){
-        node.setProperty(GENE_NAMES_PROPERTY, value);
+    public List<InterproNode> getInterpro(){
+        List<InterproNode> interpros = new ArrayList<InterproNode>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new ProteinInterproRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            InterproNode interpro = new InterproNode(iterator.next().getEndNode());
+            interpros.add(interpro);                        
+        }
+        return interpros;  
     }
     
+    public List<GoTermNode> getGOAnnotations(){
+        List<GoTermNode> list = new ArrayList<GoTermNode>();
+        Iterator<Relationship> iterator = node.getRelationships(new ProteinGoRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            GoTermNode goTerm = new GoTermNode(iterator.next().getEndNode());
+            list.add(goTerm);                        
+        }        
+        return list;
+    }
+    
+    public List<KeywordNode> getKeywords(){
+        List<KeywordNode> keywords = new ArrayList<KeywordNode>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new ProteinKeywordRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            KeywordNode keyword = new KeywordNode(iterator.next().getEndNode());
+            keywords.add(keyword);                        
+        }
+        return keywords;  
+    }
+    
+    public List<FunctionCommentRel> getFunctionComment(){
+        List<FunctionCommentRel> list = new ArrayList<FunctionCommentRel>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new FunctionCommentRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            FunctionCommentRel rel = new FunctionCommentRel(iterator.next());
+            list.add(rel);                        
+        }        
+        return list;
+    }
+    
+    public List<PathwayCommentRel> getPathwayComment(){
+        List<PathwayCommentRel> list = new ArrayList<PathwayCommentRel>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new PathwayCommentRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            PathwayCommentRel rel = new PathwayCommentRel(iterator.next());
+            list.add(rel);                        
+        }        
+        return list;
+    }
+    
+    public List<DomainCommentRel> getDomainComment(){
+        List<DomainCommentRel> list = new ArrayList<DomainCommentRel>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new DomainCommentRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            DomainCommentRel rel = new DomainCommentRel(iterator.next());
+            list.add(rel);                        
+        }        
+        return list;
+    }
+    
+    public List<SimilarityCommentRel> getSimilarityComment(){
+        List<SimilarityCommentRel> list = new ArrayList<SimilarityCommentRel>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new SimilarityCommentRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            SimilarityCommentRel rel = new SimilarityCommentRel(iterator.next());
+            list.add(rel);                        
+        }        
+        return list;
+    }
     
     /**
      * Protein-protein interactions
@@ -393,7 +418,73 @@ public class ProteinNode extends BasicEntity {
     //---------------------------------------------------------------------------------------------
     //---------------------------------------------------------------------------------------------
     
+    public void setName(String value) {
+        node.setProperty(NAME_PROPERTY, value);
+    }
+
+    public void setFullName(String value){
+        node.setProperty(FULL_NAME_PROPERTY, value);
+    }
+
+    public void setShortName(String value){
+        node.setProperty(SHORT_NAME_PROPERTY, value);
+    }
+
+    public void setAccession(String value) {
+        node.setProperty(ACCESSION_PROPERTY, value);
+    }
+
+    public void setSequence(String value) {
+        node.setProperty(SEQUENCE_PROPERTY, value);
+    }
+
+    public void setModifiedDate(String value){
+        node.setProperty(MODIFIED_DATE_PROPERTY, value);
+    }
+
+    public void setEnsemblId(String value){
+        node.setProperty(ENSEMBL_ID_PROPERTY, value);
+    }
+
+    public void setKeggId(String value){
+        node.setProperty(KEGG_ID_PROPERTY, value);
+    }
+
+    public void setPIRId(String value){
+        node.setProperty(PIR_ID_PROPERTY, value);
+    }
+
+    public void setEMBLreferences(String[] value){
+        node.setProperty(EMBL_REFERENCES_PROPERTY, value);
+    }
+
+    public void setRefseqReferences(String[] value){
+        node.setProperty(REFSEQ_REFERENCES_PROPERTY, value);
+    }
     
+    public void setAlternativeAccessions(String[] value){
+        node.setProperty(ALTERNATIVE_ACCESSIONS_PROPERTY, value);
+    }
+
+    public void setArrayExpressId(String value){
+        node.setProperty(ARRAY_EXPRESS_ID_PROPERTY, value);
+    }
+
+    public void setUniGeneId(String value){
+        node.setProperty(UNIGENE_ID_PROPERTY, value);
+    }
+
+    public void setMass(float value) {
+        node.setProperty(MASS_PROPERTY, value);
+    }
+
+    public void setLength(int value) {
+        node.setProperty(LENGTH_PROPERTY, value);
+    }
+
+    public void setGeneNames(String[] value){
+        node.setProperty(GENE_NAMES_PROPERTY, value);
+    }
     
 
     @Override
