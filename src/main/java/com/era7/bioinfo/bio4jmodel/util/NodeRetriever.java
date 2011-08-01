@@ -6,6 +6,7 @@ package com.era7.bioinfo.bio4jmodel.util;
 
 import com.era7.bioinfo.bio4jmodel.nodes.*;
 import com.era7.bioinfo.bio4jmodel.nodes.citation.*;
+import com.era7.bioinfo.bio4jmodel.nodes.ncbi.NCBITaxonNode;
 import com.era7.bioinfo.bio4jmodel.nodes.refseq.GenomeElementNode;
 import java.util.ArrayList;
 import java.util.List;
@@ -214,6 +215,20 @@ public class NodeRetriever {
         IndexHits<Node> hits = manager.getTaxonNameIndex().get(TaxonNode.TAXON_NAME_INDEX, taxonName);        
         if(hits.hasNext()){
             return new TaxonNode(hits.getSingle());
+        }else{
+            return null;
+        }   
+    }
+    
+    /**
+     * 
+     * @param taxId
+     * @return NCBITaxonNode with the tax id provided
+     */
+    public NCBITaxonNode getNCBITaxonByTaxId(String taxId){
+        IndexHits<Node> hits = manager.getNCBITaxonIdIndex().get(NCBITaxonNode.NCBI_TAXON_ID_INDEX, taxId);        
+        if(hits.hasNext()){
+            return new NCBITaxonNode(hits.getSingle());
         }else{
             return null;
         }   

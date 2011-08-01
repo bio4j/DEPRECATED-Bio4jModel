@@ -7,6 +7,7 @@ package com.era7.bioinfo.bio4jmodel.util;
 
 import com.era7.bioinfo.bio4jmodel.nodes.*;
 import com.era7.bioinfo.bio4jmodel.nodes.citation.*;
+import com.era7.bioinfo.bio4jmodel.nodes.ncbi.NCBITaxonNode;
 import com.era7.bioinfo.bio4jmodel.nodes.refseq.GenomeElementNode;
 import com.era7.bioinfo.bio4jmodel.relationships.SubcellularLocationParentRel;
 import com.era7.bioinfo.bio4jmodel.relationships.go.IsAGoRel;
@@ -65,6 +66,7 @@ public class Bio4jManager extends Neo4jManager{
     private Index<Node> articlePubmedIdIndex = null;
     private Index<Node> journalNameIndex = null;
     private Index<Node> genomeElementVersionIndex = null;
+    private Index<Node> ncbiTaxonIdIndex = null;
     
     //----special indexes----
     //private Index<Node> 
@@ -120,6 +122,8 @@ public class Bio4jManager extends Neo4jManager{
         articlePubmedIdIndex = graphDbService.index().forNodes(ArticleNode.ARTICLE_PUBMED_ID_INDEX, indexProps);
         journalNameIndex = graphDbService.index().forNodes(JournalNode.JOURNAL_NAME_INDEX, indexProps);
         genomeElementVersionIndex = graphDbService.index().forNodes(GenomeElementNode.GENOME_ELEMENT_VERSION_INDEX,indexProps);
+        ncbiTaxonIdIndex = graphDbService.index().forNodes(NCBITaxonNode.NCBI_TAXON_ID_INDEX,indexProps);
+        
 
         //----------relationship indexes-----
         isAGorelIndex = graphDbService.index().forRelationships(IsAGoRel.IS_A_REL_INDEX, indexProps);
@@ -229,6 +233,9 @@ public class Bio4jManager extends Neo4jManager{
     }
     public Index<Node> getGenomeElementVersionIndex(){
         return genomeElementVersionIndex;
+    }
+    public Index<Node> getNCBITaxonIdIndex(){
+        return ncbiTaxonIdIndex;
     }
 
     public RelationshipIndex getIsAGoRelIndex(){
