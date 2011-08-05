@@ -20,6 +20,7 @@ import org.neo4j.graphdb.Relationship;
 public class NCBITaxonNode extends BasicEntity{
 
     public static final String NCBI_TAXON_ID_INDEX = "ncbi_taxon_id_index";
+    public static final String NCBI_TAXON_GI_ID_INDEX = "ncbi_taxon_gi_id_index";
 
     public static final String NODE_TYPE = NCBITaxonNode.class.getCanonicalName();
 

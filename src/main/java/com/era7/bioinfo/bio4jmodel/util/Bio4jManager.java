@@ -67,6 +67,7 @@ public class Bio4jManager extends Neo4jManager{
     private Index<Node> journalNameIndex = null;
     private Index<Node> genomeElementVersionIndex = null;
     private Index<Node> ncbiTaxonIdIndex = null;
+    private Index<Node> ncbiTaxonGiIdIndex = null;
     
     //----special indexes----
     //private Index<Node> 
@@ -123,6 +124,7 @@ public class Bio4jManager extends Neo4jManager{
         journalNameIndex = graphDbService.index().forNodes(JournalNode.JOURNAL_NAME_INDEX, indexProps);
         genomeElementVersionIndex = graphDbService.index().forNodes(GenomeElementNode.GENOME_ELEMENT_VERSION_INDEX,indexProps);
         ncbiTaxonIdIndex = graphDbService.index().forNodes(NCBITaxonNode.NCBI_TAXON_ID_INDEX,indexProps);
+        ncbiTaxonGiIdIndex = graphDbService.index().forNodes(NCBITaxonNode.NCBI_TAXON_GI_ID_INDEX,indexProps);
         
 
         //----------relationship indexes-----
@@ -236,6 +238,9 @@ public class Bio4jManager extends Neo4jManager{
     }
     public Index<Node> getNCBITaxonIdIndex(){
         return ncbiTaxonIdIndex;
+    }
+    public Index<Node> getNCBITaxonGiIdIndex(){
+        return ncbiTaxonGiIdIndex;
     }
 
     public RelationshipIndex getIsAGoRelIndex(){
