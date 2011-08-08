@@ -70,8 +70,7 @@ public class GoUtil {
             Bio4jManager manager) {
 
         GoAnnotationXML annotationXML = new GoAnnotationXML();
-
-
+        
         HashMap<String, GoTermXML> goAnnotatorsMap = new HashMap<String, GoTermXML>();
         HashMap<String, Integer> goCountsMap = new HashMap<String, Integer>();
 

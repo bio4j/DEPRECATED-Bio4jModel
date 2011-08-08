@@ -233,6 +233,19 @@ public class NodeRetriever {
             return null;
         }   
     }
+    /**
+     * 
+     * @param giId
+     * @return NCBITaxonNode with the tax id provided
+     */
+    public NCBITaxonNode getNCBITaxonByGiId(String giId){
+        IndexHits<Node> hits = manager.getNCBITaxonGiIdIndex().get(NCBITaxonNode.NCBI_TAXON_GI_ID_INDEX, giId);        
+        if(hits.hasNext()){
+            return new NCBITaxonNode(hits.getSingle());
+        }else{
+            return null;
+        }   
+    }
     
     //-------------------------------------------------------------------
     //--------------------ISOFORMS--------------------------------
