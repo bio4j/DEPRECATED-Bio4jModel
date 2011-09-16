@@ -24,7 +24,7 @@ import org.neo4j.graphdb.Node;
  * This class just models a Research Institute.
  * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
-public class InstituteNode extends BasicEntity{
+public class InstituteNode extends BasicEntity{ 
 
     public static final String NODE_TYPE = InstituteNode.class.getCanonicalName();
     public static final String INSTITUTE_NAME_INDEX = "institute_name_index";
