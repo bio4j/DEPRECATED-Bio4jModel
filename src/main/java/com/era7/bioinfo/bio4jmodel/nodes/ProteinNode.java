@@ -43,7 +43,6 @@ import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinIsoformInteracti
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinKeywordRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinOrganismRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinProteinInteractionRel;
-import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinSelfInteractionRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinSubcellularLocationRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
 import java.util.ArrayList;
@@ -285,20 +284,6 @@ public class ProteinNode extends BasicEntity {
         Iterator<Relationship> iterator = node.getRelationships(new ProteinProteinInteractionRel(null), Direction.OUTGOING).iterator();
         while(iterator.hasNext()){
             list.add(new ProteinProteinInteractionRel(iterator.next()));
-        }
-        
-        return list;
-    }
-    /**
-     * Protein self-interactions
-     * @return 
-     */
-    public List<ProteinSelfInteractionRel> getSelfInteractions(){
-        List<ProteinSelfInteractionRel> list = new ArrayList<ProteinSelfInteractionRel>();
-        
-        Iterator<Relationship> iterator = node.getRelationships(new ProteinSelfInteractionRel(null), Direction.OUTGOING).iterator();
-        while(iterator.hasNext()){
-            list.add(new ProteinSelfInteractionRel(iterator.next()));
         }
         
         return list;

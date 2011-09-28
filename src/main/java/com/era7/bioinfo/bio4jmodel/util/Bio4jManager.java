@@ -81,8 +81,7 @@ public class Bio4jManager extends Neo4jManager{
      * @param dbFolder
      */
     public Bio4jManager(String dbFolder){        
-        super(dbFolder,firstTimeCalled(), null);
-        graphDbService = Neo4jManager.graphService;
+        super(dbFolder,firstTimeCalled());
 
         Map<String,String> indexProps = new HashMap<String, String>();
         indexProps.put(PROVIDER_ST, LUCENE_ST);

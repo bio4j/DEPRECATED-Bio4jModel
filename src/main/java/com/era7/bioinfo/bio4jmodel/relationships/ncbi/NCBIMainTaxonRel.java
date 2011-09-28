@@ -21,7 +21,7 @@ import com.era7.bioinfo.bioinfoneo4j.BasicRelationship;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
+ * Entry point for the root taxon of NCBI taxonomy (Relationship coming from reference node)
  * @author ppareja
  */
 public class NCBIMainTaxonRel extends BasicRelationship{
