@@ -21,14 +21,14 @@ import com.era7.bioinfo.bioinfoneo4j.BasicRelationship;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Submission authors (consortiums)
+ * Submission authors (people)
  * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
-public class SubmissionAuthorConsortiumRel extends BasicRelationship{
+public class SubmissionAuthorRel extends BasicRelationship{
 
-    public static final String NAME = "SUBMISSION_AUTHOR_CONSORTIUM";
+    public static final String NAME = "SUBMISSION_AUTHOR_PERSON";
 
-    public SubmissionAuthorConsortiumRel(Relationship rel){
+    public SubmissionAuthorRel(Relationship rel){
         super(rel);
     }
 

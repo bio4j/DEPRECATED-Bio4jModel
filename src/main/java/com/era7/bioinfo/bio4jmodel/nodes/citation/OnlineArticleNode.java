@@ -20,7 +20,7 @@ package com.era7.bioinfo.bio4jmodel.nodes.citation;
 import com.era7.bioinfo.bio4jmodel.nodes.ConsortiumNode;
 import com.era7.bioinfo.bio4jmodel.nodes.PersonNode;
 import com.era7.bioinfo.bio4jmodel.relationships.citation.onarticle.OnlineArticleAuthorConsortiumRel;
-import com.era7.bioinfo.bio4jmodel.relationships.citation.onarticle.OnlineArticleAuthorPersonRel;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.onarticle.OnlineArticleAuthorRel;
 import com.era7.bioinfo.bio4jmodel.relationships.citation.onarticle.OnlineArticleJournalRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
 import java.util.ArrayList;
@@ -89,7 +89,7 @@ public class OnlineArticleNode extends BasicEntity{
      */
     public List<PersonNode> getPersonAuthors(){
         List<PersonNode> list = new ArrayList<PersonNode>();
-        Iterator<Relationship> iterator = this.node.getRelationships(new OnlineArticleAuthorPersonRel(null), Direction.OUTGOING).iterator();
+        Iterator<Relationship> iterator = this.node.getRelationships(new OnlineArticleAuthorRel(null), Direction.OUTGOING).iterator();
         while(iterator.hasNext()){
             list.add(new PersonNode(iterator.next().getEndNode()));
         }
