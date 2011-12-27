@@ -70,11 +70,11 @@ public abstract class BasicFeatureRel extends BasicRelationship{
     public String getRef(){
         return String.valueOf(this.relationship.getProperty(REF_PROPERTY));
     }
-    public int getBegin(){
-        return Integer.parseInt(String.valueOf(this.relationship.getProperty(BEGIN_PROPERTY)));
+    public String getBegin(){
+        return String.valueOf(this.relationship.getProperty(BEGIN_PROPERTY));
     }
-    public int getEnd(){
-        return Integer.parseInt(String.valueOf(this.relationship.getProperty(END_PROPERTY)));
+    public String getEnd(){
+        return String.valueOf(this.relationship.getProperty(END_PROPERTY));
     }    
 
     public FeatureTypeNode getFeatureType(){

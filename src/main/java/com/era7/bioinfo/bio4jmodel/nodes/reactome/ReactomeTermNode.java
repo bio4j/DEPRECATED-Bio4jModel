@@ -17,18 +17,8 @@
 
 package com.era7.bioinfo.bio4jmodel.nodes.reactome;
 
-import com.era7.bioinfo.bio4jmodel.relationships.go.HasPartOfGoRel;
-import com.era7.bioinfo.bio4jmodel.relationships.go.IsAGoRel;
-import com.era7.bioinfo.bio4jmodel.relationships.go.NegativelyRegulatesGoRel;
-import com.era7.bioinfo.bio4jmodel.relationships.go.PartOfGoRel;
-import com.era7.bioinfo.bio4jmodel.relationships.go.PositivelyRegulatesGoRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * Gene ontology term

@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.era7.bioinfo.bio4jmodel.util;
 
 import com.era7.bioinfo.bio4jmodel.nodes.*;
@@ -23,17 +22,21 @@ import org.neo4j.graphdb.index.RelationshipIndex;
  *
  * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
-public class Bio4jManager extends Neo4jManager{
+public class Bio4jManager extends Neo4jManager {
 
     private static boolean alreadyCreated = false;
-
     private static String PROVIDER_ST = "provider";
     private static String EXACT_ST = "exact";
     private static String FULL_TEXT_ST = "fulltext";
     private static String LUCENE_ST = "lucene";
     private static String TYPE_ST = "type";
-
+    
+    public static final String NODE_TYPE_INDEX_NAME = "node_type_index";
+    
     //-----------------node indexes-----------------------
+    private Index<Node> enzymeIdIndex = null;
+    private Index<Node> nodeTypeIndex = null;
+    private Index<Node> datasetNameIndex = null;
     private Index<Node> goTermIdIndex = null;
     private Index<Node> proteinAccessionIndex = null;
     private Index<Node> proteinFullNameFullTextIndex = null;
@@ -67,10 +70,8 @@ public class Bio4jManager extends Neo4jManager{
     private Index<Node> ncbiTaxonIdIndex = null;
     private Index<Node> ncbiTaxonGiIdIndex = null;
     private Index<Node> reactomeTermIdIndex = null;
-    
     //----special indexes----
     //private Index<Node> 
-
     //------------relationship indexes---------------
     private RelationshipIndex isAGorelIndex = null;
     private RelationshipIndex subcellularLocationParentRelIndex = null;
@@ -79,21 +80,51 @@ public class Bio4jManager extends Neo4jManager{
      * Constructor
      * @param dbFolder
      */
-    public Bio4jManager(String dbFolder){        
-        super(dbFolder,firstTimeCalled());
+    public Bio4jManager(String dbFolder) {
+        super(dbFolder, firstTimeCalled(), true);       
+
+        initializeIndexes(getIndexProps(), getIndexFullTextProps());
         
-        Map<String,String> indexProps = new HashMap<String, String>();
+        System.out.println("graphservice hashcode: " + graphService.hashCode());
+
+    }
+    
+    /**
+     * Constructor
+     * @param dbFolder
+     */
+    public Bio4jManager(String dbFolder, boolean createUnderlyingService, boolean readOnlyMode) {
+        super(dbFolder, createUnderlyingService, readOnlyMode);       
+
+        initializeIndexes(getIndexProps(), getIndexFullTextProps());
+        
+        System.out.println("graphservice hashcode: " + graphService.hashCode());
+
+    }
+    
+    private Map<String, String> getIndexProps(){
+        
+        Map<String, String> indexProps = new HashMap<String, String>();        
         indexProps.put(PROVIDER_ST, LUCENE_ST);
         indexProps.put(TYPE_ST, EXACT_ST);
-
-        Map<String,String> indexFullTextProps = new HashMap<String, String>();
+        
+        return indexProps;
+    }
+    
+    private Map<String, String> getIndexFullTextProps(){
+        
+        Map<String, String> indexFullTextProps = new HashMap<String, String>();
         indexFullTextProps.put(PROVIDER_ST, LUCENE_ST);
         indexFullTextProps.put(TYPE_ST, FULL_TEXT_ST);
         
-        System.out.println("graphservice hashcode: " + graphService.hashCode());
-        
+        return indexFullTextProps;
+    }
 
+    private void initializeIndexes(Map<String, String> indexProps, Map<String, String> indexFullTextProps) {
         //----------node indexes-----------
+        nodeTypeIndex = graphService.index().forNodes(NODE_TYPE_INDEX_NAME, indexProps);
+        enzymeIdIndex = graphService.index().forNodes(EnzymeNode.ENZYME_ID_INDEX, indexProps);
+        datasetNameIndex = graphService.index().forNodes(DatasetNode.DATASET_NAME_INDEX, indexProps);
         goTermIdIndex = graphService.index().forNodes(GoTermNode.GO_TERM_ID_INDEX, indexProps);
         proteinAccessionIndex = graphService.index().forNodes(ProteinNode.PROTEIN_ACCESSION_INDEX, indexProps);
         proteinFullNameFullTextIndex = graphService.index().forNodes(ProteinNode.PROTEIN_FULL_NAME_FULL_TEXT_INDEX, indexFullTextProps);
@@ -123,136 +154,178 @@ public class Bio4jManager extends Neo4jManager{
         articleDoiIdIndex = graphService.index().forNodes(ArticleNode.ARTICLE_DOI_ID_INDEX, indexProps);
         articlePubmedIdIndex = graphService.index().forNodes(ArticleNode.ARTICLE_PUBMED_ID_INDEX, indexProps);
         journalNameIndex = graphService.index().forNodes(JournalNode.JOURNAL_NAME_INDEX, indexProps);
-        genomeElementVersionIndex = graphService.index().forNodes(GenomeElementNode.GENOME_ELEMENT_VERSION_INDEX,indexProps);
-        ncbiTaxonIdIndex = graphService.index().forNodes(NCBITaxonNode.NCBI_TAXON_ID_INDEX,indexProps);
-        ncbiTaxonGiIdIndex = graphService.index().forNodes(NCBITaxonNode.NCBI_TAXON_GI_ID_INDEX,indexProps);
-        reactomeTermIdIndex = graphService.index().forNodes(ReactomeTermNode.REACTOME_TERM_ID_INDEX,indexProps);
+        genomeElementVersionIndex = graphService.index().forNodes(GenomeElementNode.GENOME_ELEMENT_VERSION_INDEX, indexProps);
+        ncbiTaxonIdIndex = graphService.index().forNodes(NCBITaxonNode.NCBI_TAXON_ID_INDEX, indexProps);
+        ncbiTaxonGiIdIndex = graphService.index().forNodes(NCBITaxonNode.NCBI_TAXON_GI_ID_INDEX, indexProps);
+        reactomeTermIdIndex = graphService.index().forNodes(ReactomeTermNode.REACTOME_TERM_ID_INDEX, indexProps);
 
         //----------relationship indexes-----
         isAGorelIndex = graphService.index().forRelationships(IsAGoRel.IS_A_REL_INDEX, indexProps);
         subcellularLocationParentRelIndex = graphService.index().forRelationships(SubcellularLocationParentRel.SUBCELLULAR_LOCATION_PARENT_REL_INDEX);
-        
 
     }
-    private static synchronized boolean firstTimeCalled(){
-        if(!alreadyCreated){
+
+    private static synchronized boolean firstTimeCalled() {
+        if (!alreadyCreated) {
             alreadyCreated = true;
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
     //---------------------------------------------------------------
     //--------------------------INDEXES------------------------------
-    //------------------------------------------------------------------S
+    //------------------------------------------------------------------
+    public Index<Node> getNodeTypeIndex() {
+        return nodeTypeIndex;
+    }
+    
+    public Index<Node> getEnzymeIdIndex(){
+        return enzymeIdIndex;
+    }
+    
+    public Index<Node> getDatasetNameIndex() {
+        return datasetNameIndex;
+    }
 
-    public Index<Node> getGoTermIdIndex(){        
+    public Index<Node> getGoTermIdIndex() {
         return goTermIdIndex;
     }
-    public Index<Node> getProteinAccessionIndex(){        
+
+    public Index<Node> getProteinAccessionIndex() {
         return proteinAccessionIndex;
     }
-    public Index<Node> getProteinFullNameFullTextIndex(){
+
+    public Index<Node> getProteinFullNameFullTextIndex() {
         return proteinFullNameFullTextIndex;
     }
-    public Index<Node> getProteinGeneNamesFullTextIndex(){
+
+    public Index<Node> getProteinGeneNamesFullTextIndex() {
         return proteinGeneNamesFullTextIndex;
     }
-    public Index<Node> getKeywordIdIndex(){
+
+    public Index<Node> getKeywordIdIndex() {
         return keywordIdIndex;
     }
-    public Index<Node> getKeywordNameIndex(){
+
+    public Index<Node> getKeywordNameIndex() {
         return keywordNameIndex;
     }
-    public Index<Node> getInterproIdIndex(){
+
+    public Index<Node> getInterproIdIndex() {
         return interproIdIndex;
     }
-    public Index<Node> getOrganismScientificNameIndex(){
+
+    public Index<Node> getOrganismScientificNameIndex() {
         return organismScientificNameIndex;
     }
-    public Index<Node> getOrganismNcbiTaxonomyIdIndex(){
+
+    public Index<Node> getOrganismNcbiTaxonomyIdIndex() {
         return organismNcbiTaxonomyIdIndex;
     }
-    public Index<Node> getTaxonNameIndex(){
+
+    public Index<Node> getTaxonNameIndex() {
         return taxonNameIndex;
     }
-    public Index<Node> getFeatureTypeNameIndex(){
+
+    public Index<Node> getFeatureTypeNameIndex() {
         return featureTypeNameIndex;
     }
-    public Index<Node> getCommentTypeNameIndex(){
+
+    public Index<Node> getCommentTypeNameIndex() {
         return commentTypeNameIndex;
     }
-    public Index<Node> getIsoformIdIndex(){
+
+    public Index<Node> getIsoformIdIndex() {
         return isoformIdIndex;
     }
-    public Index<Node> getPersonNameIndex(){
+
+    public Index<Node> getPersonNameIndex() {
         return personNameFullTextIndex;
     }
-    public Index<Node> getConsortiumNameIndex(){
+
+    public Index<Node> getConsortiumNameIndex() {
         return consortiumNameIndex;
     }
-    public Index<Node> getInstituteNameIndex(){
+
+    public Index<Node> getInstituteNameIndex() {
         return instituteNameIndex;
     }
-    public Index<Node> getCountryNameIndex(){
+
+    public Index<Node> getCountryNameIndex() {
         return countryNameIndex;
     }
-    public Index<Node> getCityNameIndex(){
+
+    public Index<Node> getCityNameIndex() {
         return cityNameIndex;
     }
-    public Index<Node> getThesisFullTextIndex(){
+
+    public Index<Node> getThesisFullTextIndex() {
         return thesisTitleFullTextIndex;
     }
-    public Index<Node> getPatentNumberIndex(){
+
+    public Index<Node> getPatentNumberIndex() {
         return patentNumberIndex;
     }
-    public Index<Node> getBookNameFullTextIndex(){
+
+    public Index<Node> getBookNameFullTextIndex() {
         return bookNameFullTextIndex;
     }
-    public Index<Node> getPublisherNameIndex(){
+
+    public Index<Node> getPublisherNameIndex() {
         return publisherNameIndex;
     }
-    public Index<Node> getOnlineArticleTitleFullTextIndex(){
+
+    public Index<Node> getOnlineArticleTitleFullTextIndex() {
         return onlineArticleTitleFullTextIndex;
     }
-    public Index<Node> getOnlineJournalNameIndex(){
+
+    public Index<Node> getOnlineJournalNameIndex() {
         return onlineJournalNameIndex;
     }
-    public Index<Node> getArticleTitleFullTextIndex(){
+
+    public Index<Node> getArticleTitleFullTextIndex() {
         return articleTitleFullTextIndex;
     }
-    public Index<Node> getArticleMedLineIdIndex(){
+
+    public Index<Node> getArticleMedLineIdIndex() {
         return articleMedlineIdIndex;
     }
-    public Index<Node> getArticleDoiIdIndex(){
+
+    public Index<Node> getArticleDoiIdIndex() {
         return articleDoiIdIndex;
     }
-    public Index<Node> getArticlePubmedIdIndex(){
+
+    public Index<Node> getArticlePubmedIdIndex() {
         return articlePubmedIdIndex;
     }
-    public Index<Node> getJournalNameIndex(){
+
+    public Index<Node> getJournalNameIndex() {
         return journalNameIndex;
     }
-    public Index<Node> getGenomeElementVersionIndex(){
+
+    public Index<Node> getGenomeElementVersionIndex() {
         return genomeElementVersionIndex;
     }
-    public Index<Node> getNCBITaxonIdIndex(){
+
+    public Index<Node> getNCBITaxonIdIndex() {
         return ncbiTaxonIdIndex;
     }
-    public Index<Node> getNCBITaxonGiIdIndex(){
+
+    public Index<Node> getNCBITaxonGiIdIndex() {
         return ncbiTaxonGiIdIndex;
     }
-    public Index<Node> getReactomeTermIdIndex(){
+
+    public Index<Node> getReactomeTermIdIndex() {
         return reactomeTermIdIndex;
     }
-    public RelationshipIndex getIsAGoRelIndex(){
+
+    public RelationshipIndex getIsAGoRelIndex() {
         return isAGorelIndex;
     }
-    public RelationshipIndex getSubcellularParentRelIndex(){
+
+    public RelationshipIndex getSubcellularParentRelIndex() {
         return subcellularLocationParentRelIndex;
     }
-    
-    
-
 }
