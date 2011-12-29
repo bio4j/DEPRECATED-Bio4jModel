@@ -79,7 +79,29 @@ public class EnzymeNode extends BasicEntity{
 
     @Override
     public String toString(){
-        return "id = " + getId();
+        String alternateNames = "";
+        for (String altName : getAlternateNames()) {
+            alternateNames += altName + ",";
+        }
+        alternateNames = alternateNames.substring(0, alternateNames.length() - 1);
+        String cofactors = "";
+        for (String cofactor : getCofactors()) {
+            cofactors += cofactor + ",";
+        }
+        cofactors = cofactors.substring(0, cofactors.length() - 1);
+        String prositeRefs = "";
+        for (String prositeRef : getPrositeCrossReferences()) {
+            prositeRefs += prositeRef + ",";
+        }
+        prositeRefs = prositeRefs.substring(0, prositeRefs.length() - 1);
+        
+        return "id = " + getId() + "\n" +
+                "Official name = " + getOfficialName() + "\n" +
+                "Alternate names = " + alternateNames + "\n" +
+                "Catalytic activity = " + getCatalyticActivity() + "\n" +
+                "Cofactors = " + cofactors + "\n" +
+                "Comments = " + getComments() + "\n" +
+                "Prosite cross-references" + prositeRefs;
     }
 
 }
