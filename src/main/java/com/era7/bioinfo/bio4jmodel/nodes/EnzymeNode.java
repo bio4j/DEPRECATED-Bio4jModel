@@ -95,7 +95,7 @@ public class EnzymeNode extends BasicEntity{
         }
         prositeRefs = prositeRefs.substring(0, prositeRefs.length() - 1);
         
-        return "id = " + getId() + "\n" +
+        return "ID = " + getId() + "\n" +
                 "Official name = " + getOfficialName() + "\n" +
                 "Alternate names = " + alternateNames + "\n" +
                 "Catalytic activity = " + getCatalyticActivity() + "\n" +
