@@ -35,6 +35,10 @@ import com.era7.bioinfo.bio4jmodel.relationships.comment.DomainCommentRel;
 import com.era7.bioinfo.bio4jmodel.relationships.comment.FunctionCommentRel;
 import com.era7.bioinfo.bio4jmodel.relationships.comment.PathwayCommentRel;
 import com.era7.bioinfo.bio4jmodel.relationships.comment.SimilarityCommentRel;
+import com.era7.bioinfo.bio4jmodel.relationships.features.ActiveSiteFeatureRel;
+import com.era7.bioinfo.bio4jmodel.relationships.features.SignalPeptideFeatureRel;
+import com.era7.bioinfo.bio4jmodel.relationships.features.SpliceVariantFeatureRel;
+import com.era7.bioinfo.bio4jmodel.relationships.features.TransmembraneRegionFeatureRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinDatasetRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinGenomeElementRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinGoRel;
@@ -43,11 +47,14 @@ import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinIsoformInteracti
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinKeywordRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinOrganismRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinProteinInteractionRel;
-import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinSelfInteractionRel;
 import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinSubcellularLocationRel;
+import com.era7.bioinfo.bio4jmodel.relationships.uniref.UniRef100MemberRel;
+import com.era7.bioinfo.bio4jmodel.relationships.uniref.UniRef50MemberRel;
+import com.era7.bioinfo.bio4jmodel.relationships.uniref.UniRef90MemberRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -161,6 +168,62 @@ public class ProteinNode extends BasicEntity {
 //        return String.valueOf(node.getProperty(GENE_NAMES_PROPERTY)).split(GENE_NAMES_SEPARATOR);
 //    }
 
+    
+    public boolean isUniref50Representant(){
+        return !node.getRelationships(Direction.INCOMING, new UniRef50MemberRel(null)).iterator().hasNext();
+    }
+    public boolean isUniref90Representant(){
+        return !node.getRelationships(Direction.INCOMING, new UniRef90MemberRel(null)).iterator().hasNext();
+    }
+    public boolean isUniref100Representant(){
+        return !node.getRelationships(Direction.INCOMING, new UniRef100MemberRel(null)).iterator().hasNext();
+    }
+    
+    public List<ProteinNode> getUniref50ClusterThisProteinBelongsTo(){
+        List<ProteinNode> list = new LinkedList<ProteinNode>();
+        if(isUniref50Representant()){
+            list.add(this);
+            Iterator<Relationship> relIterator = node.getRelationships(Direction.OUTGOING, new UniRef50MemberRel(null)).iterator();
+            while(relIterator.hasNext()){
+                list.add(new ProteinNode(relIterator.next().getEndNode()));
+            }
+        }else{
+            ProteinNode representant = new ProteinNode(node.getRelationships(Direction.INCOMING, new UniRef50MemberRel(null)).iterator().next().getStartNode());
+            return representant.getUniref50ClusterThisProteinBelongsTo();
+        }
+        return list;
+    }
+    
+    public List<ProteinNode> getUniref90ClusterThisProteinBelongsTo(){
+        List<ProteinNode> list = new LinkedList<ProteinNode>();
+        if(isUniref90Representant()){
+            list.add(this);
+            Iterator<Relationship> relIterator = node.getRelationships(Direction.OUTGOING, new UniRef90MemberRel(null)).iterator();
+            while(relIterator.hasNext()){
+                list.add(new ProteinNode(relIterator.next().getEndNode()));
+            }
+        }else{
+            ProteinNode representant = new ProteinNode(node.getRelationships(Direction.INCOMING, new UniRef90MemberRel(null)).iterator().next().getStartNode());
+            return representant.getUniref90ClusterThisProteinBelongsTo();
+        }
+        return list;
+    }
+    
+    public List<ProteinNode> getUniref100ClusterThisProteinBelongsTo(){
+        List<ProteinNode> list = new LinkedList<ProteinNode>();
+        if(isUniref100Representant()){
+            list.add(this);
+            Iterator<Relationship> relIterator = node.getRelationships(Direction.OUTGOING, new UniRef100MemberRel(null)).iterator();
+            while(relIterator.hasNext()){
+                list.add(new ProteinNode(relIterator.next().getEndNode()));
+            }
+        }else{
+            ProteinNode representant = new ProteinNode(node.getRelationships(Direction.INCOMING, new UniRef100MemberRel(null)).iterator().next().getStartNode());
+            return representant.getUniref100ClusterThisProteinBelongsTo();
+        }
+        return list;
+    }
+    
     public OrganismNode getOrganism() {
         OrganismNode org = null;
         Relationship rel = node.getSingleRelationship(new ProteinOrganismRel(null), Direction.OUTGOING);
@@ -231,6 +294,47 @@ public class ProteinNode extends BasicEntity {
         return keywords;  
     }
     
+    public List<SignalPeptideFeatureRel> getSignalPeptideFeature(){
+        List<SignalPeptideFeatureRel> list = new ArrayList<SignalPeptideFeatureRel>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new SignalPeptideFeatureRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            SignalPeptideFeatureRel rel = new SignalPeptideFeatureRel(iterator.next());
+            list.add(rel);                        
+        }        
+        return list;
+    }
+    public List<SpliceVariantFeatureRel> getSpliceVariantFeature(){
+        List<SpliceVariantFeatureRel> list = new ArrayList<SpliceVariantFeatureRel>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new SpliceVariantFeatureRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            SpliceVariantFeatureRel rel = new SpliceVariantFeatureRel(iterator.next());
+            list.add(rel);                        
+        }        
+        return list;
+    }
+    public List<TransmembraneRegionFeatureRel> getTransmembraneRegionFeature(){
+        List<TransmembraneRegionFeatureRel> list = new ArrayList<TransmembraneRegionFeatureRel>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new TransmembraneRegionFeatureRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            TransmembraneRegionFeatureRel rel = new TransmembraneRegionFeatureRel(iterator.next());
+            list.add(rel);                        
+        }        
+        return list;
+    }
+    public List<ActiveSiteFeatureRel> getActiveSiteFeature(){
+        List<ActiveSiteFeatureRel> list = new ArrayList<ActiveSiteFeatureRel>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new ActiveSiteFeatureRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            ActiveSiteFeatureRel rel = new ActiveSiteFeatureRel(iterator.next());
+            list.add(rel);                        
+        }        
+        return list;
+    }
+    
     public List<FunctionCommentRel> getFunctionComment(){
         List<FunctionCommentRel> list = new ArrayList<FunctionCommentRel>();
         
@@ -276,10 +380,10 @@ public class ProteinNode extends BasicEntity {
     }
     
     /**
-     * Protein-protein interactions
+     * Protein-protein outgoing interactions
      * @return 
      */
-    public List<ProteinProteinInteractionRel> getProteinInteractions(){
+    public List<ProteinProteinInteractionRel> getProteinOutgoingInteractions(){
         List<ProteinProteinInteractionRel> list = new ArrayList<ProteinProteinInteractionRel>();
         
         Iterator<Relationship> iterator = node.getRelationships(new ProteinProteinInteractionRel(null), Direction.OUTGOING).iterator();
@@ -290,28 +394,43 @@ public class ProteinNode extends BasicEntity {
         return list;
     }
     /**
-     * Protein self-interactions
+     * Protein-protein incoming interactions
      * @return 
      */
-    public List<ProteinSelfInteractionRel> getSelfInteractions(){
-        List<ProteinSelfInteractionRel> list = new ArrayList<ProteinSelfInteractionRel>();
+    public List<ProteinProteinInteractionRel> getProteinIncomingInteractions(){
+        List<ProteinProteinInteractionRel> list = new ArrayList<ProteinProteinInteractionRel>();
         
-        Iterator<Relationship> iterator = node.getRelationships(new ProteinSelfInteractionRel(null), Direction.OUTGOING).iterator();
+        Iterator<Relationship> iterator = node.getRelationships(new ProteinProteinInteractionRel(null), Direction.INCOMING).iterator();
         while(iterator.hasNext()){
-            list.add(new ProteinSelfInteractionRel(iterator.next()));
+            list.add(new ProteinProteinInteractionRel(iterator.next()));
         }
         
         return list;
     }
     
     /**
-     * Protein-Isoform interactions
+     * Protein-Isoform outgoing interactions
      * @return 
      */
-    public List<ProteinIsoformInteractionRel> getIsoformInteractions(){
+    public List<ProteinIsoformInteractionRel> getIsoformOutgoingInteractions(){
         List<ProteinIsoformInteractionRel> list = new ArrayList<ProteinIsoformInteractionRel>();
         
         Iterator<Relationship> iterator = node.getRelationships(new ProteinIsoformInteractionRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            list.add(new ProteinIsoformInteractionRel(iterator.next()));
+        }
+        
+        return list;
+    }
+    
+    /**
+     * Protein-Isoform incoming interactions
+     * @return 
+     */
+    public List<ProteinIsoformInteractionRel> getIsoformIncomingInteractions(){
+        List<ProteinIsoformInteractionRel> list = new ArrayList<ProteinIsoformInteractionRel>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new ProteinIsoformInteractionRel(null), Direction.INCOMING).iterator();
         while(iterator.hasNext()){
             list.add(new ProteinIsoformInteractionRel(iterator.next()));
         }

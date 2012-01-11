@@ -2,19 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.era7.bioinfo.bio4jmodel.util;
 
 import com.era7.bioinfo.bio4jmodel.nodes.*;
 import com.era7.bioinfo.bio4jmodel.nodes.citation.*;
 import com.era7.bioinfo.bio4jmodel.nodes.ncbi.NCBITaxonNode;
+import com.era7.bioinfo.bio4jmodel.nodes.reactome.ReactomeTermNode;
 import com.era7.bioinfo.bio4jmodel.nodes.refseq.GenomeElementNode;
 import com.era7.bioinfo.bio4jmodel.relationships.SubcellularLocationParentRel;
 import com.era7.bioinfo.bio4jmodel.relationships.go.IsAGoRel;
 import com.era7.bioinfo.bioinfoneo4j.Neo4jManager;
 import java.util.HashMap;
 import java.util.Map;
-import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.RelationshipIndex;
@@ -23,19 +22,21 @@ import org.neo4j.graphdb.index.RelationshipIndex;
  *
  * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
-public class Bio4jManager extends Neo4jManager{
+public class Bio4jManager extends Neo4jManager {
 
     private static boolean alreadyCreated = false;
-
     private static String PROVIDER_ST = "provider";
     private static String EXACT_ST = "exact";
     private static String FULL_TEXT_ST = "fulltext";
     private static String LUCENE_ST = "lucene";
     private static String TYPE_ST = "type";
-
-    private GraphDatabaseService graphDbService = null;
-
+    
+    public static final String NODE_TYPE_INDEX_NAME = "node_type_index";
+    
     //-----------------node indexes-----------------------
+    private Index<Node> enzymeIdIndex = null;
+    private Index<Node> nodeTypeIndex = null;
+    private Index<Node> datasetNameIndex = null;
     private Index<Node> goTermIdIndex = null;
     private Index<Node> proteinAccessionIndex = null;
     private Index<Node> proteinFullNameFullTextIndex = null;
@@ -54,7 +55,7 @@ public class Bio4jManager extends Neo4jManager{
     private Index<Node> instituteNameIndex = null;
     private Index<Node> countryNameIndex = null;
     private Index<Node> cityNameIndex = null;
-    private Index<Node> thesisFullTextIndex = null;
+    private Index<Node> thesisTitleFullTextIndex = null;
     private Index<Node> patentNumberIndex = null;
     private Index<Node> bookNameFullTextIndex = null;
     private Index<Node> publisherNameIndex = null;
@@ -68,10 +69,9 @@ public class Bio4jManager extends Neo4jManager{
     private Index<Node> genomeElementVersionIndex = null;
     private Index<Node> ncbiTaxonIdIndex = null;
     private Index<Node> ncbiTaxonGiIdIndex = null;
-    
+    private Index<Node> reactomeTermIdIndex = null;
     //----special indexes----
     //private Index<Node> 
-
     //------------relationship indexes---------------
     private RelationshipIndex isAGorelIndex = null;
     private RelationshipIndex subcellularLocationParentRelIndex = null;
@@ -80,176 +80,252 @@ public class Bio4jManager extends Neo4jManager{
      * Constructor
      * @param dbFolder
      */
-    public Bio4jManager(String dbFolder){        
-        super(dbFolder,firstTimeCalled());
-        graphDbService = Neo4jManager.graphService;
+    public Bio4jManager(String dbFolder) {
+        super(dbFolder, firstTimeCalled(), true);       
 
-        Map<String,String> indexProps = new HashMap<String, String>();
-        indexProps.put(PROVIDER_ST, LUCENE_ST);
-        indexProps.put(TYPE_ST, EXACT_ST);
-
-        Map<String,String> indexFullTextProps = new HashMap<String, String>();
-        indexFullTextProps.put(PROVIDER_ST, LUCENE_ST);
-        indexFullTextProps.put(TYPE_ST, FULL_TEXT_ST);
-
-        //----------node indexes-----------
-        goTermIdIndex = graphDbService.index().forNodes(GoTermNode.GO_TERM_ID_INDEX, indexProps);
-        proteinAccessionIndex = graphDbService.index().forNodes(ProteinNode.PROTEIN_ACCESSION_INDEX, indexProps);
-        proteinFullNameFullTextIndex = graphDbService.index().forNodes(ProteinNode.PROTEIN_FULL_NAME_FULL_TEXT_INDEX, indexFullTextProps);
-        proteinGeneNamesFullTextIndex = graphDbService.index().forNodes(ProteinNode.PROTEIN_GENE_NAMES_FULL_TEXT_INDEX, indexFullTextProps);
-        keywordIdIndex = graphDbService.index().forNodes(KeywordNode.KEYWORD_ID_INDEX, indexProps);
-        keywordNameIndex = graphDbService.index().forNodes(KeywordNode.KEYWORD_NAME_INDEX, indexProps);
-        interproIdIndex = graphDbService.index().forNodes(InterproNode.INTERPRO_ID_INDEX, indexProps);
-        organismScientificNameIndex = graphDbService.index().forNodes(OrganismNode.ORGANISM_SCIENTIFIC_NAME_INDEX, indexProps);
-        organismNcbiTaxonomyIdIndex = graphDbService.index().forNodes(OrganismNode.NCBI_TAXONOMY_ID_PROPERTY, indexProps);
-        taxonNameIndex = graphDbService.index().forNodes(TaxonNode.TAXON_NAME_INDEX, indexProps);
-        featureTypeNameIndex = graphDbService.index().forNodes(FeatureTypeNode.FEATURE_TYPE_NAME_INDEX, indexProps);
-        commentTypeNameIndex = graphDbService.index().forNodes(CommentTypeNode.COMMENT_TYPE_NAME_INDEX, indexProps);
-        isoformIdIndex = graphDbService.index().forNodes(IsoformNode.ISOFORM_ID_INDEX, indexProps);
-        personNameFullTextIndex = graphDbService.index().forNodes(PersonNode.PERSON_NAME_FULL_TEXT_INDEX, indexFullTextProps);
-        consortiumNameIndex = graphDbService.index().forNodes(ConsortiumNode.CONSORTIUM_NAME_INDEX, indexProps);
-        instituteNameIndex = graphDbService.index().forNodes(InstituteNode.INSTITUTE_NAME_INDEX, indexProps);
-        countryNameIndex = graphDbService.index().forNodes(CountryNode.COUNTRY_NAME_INDEX, indexProps);
-        cityNameIndex = graphDbService.index().forNodes(CityNode.CITY_NAME_INDEX, indexProps);
-        thesisFullTextIndex = graphDbService.index().forNodes(ThesisNode.THESIS_TITLE_FULL_TEXT_INDEX, indexFullTextProps);
-        patentNumberIndex = graphDbService.index().forNodes(PatentNode.PATENT_NUMBER_INDEX, indexProps);
-        bookNameFullTextIndex = graphDbService.index().forNodes(BookNode.BOOK_NAME_FULL_TEXT_INDEX, indexFullTextProps);
-        publisherNameIndex = graphDbService.index().forNodes(PublisherNode.PUBLISHER_NAME_INDEX, indexProps);
-        onlineArticleTitleFullTextIndex = graphDbService.index().forNodes(OnlineArticleNode.ONLINE_ARTICLE_TITLE_FULL_TEXT_INDEX, indexFullTextProps);
-        onlineJournalNameIndex = graphDbService.index().forNodes(OnlineJournalNode.ONLINE_JOURNAL_NAME_INDEX, indexProps);
-        articleTitleFullTextIndex = graphDbService.index().forNodes(ArticleNode.ARTICLE_TITLE_FULL_TEXT_INDEX, indexFullTextProps);
-        articleMedlineIdIndex = graphDbService.index().forNodes(ArticleNode.ARTICLE_MEDLINE_ID_INDEX, indexProps);
-        articleDoiIdIndex = graphDbService.index().forNodes(ArticleNode.ARTICLE_DOI_ID_INDEX, indexProps);
-        articlePubmedIdIndex = graphDbService.index().forNodes(ArticleNode.ARTICLE_PUBMED_ID_INDEX, indexProps);
-        journalNameIndex = graphDbService.index().forNodes(JournalNode.JOURNAL_NAME_INDEX, indexProps);
-        genomeElementVersionIndex = graphDbService.index().forNodes(GenomeElementNode.GENOME_ELEMENT_VERSION_INDEX,indexProps);
-        ncbiTaxonIdIndex = graphDbService.index().forNodes(NCBITaxonNode.NCBI_TAXON_ID_INDEX,indexProps);
-        ncbiTaxonGiIdIndex = graphDbService.index().forNodes(NCBITaxonNode.NCBI_TAXON_GI_ID_INDEX,indexProps);
+        initializeIndexes(getIndexProps(), getIndexFullTextProps());
         
-
-        //----------relationship indexes-----
-        isAGorelIndex = graphDbService.index().forRelationships(IsAGoRel.IS_A_REL_INDEX, indexProps);
-        subcellularLocationParentRelIndex = graphDbService.index().forRelationships(SubcellularLocationParentRel.SUBCELLULAR_LOCATION_PARENT_REL_INDEX);
-        
+        System.out.println("graphservice hashcode: " + graphService.hashCode());
 
     }
-    private static synchronized boolean firstTimeCalled(){
-        if(!alreadyCreated){
+    
+    /**
+     * Constructor
+     * @param dbFolder
+     */
+    public Bio4jManager(String dbFolder, boolean createUnderlyingService, boolean readOnlyMode) {
+        super(dbFolder, createUnderlyingService, readOnlyMode);       
+
+        initializeIndexes(getIndexProps(), getIndexFullTextProps());
+        
+        System.out.println("graphservice hashcode: " + graphService.hashCode());
+
+    }
+    
+    private Map<String, String> getIndexProps(){
+        
+        Map<String, String> indexProps = new HashMap<String, String>();        
+        indexProps.put(PROVIDER_ST, LUCENE_ST);
+        indexProps.put(TYPE_ST, EXACT_ST);
+        
+        return indexProps;
+    }
+    
+    private Map<String, String> getIndexFullTextProps(){
+        
+        Map<String, String> indexFullTextProps = new HashMap<String, String>();
+        indexFullTextProps.put(PROVIDER_ST, LUCENE_ST);
+        indexFullTextProps.put(TYPE_ST, FULL_TEXT_ST);
+        
+        return indexFullTextProps;
+    }
+
+    private void initializeIndexes(Map<String, String> indexProps, Map<String, String> indexFullTextProps) {
+        //----------node indexes-----------
+        nodeTypeIndex = graphService.index().forNodes(NODE_TYPE_INDEX_NAME, indexProps);
+        enzymeIdIndex = graphService.index().forNodes(EnzymeNode.ENZYME_ID_INDEX, indexProps);
+        datasetNameIndex = graphService.index().forNodes(DatasetNode.DATASET_NAME_INDEX, indexProps);
+        goTermIdIndex = graphService.index().forNodes(GoTermNode.GO_TERM_ID_INDEX, indexProps);
+        proteinAccessionIndex = graphService.index().forNodes(ProteinNode.PROTEIN_ACCESSION_INDEX, indexProps);
+        proteinFullNameFullTextIndex = graphService.index().forNodes(ProteinNode.PROTEIN_FULL_NAME_FULL_TEXT_INDEX, indexFullTextProps);
+        proteinGeneNamesFullTextIndex = graphService.index().forNodes(ProteinNode.PROTEIN_GENE_NAMES_FULL_TEXT_INDEX, indexFullTextProps);
+        keywordIdIndex = graphService.index().forNodes(KeywordNode.KEYWORD_ID_INDEX, indexProps);
+        keywordNameIndex = graphService.index().forNodes(KeywordNode.KEYWORD_NAME_INDEX, indexProps);
+        interproIdIndex = graphService.index().forNodes(InterproNode.INTERPRO_ID_INDEX, indexProps);
+        organismScientificNameIndex = graphService.index().forNodes(OrganismNode.ORGANISM_SCIENTIFIC_NAME_INDEX, indexProps);
+        organismNcbiTaxonomyIdIndex = graphService.index().forNodes(OrganismNode.NCBI_TAXONOMY_ID_PROPERTY, indexProps);
+        taxonNameIndex = graphService.index().forNodes(TaxonNode.TAXON_NAME_INDEX, indexProps);
+        featureTypeNameIndex = graphService.index().forNodes(FeatureTypeNode.FEATURE_TYPE_NAME_INDEX, indexProps);
+        commentTypeNameIndex = graphService.index().forNodes(CommentTypeNode.COMMENT_TYPE_NAME_INDEX, indexProps);
+        isoformIdIndex = graphService.index().forNodes(IsoformNode.ISOFORM_ID_INDEX, indexProps);
+        personNameFullTextIndex = graphService.index().forNodes(PersonNode.PERSON_NAME_FULL_TEXT_INDEX, indexFullTextProps);
+        consortiumNameIndex = graphService.index().forNodes(ConsortiumNode.CONSORTIUM_NAME_INDEX, indexProps);
+        instituteNameIndex = graphService.index().forNodes(InstituteNode.INSTITUTE_NAME_INDEX, indexProps);
+        countryNameIndex = graphService.index().forNodes(CountryNode.COUNTRY_NAME_INDEX, indexProps);
+        cityNameIndex = graphService.index().forNodes(CityNode.CITY_NAME_INDEX, indexProps);
+        thesisTitleFullTextIndex = graphService.index().forNodes(ThesisNode.THESIS_TITLE_FULL_TEXT_INDEX, indexFullTextProps);
+        patentNumberIndex = graphService.index().forNodes(PatentNode.PATENT_NUMBER_INDEX, indexProps);
+        bookNameFullTextIndex = graphService.index().forNodes(BookNode.BOOK_NAME_FULL_TEXT_INDEX, indexFullTextProps);
+        publisherNameIndex = graphService.index().forNodes(PublisherNode.PUBLISHER_NAME_INDEX, indexProps);
+        onlineArticleTitleFullTextIndex = graphService.index().forNodes(OnlineArticleNode.ONLINE_ARTICLE_TITLE_FULL_TEXT_INDEX, indexFullTextProps);
+        onlineJournalNameIndex = graphService.index().forNodes(OnlineJournalNode.ONLINE_JOURNAL_NAME_INDEX, indexProps);
+        articleTitleFullTextIndex = graphService.index().forNodes(ArticleNode.ARTICLE_TITLE_FULL_TEXT_INDEX, indexFullTextProps);
+        articleMedlineIdIndex = graphService.index().forNodes(ArticleNode.ARTICLE_MEDLINE_ID_INDEX, indexProps);
+        articleDoiIdIndex = graphService.index().forNodes(ArticleNode.ARTICLE_DOI_ID_INDEX, indexProps);
+        articlePubmedIdIndex = graphService.index().forNodes(ArticleNode.ARTICLE_PUBMED_ID_INDEX, indexProps);
+        journalNameIndex = graphService.index().forNodes(JournalNode.JOURNAL_NAME_INDEX, indexProps);
+        genomeElementVersionIndex = graphService.index().forNodes(GenomeElementNode.GENOME_ELEMENT_VERSION_INDEX, indexProps);
+        ncbiTaxonIdIndex = graphService.index().forNodes(NCBITaxonNode.NCBI_TAXON_ID_INDEX, indexProps);
+        ncbiTaxonGiIdIndex = graphService.index().forNodes(NCBITaxonNode.NCBI_TAXON_GI_ID_INDEX, indexProps);
+        reactomeTermIdIndex = graphService.index().forNodes(ReactomeTermNode.REACTOME_TERM_ID_INDEX, indexProps);
+
+        //----------relationship indexes-----
+        isAGorelIndex = graphService.index().forRelationships(IsAGoRel.IS_A_REL_INDEX, indexProps);
+        subcellularLocationParentRelIndex = graphService.index().forRelationships(SubcellularLocationParentRel.SUBCELLULAR_LOCATION_PARENT_REL_INDEX);
+
+    }
+
+    private static synchronized boolean firstTimeCalled() {
+        if (!alreadyCreated) {
             alreadyCreated = true;
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
     //---------------------------------------------------------------
     //--------------------------INDEXES------------------------------
-    //------------------------------------------------------------------S
+    //------------------------------------------------------------------
+    public Index<Node> getNodeTypeIndex() {
+        return nodeTypeIndex;
+    }
+    
+    public Index<Node> getEnzymeIdIndex(){
+        return enzymeIdIndex;
+    }
+    
+    public Index<Node> getDatasetNameIndex() {
+        return datasetNameIndex;
+    }
 
-    public Index<Node> getGoTermIdIndex(){        
+    public Index<Node> getGoTermIdIndex() {
         return goTermIdIndex;
     }
-    public Index<Node> getProteinAccessionIndex(){        
+
+    public Index<Node> getProteinAccessionIndex() {
         return proteinAccessionIndex;
     }
-    public Index<Node> getProteinFullNameFullTextIndex(){
+
+    public Index<Node> getProteinFullNameFullTextIndex() {
         return proteinFullNameFullTextIndex;
     }
-    public Index<Node> getProteinGeneNamesFullTextIndex(){
+
+    public Index<Node> getProteinGeneNamesFullTextIndex() {
         return proteinGeneNamesFullTextIndex;
     }
-    public Index<Node> getKeywordIdIndex(){
+
+    public Index<Node> getKeywordIdIndex() {
         return keywordIdIndex;
     }
-    public Index<Node> getKeywordNameIndex(){
+
+    public Index<Node> getKeywordNameIndex() {
         return keywordNameIndex;
     }
-    public Index<Node> getInterproIdIndex(){
+
+    public Index<Node> getInterproIdIndex() {
         return interproIdIndex;
     }
-    public Index<Node> getOrganismScientificNameIndex(){
+
+    public Index<Node> getOrganismScientificNameIndex() {
         return organismScientificNameIndex;
     }
-    public Index<Node> getOrganismNcbiTaxonomyIdIndex(){
+
+    public Index<Node> getOrganismNcbiTaxonomyIdIndex() {
         return organismNcbiTaxonomyIdIndex;
     }
-    public Index<Node> getTaxonNameIndex(){
+
+    public Index<Node> getTaxonNameIndex() {
         return taxonNameIndex;
     }
-    public Index<Node> getFeatureTypeNameIndex(){
+
+    public Index<Node> getFeatureTypeNameIndex() {
         return featureTypeNameIndex;
     }
-    public Index<Node> getCommentTypeNameIndex(){
+
+    public Index<Node> getCommentTypeNameIndex() {
         return commentTypeNameIndex;
     }
-    public Index<Node> getIsoformIdIndex(){
+
+    public Index<Node> getIsoformIdIndex() {
         return isoformIdIndex;
     }
-    public Index<Node> getPersonNameIndex(){
+
+    public Index<Node> getPersonNameIndex() {
         return personNameFullTextIndex;
     }
-    public Index<Node> getConsortiumNameIndex(){
+
+    public Index<Node> getConsortiumNameIndex() {
         return consortiumNameIndex;
     }
-    public Index<Node> getInstituteNameIndex(){
+
+    public Index<Node> getInstituteNameIndex() {
         return instituteNameIndex;
     }
-    public Index<Node> getCountryNameIndex(){
+
+    public Index<Node> getCountryNameIndex() {
         return countryNameIndex;
     }
-    public Index<Node> getCityNameIndex(){
+
+    public Index<Node> getCityNameIndex() {
         return cityNameIndex;
     }
-    public Index<Node> getThesisFullTextIndex(){
-        return thesisFullTextIndex;
+
+    public Index<Node> getThesisFullTextIndex() {
+        return thesisTitleFullTextIndex;
     }
-    public Index<Node> getPatentNumberIndex(){
+
+    public Index<Node> getPatentNumberIndex() {
         return patentNumberIndex;
     }
-    public Index<Node> getBookNameFullTextIndex(){
+
+    public Index<Node> getBookNameFullTextIndex() {
         return bookNameFullTextIndex;
     }
-    public Index<Node> getPublisherNameIndex(){
+
+    public Index<Node> getPublisherNameIndex() {
         return publisherNameIndex;
     }
-    public Index<Node> getOnlineArticleTitleFullTextIndex(){
+
+    public Index<Node> getOnlineArticleTitleFullTextIndex() {
         return onlineArticleTitleFullTextIndex;
     }
-    public Index<Node> getOnlineJournalNameIndex(){
+
+    public Index<Node> getOnlineJournalNameIndex() {
         return onlineJournalNameIndex;
     }
-    public Index<Node> getArticleTitleFullTextIndex(){
+
+    public Index<Node> getArticleTitleFullTextIndex() {
         return articleTitleFullTextIndex;
     }
-    public Index<Node> getArticleMedLineIdIndex(){
+
+    public Index<Node> getArticleMedLineIdIndex() {
         return articleMedlineIdIndex;
     }
-    public Index<Node> getArticleDoiIdIndex(){
+
+    public Index<Node> getArticleDoiIdIndex() {
         return articleDoiIdIndex;
     }
-    public Index<Node> getArticlePubmedIdIndex(){
+
+    public Index<Node> getArticlePubmedIdIndex() {
         return articlePubmedIdIndex;
     }
-    public Index<Node> getJournalNameIndex(){
+
+    public Index<Node> getJournalNameIndex() {
         return journalNameIndex;
     }
-    public Index<Node> getGenomeElementVersionIndex(){
+
+    public Index<Node> getGenomeElementVersionIndex() {
         return genomeElementVersionIndex;
     }
-    public Index<Node> getNCBITaxonIdIndex(){
+
+    public Index<Node> getNCBITaxonIdIndex() {
         return ncbiTaxonIdIndex;
     }
-    public Index<Node> getNCBITaxonGiIdIndex(){
+
+    public Index<Node> getNCBITaxonGiIdIndex() {
         return ncbiTaxonGiIdIndex;
     }
 
-    public RelationshipIndex getIsAGoRelIndex(){
+    public Index<Node> getReactomeTermIdIndex() {
+        return reactomeTermIdIndex;
+    }
+
+    public RelationshipIndex getIsAGoRelIndex() {
         return isAGorelIndex;
     }
-    public RelationshipIndex getSubcellularParentRelIndex(){
+
+    public RelationshipIndex getSubcellularParentRelIndex() {
         return subcellularLocationParentRelIndex;
     }
-    
-    
-
 }

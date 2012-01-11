@@ -50,7 +50,7 @@ public class EnzymeNode extends BasicEntity{
     public String[] getAlternateNames(){  return (String[])node.getProperty(ALTERNATE_NAMES_PROPERTY);}
     public String getCatalyticActivity(){   return String.valueOf(node.getProperty(CATALYTIC_ACTIVITY_PROPERTY));}
     public String[] getCofactors(){   return (String[])node.getProperty(COFACTORS_PROPERTY);}
-    public String[] getComments(){   return (String[])node.getProperty(COMMENTS_PROPERTY);}
+    public String getComments(){   return String.valueOf(node.getProperty(COMMENTS_PROPERTY));}
     public String[] getPrositeCrossReferences(){   return (String[])node.getProperty(PROSITE_CROSS_REFERENCES_PROPERTY);}
 
     public void setId(String value){    node.setProperty(ID_PROPERTY, value);}
@@ -58,7 +58,7 @@ public class EnzymeNode extends BasicEntity{
     public void setAlternateNames(String[] value){    node.setProperty(ALTERNATE_NAMES_PROPERTY, value);}
     public void setCatalyticActivity(String value){ node.setProperty(CATALYTIC_ACTIVITY_PROPERTY, value);}
     public void setCofactors(String[] value){    node.setProperty(COFACTORS_PROPERTY, value);}
-    public void setComments(String[] value){    node.setProperty(COMMENTS_PROPERTY, value);}
+    public void setComments(String value){    node.setProperty(COMMENTS_PROPERTY, value);}
     public void setPrositeCrossReferences(String[] value){    node.setProperty(PROSITE_CROSS_REFERENCES_PROPERTY, value);}
 
 
@@ -79,7 +79,29 @@ public class EnzymeNode extends BasicEntity{
 
     @Override
     public String toString(){
-        return "id = " + getId();
+        String alternateNames = "";
+        for (String altName : getAlternateNames()) {
+            alternateNames += altName + ",";
+        }
+        alternateNames = alternateNames.substring(0, alternateNames.length() - 1);
+        String cofactors = "";
+        for (String cofactor : getCofactors()) {
+            cofactors += cofactor + ",";
+        }
+        cofactors = cofactors.substring(0, cofactors.length() - 1);
+        String prositeRefs = "";
+        for (String prositeRef : getPrositeCrossReferences()) {
+            prositeRefs += prositeRef + ",";
+        }
+        prositeRefs = prositeRefs.substring(0, prositeRefs.length() - 1);
+        
+        return "ID = " + getId() + "\n" +
+                "Official name = " + getOfficialName() + "\n" +
+                "Alternate names = " + alternateNames + "\n" +
+                "Catalytic activity = " + getCatalyticActivity() + "\n" +
+                "Cofactors = " + cofactors + "\n" +
+                "Comments = " + getComments() + "\n" +
+                "Prosite cross-references" + prositeRefs;
     }
 
 }

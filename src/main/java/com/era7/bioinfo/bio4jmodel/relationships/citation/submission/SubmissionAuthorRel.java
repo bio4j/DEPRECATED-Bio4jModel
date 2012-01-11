@@ -15,20 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.era7.bioinfo.bio4jmodel.relationships.ncbi;
+package com.era7.bioinfo.bio4jmodel.relationships.citation.submission;
 
 import com.era7.bioinfo.bioinfoneo4j.BasicRelationship;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Submission authors (people)
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
-public class NcbiOrganismGenomeElementRel extends BasicRelationship{
+public class SubmissionAuthorRel extends BasicRelationship{
 
-    public static final String NAME = "NCBI_ORGANISM_GENOME_ELEMENT";
+    public static final String NAME = "SUBMISSION_AUTHOR_PERSON";
 
-    public NcbiOrganismGenomeElementRel(Relationship rel){
+    public SubmissionAuthorRel(Relationship rel){
         super(rel);
     }
 

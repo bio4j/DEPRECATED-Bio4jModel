@@ -20,7 +20,7 @@ import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
 import org.neo4j.graphdb.Node;
 
 /**
- * Journals article protein citations are published in
+ * Journals where article citations are published
  * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class JournalNode extends BasicEntity{

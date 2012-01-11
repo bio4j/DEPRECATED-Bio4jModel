@@ -24,41 +24,18 @@ import org.neo4j.graphdb.Relationship;
  * 
  * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
-public class ProteinFoundInGenomeElementRel extends BasicRelationship{
+public class ProteinReactomeRel extends BasicRelationship{
 
-    public static final String NAME = "PROTEIN_FOUND_IN_GENOME_ELEMENT";
+    public static final String NAME = "PROTEIN_REACTOME";
 
-    public static final String BEGIN_PROPERTY = "begin";
-    public static final String END_PROPERTY = "end";
-
-    public ProteinFoundInGenomeElementRel(Relationship rel){
+    public ProteinReactomeRel(Relationship rel){
         super(rel);
     }
-
-    public int getBegin(){
-        return Integer.parseInt(String.valueOf(this.relationship.getProperty(BEGIN_PROPERTY)));
-    }
-    public int getEnd(){
-        return Integer.parseInt(String.valueOf(this.relationship.getProperty(END_PROPERTY)));
-    }
-
-    public void setBegin(int value){
-        relationship.setProperty(BEGIN_PROPERTY, String.valueOf(value));
-    }
-    public void setEnd(int value){
-        relationship.setProperty(END_PROPERTY, String.valueOf(value));
-    }
-
 
     @Override
     public String name() {
         return NAME;
     }
 
-    @Override
-    public String toString(){
-        return super.toString() + "\nbegin = " + getBegin() + "\n" +
-                "end = " + getEnd();
-    }
 
 }

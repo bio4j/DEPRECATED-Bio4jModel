@@ -8,9 +8,15 @@ import com.era7.bioinfo.bio4jmodel.nodes.*;
 import com.era7.bioinfo.bio4jmodel.nodes.citation.*;
 import com.era7.bioinfo.bio4jmodel.nodes.ncbi.NCBITaxonNode;
 import com.era7.bioinfo.bio4jmodel.nodes.refseq.GenomeElementNode;
+import com.era7.bioinfo.bio4jmodel.relationships.MainDatasetRel;
+import com.era7.bioinfo.bio4jmodel.relationships.MainTaxonRel;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 /**
@@ -24,6 +30,49 @@ public class NodeRetriever {
     
     public NodeRetriever(Bio4jManager bio4jManager){
         manager = bio4jManager;
+    }
+    
+    
+    //-------------------------------------------------------------------
+    //--------------------------TAXONOMY-----------------------------------
+    
+    public TaxonNode getMainTaxon(){
+        return new TaxonNode(manager.getReferenceNode().getRelationships(new MainTaxonRel(null), Direction.OUTGOING).iterator().next().getEndNode());        
+    }
+    
+    //-------------------------------------------------------------------
+    //--------------------------ENZYME-----------------------------------
+    
+    public EnzymeNode getEnzymeById(String id){
+        IndexHits<Node> hits = manager.getEnzymeIdIndex().get(EnzymeNode.ENZYME_ID_INDEX, id);
+        
+        if(hits.hasNext()){
+            return new EnzymeNode(hits.getSingle());
+        }else{
+            return null;
+        }
+    }
+    
+    //-------------------------------------------------------------------
+    //--------------------------DATASETS-----------------------------------
+    
+    public List<DatasetNode> getMainDatasets(){
+        List<DatasetNode> list = new LinkedList<DatasetNode>();
+        Iterator<Relationship> relIt = manager.getReferenceNode().getRelationships(new MainDatasetRel(null), Direction.OUTGOING).iterator();
+        while(relIt.hasNext()){
+            list.add(new DatasetNode(relIt.next().getEndNode()));
+        }
+        return list;
+    }
+    
+    public DatasetNode getDatasetByName(String name){
+        IndexHits<Node> hits = manager.getDatasetNameIndex().get(DatasetNode.DATASET_NAME_INDEX, name);
+        
+        if(hits.hasNext()){
+            return new DatasetNode(hits.getSingle());
+        }else{
+            return null;
+        }
     }
     
     //-------------------------------------------------------------------

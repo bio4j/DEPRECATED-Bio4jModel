@@ -14,27 +14,33 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+package com.era7.bioinfo.bio4jmodel.util;
 
-package com.era7.bioinfo.bio4jmodel.relationships.citation.article;
-
-import com.era7.bioinfo.bioinfoneo4j.BasicRelationship;
-import org.neo4j.graphdb.Relationship;
+import com.era7.bioinfo.bio4jmodel.nodes.reactome.ReactomeTermNode;
+import org.neo4j.graphdb.Transaction;
 
 /**
- * Relationship between articles and consortium authors
+ *
  * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
-public class ArticleAuthorConsortiumRel extends BasicRelationship{
-
-    public static final String NAME = "ARTICLE_AUTHOR_CONSORTIUM";
-
-    public ArticleAuthorConsortiumRel(Relationship rel){
-        super(rel);
+public class NodeIndexer {
+    
+    protected Bio4jManager manager;
+    
+    
+    public NodeIndexer(Bio4jManager bio4jManager){
+        manager = bio4jManager;
     }
-
-    @Override
-    public String name() {
-        return NAME;
+    
+    
+    public void indexReactomeTermById(ReactomeTermNode node,Transaction txn, boolean commitTxn){
+        
+        manager.getReactomeTermIdIndex().add(node.getNode(), ReactomeTermNode.REACTOME_TERM_ID_INDEX, node.getId());
+        if(commitTxn){
+            txn.success();
+            txn.finish();
+        }        
     }
-
+    
+    
 }

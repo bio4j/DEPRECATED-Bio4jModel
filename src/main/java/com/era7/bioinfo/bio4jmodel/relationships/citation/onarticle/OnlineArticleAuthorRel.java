@@ -15,20 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.era7.bioinfo.bio4jmodel.relationships.ncbi;
+package com.era7.bioinfo.bio4jmodel.relationships.citation.onarticle;
 
 import com.era7.bioinfo.bioinfoneo4j.BasicRelationship;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
- * @author ppareja
+ * Online article authors (people)
+ * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
-public class MainTaxonNcbiRel extends BasicRelationship{
+public class OnlineArticleAuthorRel extends BasicRelationship{
 
-    public static final String NAME = "MAIN_TAXON_NCBI";
+    public static final String NAME = "ONLINE_ARTICLE_AUTHOR_PERSON";
 
-    public MainTaxonNcbiRel(Relationship rel){
+    public OnlineArticleAuthorRel(Relationship rel){
         super(rel);
     }
 

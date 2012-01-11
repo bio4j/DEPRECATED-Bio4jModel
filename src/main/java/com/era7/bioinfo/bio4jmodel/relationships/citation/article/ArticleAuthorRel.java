@@ -15,20 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.era7.bioinfo.bio4jmodel.relationships.citation.onarticle;
+package com.era7.bioinfo.bio4jmodel.relationships.citation.article;
 
 import com.era7.bioinfo.bioinfoneo4j.BasicRelationship;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Online article authors (consortiums)
+ * Article authors
  * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
-public class OnlineArticleAuthorConsortiumRel extends BasicRelationship{
+public class ArticleAuthorRel extends BasicRelationship{
 
-    public static final String NAME = "ONLINE_ARTICLE_AUTHOR_CONSORTIUM";
+    public static final String NAME = "ARTICLE_AUTHOR_PERSON";
 
-    public OnlineArticleAuthorConsortiumRel(Relationship rel){
+    public ArticleAuthorRel(Relationship rel){
         super(rel);
     }
 

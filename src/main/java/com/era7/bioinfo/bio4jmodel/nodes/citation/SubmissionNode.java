@@ -18,8 +18,7 @@ package com.era7.bioinfo.bio4jmodel.nodes.citation;
 
 import com.era7.bioinfo.bio4jmodel.nodes.ConsortiumNode;
 import com.era7.bioinfo.bio4jmodel.nodes.PersonNode;
-import com.era7.bioinfo.bio4jmodel.relationships.citation.submission.SubmissionAuthorConsortiumRel;
-import com.era7.bioinfo.bio4jmodel.relationships.citation.submission.SubmissionAuthorPersonRel;
+import com.era7.bioinfo.bio4jmodel.relationships.citation.submission.SubmissionAuthorRel;
 import com.era7.bioinfo.bio4jmodel.relationships.citation.submission.SubmissionDbRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
 import java.util.ArrayList;
@@ -77,9 +76,12 @@ public class SubmissionNode extends BasicEntity{
      */
     public List<ConsortiumNode> getConsortiumAuthors(){
         List<ConsortiumNode> list = new ArrayList<ConsortiumNode>();
-        Iterator<Relationship> iterator = this.node.getRelationships(new SubmissionAuthorConsortiumRel(null), Direction.OUTGOING).iterator();
+        Iterator<Relationship> iterator = this.node.getRelationships(new SubmissionAuthorRel(null), Direction.OUTGOING).iterator();
         while(iterator.hasNext()){
-            list.add(new ConsortiumNode(iterator.next().getEndNode()));
+            Node currentNode = iterator.next().getEndNode();
+            if(currentNode.getProperty(BasicEntity.NODE_TYPE_PROPERTY).equals(ConsortiumNode.NODE_TYPE)){
+                list.add(new ConsortiumNode(currentNode));
+            } 
         }
         return list;
     }
@@ -89,9 +91,12 @@ public class SubmissionNode extends BasicEntity{
      */
     public List<PersonNode> getPersonAuthors(){
         List<PersonNode> list = new ArrayList<PersonNode>();
-        Iterator<Relationship> iterator = this.node.getRelationships(new SubmissionAuthorPersonRel(null), Direction.OUTGOING).iterator();
+        Iterator<Relationship> iterator = this.node.getRelationships(new SubmissionAuthorRel(null), Direction.OUTGOING).iterator();
         while(iterator.hasNext()){
-            list.add(new PersonNode(iterator.next().getEndNode()));
+            Node currentNode = iterator.next().getEndNode();
+            if(currentNode.getProperty(BasicEntity.NODE_TYPE_PROPERTY).equals(PersonNode.NODE_TYPE)){
+                list.add(new PersonNode(currentNode));
+            } 
         }
         return list;
     }

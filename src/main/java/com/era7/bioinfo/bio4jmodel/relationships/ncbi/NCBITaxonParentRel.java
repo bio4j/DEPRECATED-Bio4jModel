@@ -21,7 +21,7 @@ import com.era7.bioinfo.bioinfoneo4j.BasicRelationship;
 import org.neo4j.graphdb.Relationship;
 
 /**
- *
+ * Rel. leading to the child of the current NCBITaxon node
  * @author ppareja
  */
 public class NCBITaxonParentRel extends BasicRelationship{
