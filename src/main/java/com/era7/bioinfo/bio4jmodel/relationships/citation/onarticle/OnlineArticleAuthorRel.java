@@ -21,12 +21,12 @@ import com.era7.bioinfo.bioinfoneo4j.BasicRelationship;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Online article authors (people)
+ * Online article authors 
  * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class OnlineArticleAuthorRel extends BasicRelationship{
 
-    public static final String NAME = "ONLINE_ARTICLE_AUTHOR_PERSON";
+    public static final String NAME = "ONLINE_ARTICLE_AUTHOR";
 
     public OnlineArticleAuthorRel(Relationship rel){
         super(rel);

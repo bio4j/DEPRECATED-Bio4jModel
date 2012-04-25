@@ -26,7 +26,7 @@ import org.neo4j.graphdb.Relationship;
  */
 public class ArticleAuthorRel extends BasicRelationship{
 
-    public static final String NAME = "ARTICLE_AUTHOR_PERSON";
+    public static final String NAME = "ARTICLE_AUTHOR";
 
     public ArticleAuthorRel(Relationship rel){
         super(rel);

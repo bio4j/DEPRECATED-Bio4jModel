@@ -20,7 +20,7 @@ package com.era7.bioinfo.bio4jmodel.relationships.comment;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Description of the sequence similaritie(s) with other proteins and family attribution
+ * Description of the sequence similarities with other proteins and family attribution
  * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class SimilarityCommentRel extends BasicCommentRel{

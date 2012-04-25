@@ -21,12 +21,12 @@ import com.era7.bioinfo.bioinfoneo4j.BasicRelationship;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Submission authors (people)
+ * Submission authors
  * @author Pablo Pareja Tobes <ppareja@era7.com>
  */
 public class SubmissionAuthorRel extends BasicRelationship{
 
-    public static final String NAME = "SUBMISSION_AUTHOR_PERSON";
+    public static final String NAME = "SUBMISSION_AUTHOR";
 
     public SubmissionAuthorRel(Relationship rel){
         super(rel);

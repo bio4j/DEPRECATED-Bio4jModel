@@ -11,6 +11,7 @@ import com.era7.bioinfo.bio4jmodel.nodes.reactome.ReactomeTermNode;
 import com.era7.bioinfo.bio4jmodel.nodes.refseq.GenomeElementNode;
 import com.era7.bioinfo.bio4jmodel.relationships.SubcellularLocationParentRel;
 import com.era7.bioinfo.bio4jmodel.relationships.go.IsAGoRel;
+import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
 import com.era7.bioinfo.bioinfoneo4j.Neo4jManager;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,9 +42,11 @@ public class Bio4jManager extends Neo4jManager {
     private Index<Node> proteinAccessionIndex = null;
     private Index<Node> proteinFullNameFullTextIndex = null;
     private Index<Node> proteinGeneNamesFullTextIndex = null;
+    private Index<Node> proteinEnsemblPlantsIndex = null;
     private Index<Node> keywordIdIndex = null;
     private Index<Node> keywordNameIndex = null;
     private Index<Node> interproIdIndex = null;
+    private Index<Node> pfamIdIndex = null;
     private Index<Node> organismScientificNameIndex = null;
     private Index<Node> organismNcbiTaxonomyIdIndex = null;
     private Index<Node> taxonNameIndex = null;
@@ -81,7 +84,20 @@ public class Bio4jManager extends Neo4jManager {
      * @param dbFolder
      */
     public Bio4jManager(String dbFolder) {
-        super(dbFolder, firstTimeCalled(), true);       
+        super(dbFolder, firstTimeCalled(), false, null);       
+
+        initializeIndexes(getIndexProps(), getIndexFullTextProps());
+        
+        System.out.println("graphservice hashcode: " + graphService.hashCode());
+
+    }
+    
+    /**
+     * Constructor
+     * @param dbFolder
+     */
+    public Bio4jManager(String dbFolder, String configFile, boolean readOnlyMode) {
+        super(dbFolder, firstTimeCalled(), readOnlyMode, configFile);       
 
         initializeIndexes(getIndexProps(), getIndexFullTextProps());
         
@@ -94,12 +110,24 @@ public class Bio4jManager extends Neo4jManager {
      * @param dbFolder
      */
     public Bio4jManager(String dbFolder, boolean createUnderlyingService, boolean readOnlyMode) {
-        super(dbFolder, createUnderlyingService, readOnlyMode);       
+        
+        super(dbFolder, createUnderlyingService, readOnlyMode, null);       
 
         initializeIndexes(getIndexProps(), getIndexFullTextProps());
         
         System.out.println("graphservice hashcode: " + graphService.hashCode());
 
+    }
+    
+    /**
+     * Creates a new node
+     * @param nodeType Type of the new node
+     * @return 
+     */
+    public Node createNode(String nodeType){
+        Node node = createNode();
+        node.setProperty(BasicEntity.NODE_TYPE_PROPERTY, nodeType);
+        return node;
     }
     
     private Map<String, String> getIndexProps(){
@@ -129,9 +157,11 @@ public class Bio4jManager extends Neo4jManager {
         proteinAccessionIndex = graphService.index().forNodes(ProteinNode.PROTEIN_ACCESSION_INDEX, indexProps);
         proteinFullNameFullTextIndex = graphService.index().forNodes(ProteinNode.PROTEIN_FULL_NAME_FULL_TEXT_INDEX, indexFullTextProps);
         proteinGeneNamesFullTextIndex = graphService.index().forNodes(ProteinNode.PROTEIN_GENE_NAMES_FULL_TEXT_INDEX, indexFullTextProps);
+        proteinEnsemblPlantsIndex = graphService.index().forNodes(ProteinNode.PROTEIN_ENSEMBL_PLANTS_INDEX, indexProps);
         keywordIdIndex = graphService.index().forNodes(KeywordNode.KEYWORD_ID_INDEX, indexProps);
         keywordNameIndex = graphService.index().forNodes(KeywordNode.KEYWORD_NAME_INDEX, indexProps);
         interproIdIndex = graphService.index().forNodes(InterproNode.INTERPRO_ID_INDEX, indexProps);
+        pfamIdIndex = graphService.index().forNodes(PfamNode.PFAM_ID_INDEX, indexProps);
         organismScientificNameIndex = graphService.index().forNodes(OrganismNode.ORGANISM_SCIENTIFIC_NAME_INDEX, indexProps);
         organismNcbiTaxonomyIdIndex = graphService.index().forNodes(OrganismNode.NCBI_TAXONOMY_ID_PROPERTY, indexProps);
         taxonNameIndex = graphService.index().forNodes(TaxonNode.TAXON_NAME_INDEX, indexProps);
@@ -192,7 +222,7 @@ public class Bio4jManager extends Neo4jManager {
     public Index<Node> getGoTermIdIndex() {
         return goTermIdIndex;
     }
-
+    
     public Index<Node> getProteinAccessionIndex() {
         return proteinAccessionIndex;
     }
@@ -203,6 +233,10 @@ public class Bio4jManager extends Neo4jManager {
 
     public Index<Node> getProteinGeneNamesFullTextIndex() {
         return proteinGeneNamesFullTextIndex;
+    }
+    
+    public Index<Node> getProteinEnsemblPlantsIndex(){
+        return proteinEnsemblPlantsIndex;
     }
 
     public Index<Node> getKeywordIdIndex() {
@@ -215,6 +249,10 @@ public class Bio4jManager extends Neo4jManager {
 
     public Index<Node> getInterproIdIndex() {
         return interproIdIndex;
+    }
+    
+    public Index<Node> getPfamIdIndex(){
+        return pfamIdIndex;
     }
 
     public Index<Node> getOrganismScientificNameIndex() {

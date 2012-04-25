@@ -69,6 +69,7 @@ public class ProteinNode extends BasicEntity {
     public static final String PROTEIN_ACCESSION_INDEX = "protein_accession_index";
     public static final String PROTEIN_FULL_NAME_FULL_TEXT_INDEX = "protein_full_name_full_text_index";
     public static final String PROTEIN_GENE_NAMES_FULL_TEXT_INDEX = "protein_gene_names_full_text_index";
+    public static final String PROTEIN_ENSEMBL_PLANTS_INDEX = "protein_ensembl_plants_index";
 
     public static final String NODE_TYPE = ProteinNode.class.getCanonicalName();
     
@@ -89,6 +90,7 @@ public class ProteinNode extends BasicEntity {
     public static final String ARRAY_EXPRESS_ID_PROPERTY = "array_express_id";
     public static final String UNIGENE_ID_PROPERTY = "unigene_id";
     public static final String ALTERNATIVE_ACCESSIONS_PROPERTY = "alternative_accessions";
+    public static final String ENSEMBL_PLANTS_REFERENCES_PROPERTY = "ensembl_plants_references";
 
     //public static final String GENE_NAMES_SEPARATOR = "\t";
 
@@ -122,6 +124,10 @@ public class ProteinNode extends BasicEntity {
 
     public String[] getEMBLreferences(){
         return (String[]) node.getProperty(EMBL_REFERENCES_PROPERTY);
+    }
+    
+    public String[] getEnsemblPlantsReferences(){
+        return (String[]) node.getProperty(ENSEMBL_PLANTS_REFERENCES_PROPERTY);
     }
     
     public String[] getRefseqReferences(){
@@ -575,6 +581,10 @@ public class ProteinNode extends BasicEntity {
 
     public void setEMBLreferences(String[] value){
         node.setProperty(EMBL_REFERENCES_PROPERTY, value);
+    }
+    
+    public void setEnsemblPlantsReferences(String[] value){
+        node.setProperty(ENSEMBL_PLANTS_REFERENCES_PROPERTY, value);
     }
 
     public void setRefseqReferences(String[] value){
