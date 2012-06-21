@@ -96,7 +96,7 @@ public class Bio4jManager extends Neo4jManager {
      * Constructor
      * @param dbFolder
      */
-    public Bio4jManager(String dbFolder, String configFile, boolean readOnlyMode) {
+    public Bio4jManager(String dbFolder, Map<String,String> configFile, boolean readOnlyMode) {
         super(dbFolder, firstTimeCalled(), readOnlyMode, configFile);       
 
         initializeIndexes(getIndexProps(), getIndexFullTextProps());

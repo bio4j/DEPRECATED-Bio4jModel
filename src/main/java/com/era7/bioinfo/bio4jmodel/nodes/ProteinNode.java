@@ -16,13 +16,8 @@
  */
 package com.era7.bioinfo.bio4jmodel.nodes;
 
-import com.era7.bioinfo.bio4jmodel.nodes.citation.ArticleNode;
-import com.era7.bioinfo.bio4jmodel.nodes.citation.BookNode;
-import com.era7.bioinfo.bio4jmodel.nodes.citation.OnlineArticleNode;
-import com.era7.bioinfo.bio4jmodel.nodes.citation.PatentNode;
-import com.era7.bioinfo.bio4jmodel.nodes.citation.SubmissionNode;
-import com.era7.bioinfo.bio4jmodel.nodes.citation.ThesisNode;
-import com.era7.bioinfo.bio4jmodel.nodes.citation.UnpublishedObservationNode;
+import com.era7.bioinfo.bio4jmodel.nodes.citation.*;
+import com.era7.bioinfo.bio4jmodel.nodes.reactome.ReactomeTermNode;
 import com.era7.bioinfo.bio4jmodel.nodes.refseq.GenomeElementNode;
 import com.era7.bioinfo.bio4jmodel.relationships.citation.article.ArticleProteinCitationRel;
 import com.era7.bioinfo.bio4jmodel.relationships.citation.book.BookProteinCitationRel;
@@ -39,15 +34,7 @@ import com.era7.bioinfo.bio4jmodel.relationships.features.ActiveSiteFeatureRel;
 import com.era7.bioinfo.bio4jmodel.relationships.features.SignalPeptideFeatureRel;
 import com.era7.bioinfo.bio4jmodel.relationships.features.SpliceVariantFeatureRel;
 import com.era7.bioinfo.bio4jmodel.relationships.features.TransmembraneRegionFeatureRel;
-import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinDatasetRel;
-import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinGenomeElementRel;
-import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinGoRel;
-import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinInterproRel;
-import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinIsoformInteractionRel;
-import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinKeywordRel;
-import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinOrganismRel;
-import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinProteinInteractionRel;
-import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinSubcellularLocationRel;
+import com.era7.bioinfo.bio4jmodel.relationships.protein.*;
 import com.era7.bioinfo.bio4jmodel.relationships.uniref.UniRef100MemberRel;
 import com.era7.bioinfo.bio4jmodel.relationships.uniref.UniRef50MemberRel;
 import com.era7.bioinfo.bio4jmodel.relationships.uniref.UniRef90MemberRel;
@@ -277,6 +264,37 @@ public class ProteinNode extends BasicEntity {
             interpros.add(interpro);                        
         }
         return interpros;  
+    }
+    
+    public List<PfamNode> getPfam(){
+        List<PfamNode> pfamTerms = new ArrayList<PfamNode>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new ProteinPfamRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            PfamNode interpro = new PfamNode(iterator.next().getEndNode());
+            pfamTerms.add(interpro);                        
+        }
+        return pfamTerms;  
+    }
+    
+    public List<ReactomeTermNode> getReactomeTerms(){
+        List<ReactomeTermNode> list = new LinkedList<ReactomeTermNode>();
+        Iterator<Relationship> iterator = node.getRelationships(new ProteinReactomeRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            ReactomeTermNode reactomeTerm = new ReactomeTermNode(iterator.next().getEndNode());
+            list.add(reactomeTerm);
+        }
+        return list;
+    }
+    
+    public List<EnzymeNode> getProteinEnzymaticActivity(){
+        List<EnzymeNode> list = new LinkedList<EnzymeNode>();
+        Iterator<Relationship> iterator = node.getRelationships(new ProteinEnzymaticActivityRel(null), Direction.OUTGOING).iterator();
+        while(iterator.hasNext()){
+            EnzymeNode enzyme = new EnzymeNode(iterator.next().getEndNode());
+            list.add(enzyme);
+        }
+        return list;        
     }
     
     public List<GoTermNode> getGOAnnotations(){

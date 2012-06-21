@@ -132,6 +132,22 @@ public class NodeRetriever {
     
     /**
      * 
+     * @param ensemblPlantsRef 
+     * @return ProteinNode with the Ensembl Plants reference provided
+     */
+    public ProteinNode getProteinNodeByEnsemblPlantsRef(String ensemblPlantsRef){
+        
+        IndexHits<Node> hits = manager.getProteinEnsemblPlantsIndex().get(ProteinNode.PROTEIN_ENSEMBL_PLANTS_INDEX, ensemblPlantsRef);
+        
+        if(hits.hasNext()){
+            return new ProteinNode(hits.getSingle());
+        }else{
+            return null;
+        }        
+    }
+    
+    /**
+     * 
      * @param proteinFullName
      * @return List of proteins (if any) which match the full name provided
      */
@@ -214,6 +230,24 @@ public class NodeRetriever {
         
         if(hits.hasNext()){
             return new InterproNode(hits.getSingle());
+        }else{
+            return null;
+        }        
+    }
+    
+    //-------------------------------------------------------------------
+    //--------------------PFAM--------------------------------
+    /**
+     * 
+     * @param pfamId 
+     * @return PfamNode with the id provided
+     */
+    public PfamNode getPfamById(String pfamId){
+        
+        IndexHits<Node> hits = manager.getPfamIdIndex().get(PfamNode.PFAM_ID_INDEX, pfamId);
+        
+        if(hits.hasNext()){
+            return new PfamNode(hits.getSingle());
         }else{
             return null;
         }        
