@@ -17,14 +17,12 @@
 
 package com.era7.bioinfo.bio4jmodel.nodes;
 
-import com.era7.bioinfo.bio4jmodel.relationships.go.HasPartOfGoRel;
-import com.era7.bioinfo.bio4jmodel.relationships.go.IsAGoRel;
-import com.era7.bioinfo.bio4jmodel.relationships.go.NegativelyRegulatesGoRel;
-import com.era7.bioinfo.bio4jmodel.relationships.go.PartOfGoRel;
-import com.era7.bioinfo.bio4jmodel.relationships.go.PositivelyRegulatesGoRel;
+import com.era7.bioinfo.bio4jmodel.relationships.go.*;
+import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinGoRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -85,6 +83,18 @@ public class GoTermNode extends BasicEntity{
     public void setComment(String value){   node.setProperty(COMMENT_PROPERTY, value);}
     public void setAlternativeIds(String[] value){  node.setProperty(ALTERNATIVE_IDS_PROPERTY, value);}
   
+    
+    public List<ProteinNode> getAssociatedProteins(){
+        List<ProteinNode> proteins = new LinkedList<ProteinNode>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new ProteinGoRel(null), Direction.INCOMING).iterator();
+        while(iterator.hasNext()){
+            ProteinNode protein = new ProteinNode(iterator.next().getStartNode());
+            proteins.add(protein);                        
+        }
+        return proteins;  
+    }
+    
     /**
      * 
      * @return 

@@ -17,11 +17,14 @@
 
 package com.era7.bioinfo.bio4jmodel.nodes.refseq;
 
+import com.era7.bioinfo.bio4jmodel.nodes.ProteinNode;
 import com.era7.bioinfo.bio4jmodel.nodes.refseq.rna.*;
+import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinGenomeElementRel;
 import com.era7.bioinfo.bio4jmodel.relationships.refseq.*;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -55,6 +58,17 @@ public class GenomeElementNode extends BasicEntity{
     public void setComment(String value){  node.setProperty(COMMENT_PROPERTY, value);}
     public void setDefinition(String value){  node.setProperty(DEFINITION_PROPERTY, value);}
 
+    
+    public List<ProteinNode> getAssociatedProteins(){
+        List<ProteinNode> proteins = new LinkedList<ProteinNode>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new ProteinGenomeElementRel(null), Direction.INCOMING).iterator();
+        while(iterator.hasNext()){
+            ProteinNode protein = new ProteinNode(iterator.next().getStartNode());
+            proteins.add(protein);                        
+        }
+        return proteins;  
+    }
     
     
     /**

@@ -17,8 +17,14 @@
 
 package com.era7.bioinfo.bio4jmodel.nodes;
 
+import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinOrganismRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * Uniprot taxonomy organism
@@ -51,6 +57,18 @@ public class OrganismNode extends BasicEntity{
     public void setCommonName(String value){  node.setProperty(COMMON_NAME_PROPERTY, value);}
     public void setSynonymName(String value){  node.setProperty(SYNONYM_NAME_PROPERTY, value);}
     public void setNcbiTaxonomyId(String value){    node.setProperty(NCBI_TAXONOMY_ID_PROPERTY, value);}
+    
+    
+    public List<ProteinNode> getAssociatedProteins(){
+        List<ProteinNode> proteins = new LinkedList<ProteinNode>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new ProteinOrganismRel(null), Direction.INCOMING).iterator();
+        while(iterator.hasNext()){
+            ProteinNode protein = new ProteinNode(iterator.next().getStartNode());
+            proteins.add(protein);                        
+        }
+        return proteins;  
+    }
     
     @Override
     public int hashCode(){
