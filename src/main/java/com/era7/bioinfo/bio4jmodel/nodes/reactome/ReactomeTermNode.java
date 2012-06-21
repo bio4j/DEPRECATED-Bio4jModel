@@ -17,8 +17,15 @@
 
 package com.era7.bioinfo.bio4jmodel.nodes.reactome;
 
+import com.era7.bioinfo.bio4jmodel.nodes.ProteinNode;
+import com.era7.bioinfo.bio4jmodel.relationships.protein.ProteinReactomeRel;
 import com.era7.bioinfo.bioinfoneo4j.BasicEntity;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * Gene ontology term
@@ -48,7 +55,16 @@ public class ReactomeTermNode extends BasicEntity{
     public void setPathwayName(String value){  node.setProperty(PATHWAY_NAME_PROPERTY, value);}
   
     
-    
+    public List<ProteinNode> getAssociatedProteins(){
+        List<ProteinNode> proteins = new LinkedList<ProteinNode>();
+        
+        Iterator<Relationship> iterator = node.getRelationships(new ProteinReactomeRel(null), Direction.INCOMING).iterator();
+        while(iterator.hasNext()){
+            ProteinNode protein = new ProteinNode(iterator.next().getStartNode());
+            proteins.add(protein);                        
+        }
+        return proteins;  
+    }
     
     
     @Override

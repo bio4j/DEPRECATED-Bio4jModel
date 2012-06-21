@@ -266,7 +266,7 @@ public class ProteinNode extends BasicEntity {
         return interpros;  
     }
     
-    public List<PfamNode> getPfam(){
+    public List<PfamNode> getPfamTerms(){
         List<PfamNode> pfamTerms = new ArrayList<PfamNode>();
         
         Iterator<Relationship> iterator = node.getRelationships(new ProteinPfamRel(null), Direction.OUTGOING).iterator();
